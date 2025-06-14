@@ -13,7 +13,6 @@ const api = axios.create({
 
 // API Functions
 const apiService = {
-  // Startup Ideas API
   createStartupIdea: async (ideaData) => {
     const response = await api.post('/startup-ideas', ideaData);
     return response.data;
@@ -49,48 +48,28 @@ const apiService = {
 // Login Page Component
 export const LoginPage = ({ onLogin }) => {
   const handleLogin = () => {
-    console.log('Login button clicked!'); // Debug log
-    onLogin(); // Call the parent function
+    console.log('Login button clicked!');
+    onLogin();
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        {/* Logo */}
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
-            <svg 
-              width="32" 
-              height="32" 
-              viewBox="0 0 32 32" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-white"
-            >
-              <path 
-                d="M8 24L16 8L24 24L20 16L12 16L8 24Z" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="currentColor"
-              />
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+              <path d="M8 24L16 8L24 24L20 16L12 16L8 24Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
             </svg>
           </div>
         </div>
 
-        {/* Welcome Text */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">Welcome</h1>
           <p className="text-gray-600">Log in to zigzag</p>
         </div>
 
-        {/* Auth Buttons */}
         <div className="space-y-3">
-          <button 
-            onClick={handleLogin}
-            className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-          >
+          <button onClick={handleLogin} className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -100,10 +79,7 @@ export const LoginPage = ({ onLogin }) => {
             Continue with Google
           </button>
           
-          <button 
-            onClick={handleLogin}
-            className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-          >
+          <button onClick={handleLogin} className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path fill="#00BCF2" d="M0 0h11.377v11.372H0z"/>
               <path fill="#00BCF2" d="M12.623 0H24v11.372H12.623z"/>
@@ -113,13 +89,6 @@ export const LoginPage = ({ onLogin }) => {
             Continue with Microsoft Account
           </button>
         </div>
-
-        {/* Debug Info */}
-        <div className="mt-6 p-3 bg-blue-50 rounded-lg">
-          <p className="text-xs text-blue-600 text-center">
-            🔧 Debug: Click any button above to test authentication
-          </p>
-        </div>
       </div>
     </div>
   );
@@ -127,12 +96,12 @@ export const LoginPage = ({ onLogin }) => {
 
 // Generated Badge Component
 const GeneratedBadge = () => (
-  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+  <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
     Generated
   </span>
 );
 
-// Simple Workspace with Enhanced Features
+// ZigZag Workspace Component
 export const ZigZagWorkspace = ({ onLogout }) => {
   const [currentSection, setCurrentSection] = useState('startup-idea');
   const [currentIdea, setCurrentIdea] = useState(null);
@@ -140,7 +109,6 @@ export const ZigZagWorkspace = ({ onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load user ideas on component mount
   useEffect(() => {
     loadUserIdeas();
   }, []);
@@ -151,37 +119,88 @@ export const ZigZagWorkspace = ({ onLogout }) => {
       const ideas = await apiService.getStartupIdeas();
       setUserIdeas(ideas);
       
-      // Set the first idea as current if available, otherwise use default
       if (ideas.length > 0) {
         setCurrentIdea(ideas[0]);
       } else {
-        // Default idea for new users
+        // Default TradeHive idea matching the screenshots
         setCurrentIdea({
           id: 'default',
           name: 'TradeHive',
           description: 'social trading platform',
           industry: 'trading',
           leanCanvas: {
-            problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets'],
-            solutions: ['Social trading platform', 'Real-time market insights'],
-            customers: ['Millennial investors', 'Retirement planners', 'Day traders', 'Financial enthusiast students'],
-            competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers'],
+            problems: [
+              'Difficulty in making informed trading decisions',
+              'Lack of transparency and trust in financial markets'
+            ],
+            solutions: [
+              'Real-time social feed for trading insights',
+              'Copy-trading feature that replicates top traders\' actions'
+            ],
+            customers: [
+              'Millennial Investors',
+              'Retirement Planners', 
+              'Aspiring Full-time Traders',
+              'Financial Enthusiast Students'
+            ],
+            competitors: [
+              'eToro',
+              'ZuluTrade', 
+              'CopyMe',
+              'NAGA',
+              'TradingView',
+              'PeopTrade',
+              'Traditional'
+            ],
             valueProposition: 'Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.',
-            channels: ['Mobile app', 'Financial blogs', 'Social media', 'Trading forums'],
-            revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
-            keyMetrics: ['Active traders', 'Trading volume', 'Platform assets', 'User retention rates']
+            channels: [
+              'Mobile and desktop applications',
+              'Social media',
+              'Trading forums and communities',
+              'Financial blogs'
+            ],
+            revenue: [
+              'Trading commissions',
+              'Premium subscriptions', 
+              'Copy-trading fees'
+            ],
+            keyMetrics: [
+              'Number of active users',
+              'Volume of trades executed',
+              'User retention rates',
+              'Social'
+            ]
           },
           hypotheses: [
-            { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
-            { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
-            { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
+            {
+              type: 'Desirability',
+              text: 'Traders are interested in a social trading platform that allows them to connect, share insights, and collaborate with other traders.',
+              criticality: 'High',
+              method: 'Validation survey'
+            },
+            {
+              type: 'Viability', 
+              text: 'The commission model for mirroring trades on the platform is competitive and sustainable for the business.',
+              criticality: 'High',
+              method: 'Financial projection analysis'
+            },
+            {
+              type: 'Feasibility',
+              text: 'The technology infrastructure required to support real-time data feeds and trade execution can be built within budget constraints.',
+              criticality: 'High', 
+              method: 'Expert interview'
+            }
           ],
           storytelling: {
-            names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow'],
-            mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
-            vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
-            values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships'],
-            elevatorPitch: 'TradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge.'
+            mission: 'Empower individuals to trade, connect, and learn from each other through a social trading platform, revolutionizing the way people engage in financial markets and investing.',
+            vision: 'To create a global community of traders and investors who collaborate, share knowledge, and drive financial empowerment for all.',
+            values: [
+              'Collaboration: Fostering a supportive community where traders can collaborate, learn from each other, and grow together.',
+              'Transparency: Providing open and transparent information to empower users to make informed decisions and build trust within the community.',
+              'Innovation: Constantly evolving and introducing innovative features to enhance the trading experience and provide cutting-edge tools for users.',
+              'Empowerment: Empowering individuals to take control of their financial futures through education, access to markets, and social engagement.'
+            ],
+            names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow']
           }
         });
       }
@@ -193,13 +212,16 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     }
   };
 
+  const handleSectionChange = (section) => {
+    setCurrentSection(section);
+  };
+
   const handleNewIdea = () => {
     setCurrentSection('new-idea');
   };
 
   const handleIdeaCreated = async (newIdea) => {
     try {
-      // Save the new idea to the backend
       const savedIdea = await apiService.createStartupIdea({
         name: newIdea.name,
         description: newIdea.description,
@@ -209,24 +231,33 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         storytelling: newIdea.storytelling
       });
       
-      // Update local state
       setCurrentIdea(savedIdea);
       setUserIdeas(prev => [savedIdea, ...prev]);
       setCurrentSection('startup-idea');
     } catch (err) {
       console.error('Failed to save new idea:', err);
-      setError('Failed to save idea. Please try again.');
-      // Still update local state for now
       setCurrentIdea(newIdea);
       setCurrentSection('startup-idea');
     }
   };
 
-  const handleSectionChange = (section) => {
-    setCurrentSection(section);
+  const renderMainContent = () => {
+    switch (currentSection) {
+      case 'new-idea':
+        return <NewIdeaSection onIdeaCreated={handleIdeaCreated} />;
+      case 'business-prototype':
+        return <BusinessPrototypeSection currentIdea={currentIdea} />;
+      case 'validation':
+        return <ValidationSection currentIdea={currentIdea} />;
+      case 'storytelling':
+        return <StorytellingSection currentIdea={currentIdea} />;
+      case 'connect-dashboard':
+        return <ConnectDashboardSection />;
+      default:
+        return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
+    }
   };
 
-  // Show loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -238,7 +269,6 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -259,23 +289,6 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     );
   }
 
-  const renderMainContent = () => {
-    switch (currentSection) {
-      case 'new-idea':
-        return <NewIdeaSection onIdeaCreated={handleIdeaCreated} />;
-      case 'business-prototype':
-        return <BusinessPrototypeSection currentIdea={currentIdea} />;
-      case 'validation':
-        return <ValidationSection currentIdea={currentIdea} />;
-      case 'storytelling':
-        return <StorytellingSection currentIdea={currentIdea} />;
-      case 'connect-dashboard':
-        return <ConnectDashboardSection />;
-      default:
-        return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Left Sidebar */}
@@ -284,29 +297,15 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         <div className="p-4 border-b border-blue-800">
           <div className="flex items-center">
             <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center mr-3">
-              <svg 
-                width="16" 
-                height="16" 
-                viewBox="0 0 32 32" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-white"
-              >
-                <path 
-                  d="M8 24L16 8L24 24L20 16L12 16L8 24Z" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                  fill="currentColor"
-                />
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                <path d="M8 24L16 8L24 24L20 16L12 16L8 24Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
               </svg>
             </div>
             <span className="text-lg font-bold">zigzag</span>
           </div>
         </div>
 
-        {/* Navigation */}
+        {/* New Idea Button */}
         <div className="p-4">
           <button
             onClick={handleNewIdea}
@@ -318,15 +317,34 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         </div>
 
         {/* Your Ideas Section */}
-        <div className="px-4">
+        <div className="px-4 flex-1">
           <h3 className="text-sm font-medium text-blue-300 mb-3">Your Ideas</h3>
-          <div className="flex items-center px-4 py-3 bg-blue-800 rounded-lg">
-            <span className="mr-3">🌐</span>
-            <div className="text-left flex-1">
-              <div className="font-medium">{currentIdea.name}</div>
-              <div className="text-xs text-blue-300">{currentIdea.description}</div>
+          {currentIdea && (
+            <div className="flex items-center px-4 py-3 bg-blue-800 rounded-lg mb-4">
+              <span className="mr-3">🌐</span>
+              <div className="text-left flex-1 min-w-0">
+                <div className="font-medium truncate">{currentIdea.name}</div>
+                <div className="text-xs text-blue-300 truncate">{currentIdea.description}</div>
+              </div>
+              <div className="ml-auto flex space-x-1">
+                <button className="text-blue-300 hover:text-white p-1">✏️</button>
+                <button className="text-blue-300 hover:text-red-300 p-1">🗑️</button>
+              </div>
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* More Section */}
+        <div className="px-4 pb-4">
+          <h3 className="text-sm font-medium text-blue-300 mb-3">More</h3>
+          <button className="w-full flex items-center px-4 py-3 text-blue-300 hover:bg-blue-800 rounded-lg transition-colors duration-200">
+            <span className="mr-3">📄</span>
+            <span className="text-sm">Print Selected Idea</span>
+          </button>
+          <button className="w-full flex items-center px-4 py-3 text-blue-300 hover:bg-blue-800 rounded-lg transition-colors duration-200 mt-2">
+            <span className="mr-3">📚</span>
+            <span className="text-sm">Resource Library</span>
+          </button>
         </div>
 
         {/* User Profile */}
@@ -336,13 +354,7 @@ export const ZigZagWorkspace = ({ onLogout }) => {
             <div className="flex-1">
               <div className="text-sm font-medium">CTO Sea Sands Dubai</div>
             </div>
-            <button
-              onClick={onLogout}
-              className="text-blue-300 hover:text-white"
-              title="Logout"
-            >
-              🚪
-            </button>
+            <button onClick={onLogout} className="text-blue-300 hover:text-white" title="Logout">🚪</button>
           </div>
         </div>
       </div>
@@ -372,6 +384,9 @@ export const ZigZagWorkspace = ({ onLogout }) => {
           >
             Business Prototype
           </button>
+          <div className="ml-4 space-y-1">
+            <div className="text-xs text-gray-500">Lean Canvas</div>
+          </div>
           <button 
             onClick={() => handleSectionChange('validation')}
             className={`block w-full text-left text-sm transition-colors duration-200 ${
@@ -380,6 +395,10 @@ export const ZigZagWorkspace = ({ onLogout }) => {
           >
             Validation
           </button>
+          <div className="ml-4 space-y-1">
+            <div className="text-xs text-gray-500">Critical Hypotheses</div>
+            <div className="text-xs text-gray-500">Validation Experiments</div>
+          </div>
           <button 
             onClick={() => handleSectionChange('storytelling')}
             className={`block w-full text-left text-sm transition-colors duration-200 ${
@@ -388,6 +407,11 @@ export const ZigZagWorkspace = ({ onLogout }) => {
           >
             Storytelling Central
           </button>
+          <div className="ml-4 space-y-1">
+            <div className="text-xs text-gray-500">Brand Wheel</div>
+            <div className="text-xs text-gray-500">Startup Naming</div>
+            <div className="text-xs text-gray-500">Elevator Pitch</div>
+          </div>
           <button 
             onClick={() => handleSectionChange('connect-dashboard')}
             className={`block w-full text-left text-sm transition-colors duration-200 ${
@@ -396,12 +420,17 @@ export const ZigZagWorkspace = ({ onLogout }) => {
           >
             Connect Dashboard
           </button>
+          <div className="ml-4 space-y-1">
+            <div className="text-xs text-gray-500">Mentors</div>
+            <div className="text-xs text-gray-500">Investors & Accelerators</div>
+            <div className="text-xs text-gray-500">Perks</div>
+            <div className="text-xs text-gray-500">Service Providers</div>
+          </div>
         </nav>
       </div>
     </div>
   );
 };
-// Additional Components for Enhanced Functionality
 
 // New Idea Creation Section
 const NewIdeaSection = ({ onIdeaCreated }) => {
@@ -581,8 +610,123 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
     </div>
   );
 };
+// StartupIdeaSection - Main dashboard matching screenshot 1
+const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
+  if (!currentIdea) return null;
 
-// Business Prototype Section
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
+          <GeneratedBadge />
+        </div>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => onNavigate('business-prototype')}
+            className="flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            <span className="mr-2">🚀</span>
+            Unleash your Startup Idea
+            <span className="ml-2 text-sm bg-teal-700 px-2 py-1 rounded">in 2 mins</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Startup Idea Card */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center space-x-4 mb-8">
+          <div className="w-16 h-16 bg-gray-300 rounded-full"></div>
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900">{currentIdea.description}</h2>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <p className="text-gray-600">
+            Your AI Entrepreneur in Residence prepares a first draft of the below for your review:
+          </p>
+        </div>
+
+        {/* Feature Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Business Prototype */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('business-prototype')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Business Prototype</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Lean Canvas →</span>
+                <span className="ml-auto text-gray-500">Customer Segments</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Lean Canvas →</span>
+                <span className="ml-auto text-gray-500">Existing Alternatives</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Lean Canvas</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Validation */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('validation')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Validation</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Critical Hypotheses</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Experiments →</span>
+                <span className="ml-auto text-gray-500">Customer Interview</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Experiments →</span>
+                <span className="ml-auto text-gray-500">Landing Page</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Storytelling Central */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('storytelling')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Storytelling Central</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Brand Wheel</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Startup Naming</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Elevator Pitch</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Business Prototype Section - Matching screenshot 2
 const BusinessPrototypeSection = ({ currentIdea }) => {
   if (!currentIdea || !currentIdea.leanCanvas) return null;
 
@@ -590,59 +734,122 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
         <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 className="font-semibold text-red-900 mb-3">A. Problems</h3>
+      {/* Lean Canvas */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">Lean Canvas</h2>
+            <GeneratedBadge />
+            <p className="text-gray-600 text-sm mt-2">A streamlined one-page business plan template that succinctly captures your startup's vision.</p>
+          </div>
+          <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            <span className="mr-2">👁️</span>
+            Details
+          </button>
+        </div>
+
+        {/* Lean Canvas Grid */}
+        <div className="grid grid-cols-5 gap-4 mb-6">
+          {/* Top Row */}
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-3 text-sm">B. Problem</h3>
             <div className="space-y-2">
-              {leanCanvas.problems.map((problem, index) => (
-                <div key={index} className="text-sm text-red-800">{problem}</div>
+              {leanCanvas.problems?.map((problem, index) => (
+                <div key={index} className="text-xs text-blue-800">• {problem}</div>
               ))}
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <h3 className="font-semibold text-green-900 mb-3">B. Solutions</h3>
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+            <h3 className="font-semibold text-green-900 mb-3 text-sm">D. Solution</h3>
             <div className="space-y-2">
-              {leanCanvas.solutions.map((solution, index) => (
-                <div key={index} className="text-sm text-green-800">{solution}</div>
+              {leanCanvas.solutions?.map((solution, index) => (
+                <div key={index} className="text-xs text-green-800">• {solution}</div>
               ))}
             </div>
           </div>
 
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <h3 className="font-semibold text-purple-900 mb-3">C. Value Proposition</h3>
-            <div className="text-sm text-purple-800">{leanCanvas.valueProposition}</div>
+          <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+            <h3 className="font-semibold text-purple-900 mb-3 text-sm">E. Unique Value Proposition</h3>
+            <div className="text-xs text-purple-800 font-medium mb-2">Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.</div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 mb-3">D. Customer Segments</h3>
-            <div className="space-y-2">
-              {leanCanvas.customers.map((customer, index) => (
-                <div key={index} className="text-sm text-blue-800">{customer}</div>
+          <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+            <h3 className="font-semibold text-orange-900 mb-3 text-sm">J. Unfair Advantage</h3>
+            <div className="text-xs text-orange-800">Proprietary algorithm that surfaces trending trades and insights</div>
+          </div>
+
+          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+            <h3 className="font-semibold text-red-900 mb-3 text-sm">A. Customer Segments</h3>
+            <div className="space-y-1">
+              {leanCanvas.customers?.map((customer, index) => (
+                <div key={index} className="text-xs text-red-800">• {customer}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-5 gap-4">
+          {/* Bottom Row */}
+          <div className="bg-teal-50 border-2 border-teal-200 rounded-lg p-4">
+            <h3 className="font-semibold text-teal-900 mb-3 text-sm">C. Existing Alternatives</h3>
+            <div className="space-y-1">
+              {leanCanvas.competitors?.map((competitor, index) => (
+                <div key={index} className="text-xs text-teal-800">• {competitor}</div>
               ))}
             </div>
           </div>
 
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <h3 className="font-semibold text-yellow-900 mb-3">E. Channels</h3>
-            <div className="space-y-2">
-              {leanCanvas.channels.map((channel, index) => (
-                <div key={index} className="text-sm text-yellow-800">{channel}</div>
+          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+            <h3 className="font-semibold text-yellow-900 mb-3 text-sm">I. Key Metrics</h3>
+            <div className="space-y-1">
+              {leanCanvas.keyMetrics?.map((metric, index) => (
+                <div key={index} className="text-xs text-yellow-800">• {metric}</div>
               ))}
             </div>
           </div>
 
-          <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-            <h3 className="font-semibold text-teal-900 mb-3">F. Revenue Streams</h3>
-            <div className="space-y-2">
-              {leanCanvas.revenue.map((revenue, index) => (
-                <div key={index} className="text-sm text-teal-800">{revenue}</div>
+          <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">F. Channels</h3>
+            <div className="text-xs text-gray-700 font-medium mb-2">High Level Concept</div>
+            <div className="text-xs text-gray-600">Social network meets trading floor</div>
+            <div className="space-y-1 mt-2">
+              {leanCanvas.channels?.map((channel, index) => (
+                <div key={index} className="text-xs text-gray-700">• {channel}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
+            <h3 className="font-semibold text-indigo-900 mb-3 text-sm">Early Adopters</h3>
+            <div className="space-y-1">
+              <div className="text-xs text-indigo-800">• Young traders savvy with social media</div>
+              <div className="text-xs text-indigo-800">• Investors</div>
+            </div>
+          </div>
+
+          <div className="bg-pink-50 border-2 border-pink-200 rounded-lg p-4">
+            <h3 className="font-semibold text-pink-900 mb-3 text-sm">H. Cost Structure</h3>
+            <div className="space-y-1">
+              <div className="text-xs text-pink-800">• Platform development</div>
+              <div className="text-xs text-pink-800">• Data feeds</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-5 gap-4 mt-4">
+          <div className="col-span-2"></div>
+          <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4">
+            <h3 className="font-semibold text-emerald-900 mb-3 text-sm">G. Revenue Streams</h3>
+            <div className="space-y-1">
+              {leanCanvas.revenue?.map((revenue, index) => (
+                <div key={index} className="text-xs text-emerald-800">• {revenue}</div>
               ))}
             </div>
           </div>
@@ -652,44 +859,61 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
   );
 };
 
-// Validation Section
+// Validation Section - Matching screenshots 3 & 4
 const ValidationSection = ({ currentIdea }) => {
   if (!currentIdea || !currentIdea.hypotheses) return null;
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Validation</h1>
-        <p className="text-gray-600">Critical hypotheses that need validation to ensure your startup success.</p>
+        <p className="text-gray-600">Navigate your startup's viability by identifying critical hypotheses and conducting experiments, ensuring you meet market needs.</p>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold mb-4">Critical Hypotheses</h3>
+      {/* Critical Hypotheses */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">Critical Hypotheses</h2>
+            <GeneratedBadge />
+            <p className="text-gray-600 text-sm mt-2">Identify and prioritize the fundamental assumptions underpinning your business, setting the stage for essential validation tests.</p>
+          </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+            New
+          </button>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Hypothesis</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Criticality</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Method</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Hypothesis</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Criticality</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Testing Method</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700"></th>
               </tr>
             </thead>
             <tbody>
               {currentIdea.hypotheses.map((hypothesis, index) => (
                 <tr key={index} className="border-b border-gray-100">
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      hypothesis.type === 'Desirability' ? 'bg-green-100 text-green-800' :
-                      hypothesis.type === 'Viability' ? 'bg-blue-100 text-blue-800' :
-                      'bg-purple-100 text-purple-800'
-                    }`}>
-                      {hypothesis.type}
-                    </span>
+                  <td className="py-6 px-4">
+                    <div className="flex items-start">
+                      <div className={`w-8 h-8 rounded-full mr-4 flex items-center justify-center text-sm font-medium ${
+                        hypothesis.type === 'Desirability' ? 'bg-green-100 text-green-800' :
+                        hypothesis.type === 'Viability' ? 'bg-blue-100 text-blue-800' :
+                        'bg-purple-100 text-purple-800'
+                      }`}>
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 mb-1">{hypothesis.type}</div>
+                        <div className="text-sm text-gray-600">{hypothesis.text}</div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-700">{hypothesis.text}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  <td className="py-6 px-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                       hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
                       hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
                       'bg-gray-100 text-gray-800'
@@ -697,18 +921,79 @@ const ValidationSection = ({ currentIdea }) => {
                       {hypothesis.criticality}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{hypothesis.method}</td>
+                  <td className="py-6 px-4 text-sm text-gray-700">{hypothesis.method}</td>
+                  <td className="py-6 px-4">
+                    <button className="text-gray-400 hover:text-gray-600">
+                      Edit
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Validation Experiments */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Validation Experiments</h2>
+          <p className="text-gray-600 text-sm">Design and execute strategic tests to validate or refute your startup's hypotheses, ensuring data-driven decisions in your entrepreneurial journey.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Customer Interview */}
+          <div className="border border-gray-200 rounded-lg p-6">
+            <div className="flex items-start mb-4">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                🎤
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Customer Interview</h3>
+                <GeneratedBadge />
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">Create a tailored questionnaire for customer discovery and problem exploration.</p>
+            <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 text-sm">
+              <span className="mr-2">👁️</span>
+              Details
+            </button>
+          </div>
+
+          {/* Landing Page */}
+          <div className="border border-gray-200 rounded-lg p-6">
+            <div className="flex items-start mb-4">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                🌐
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Landing Page</h3>
+                <GeneratedBadge />
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">Develop a simple webpage to illustrate your value proposition.</p>
+            <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 text-sm">
+              <span className="mr-2">✏️</span>
+              Details
+            </button>
+          </div>
+
+          {/* Create New Experiment */}
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+              📧
+            </div>
+            <h3 className="font-medium text-gray-600 mb-1">Create a new</h3>
+            <p className="text-sm text-gray-500 mb-3">Experiment</p>
+            <p className="text-xs text-gray-400">(Coming soon)</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-// Storytelling Section
+// Storytelling Section - Matching screenshot 5
 const StorytellingSection = ({ currentIdea }) => {
   if (!currentIdea || !currentIdea.storytelling) return null;
 
@@ -716,53 +1001,73 @@ const StorytellingSection = ({ currentIdea }) => {
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Storytelling Central</h1>
-        <p className="text-gray-600">Craft compelling narratives that resonate with your audience.</p>
+        <p className="text-gray-600">Craft a compelling narrative for your brand, select your startup's name, and captivate audiences with an unforgettable pitch.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Startup Names</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {storytelling.names.map((name, index) => (
-              <div key={index} className="p-3 bg-gray-50 rounded-lg text-center font-medium">
-                {name}
+      {/* Tab Navigation */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="border-b border-gray-200">
+          <nav className="flex">
+            <button className="px-6 py-4 border-b-2 border-teal-500 text-teal-600 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center text-xs">01</span>
+                Brand Wheel
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Mission & Vision</h3>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-medium text-gray-700 mb-2">Mission</h4>
-              <p className="text-sm text-gray-600">{storytelling.mission}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-700 mb-2">Vision</h4>
-              <p className="text-sm text-gray-600">{storytelling.vision}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Core Values</h3>
-          <div className="space-y-3">
-            {storytelling.values.map((value, index) => (
-              <div key={index} className="flex items-start">
-                <div className="w-2 h-2 bg-teal-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                <p className="text-sm text-gray-700">{value}</p>
+              <div className="text-xs text-gray-500 mt-1">Define your brand positioning.</div>
+              <GeneratedBadge />
+            </button>
+            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">02</span>
+                Startup Naming
               </div>
-            ))}
-          </div>
+              <div className="text-xs text-gray-400 mt-1">Find a compelling name.</div>
+              <GeneratedBadge />
+            </button>
+            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">03</span>
+                Elevator Pitch
+              </div>
+              <div className="text-xs text-gray-400 mt-1">Craft your story.</div>
+              <GeneratedBadge />
+            </button>
+          </nav>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Elevator Pitch</h3>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-700 leading-relaxed">{storytelling.elevatorPitch}</p>
+        {/* Brand Wheel Content */}
+        <div className="p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Mission */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Mission</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.mission}</p>
+              </div>
+            </div>
+
+            {/* Vision */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Vision</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.vision}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Brand Values */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Values</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {storytelling.values?.map((value, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-700">{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -811,165 +1116,6 @@ const ConnectDashboardSection = () => {
           <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
             🎁 View Perks
           </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// StartupIdeaSection - Main dashboard showing startup idea overview
-const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
-  if (!currentIdea) {
-    return (
-      <div className="flex items-center justify-center min-h-96">
-        <div className="text-center">
-          <div className="text-gray-400 text-4xl mb-4">💡</div>
-          <p className="text-gray-600 mb-4">No startup idea selected</p>
-          <p className="text-sm text-gray-500">Create a new idea to get started</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
-          <GeneratedBadge />
-        </div>
-      </div>
-
-      {/* Startup Idea Card */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">{currentIdea.description}</h2>
-            <p className="text-gray-600">{currentIdea.industry} • Generated with AI</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between mb-6">
-          <div className="text-gray-600">
-            Your AI Entrepreneur in Residence prepares a first draft of the below for your review:
-          </div>
-          <button 
-            onClick={() => onNavigate('business-prototype')}
-            className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
-          >
-            🚀 View Complete Business Plan
-          </button>
-        </div>
-
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Business Prototype */}
-          <div 
-            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-            onClick={() => onNavigate('business-prototype')}
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Prototype</h3>
-            <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span className="text-teal-600">Lean Canvas →</span>
-                <span className="ml-auto">Customer Segments</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span className="text-teal-600">Lean Canvas →</span>
-                <span className="ml-auto">Problem & Solution</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Value Proposition</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Validation */}
-          <div 
-            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-            onClick={() => onNavigate('validation')}
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Validation</h3>
-            <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Critical Hypotheses</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span className="text-teal-600">Experiments →</span>
-                <span className="ml-auto">Customer Interview</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span className="text-teal-600">Experiments →</span>
-                <span className="ml-auto">Landing Page</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Storytelling Central */}
-          <div 
-            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-            onClick={() => onNavigate('storytelling')}
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Storytelling Central</h3>
-            <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Brand Wheel</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Startup Naming</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Elevator Pitch</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Connect Dashboard */}
-          <div 
-            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-            onClick={() => onNavigate('connect-dashboard')}
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect Dashboard</h3>
-            <div className="space-y-3">
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-orange-500 mr-2">🔒</span>
-                <span>Mentors</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-orange-500 mr-2">🔒</span>
-                <span>Investors & Accelerators</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="text-green-500 mr-2">✓</span>
-                <span>Perks</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Success Message */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-        <div className="flex items-center">
-          <div className="text-green-500 mr-3">✅</div>
-          <div>
-            <h3 className="text-green-800 font-medium">ZigZag Platform is Working!</h3>
-            <p className="text-green-700 text-sm">
-              Backend API with OpenAI GPT-4o integration is running successfully. 
-              All enhanced features including data persistence and AI generation are ready to use.
-            </p>
-          </div>
         </div>
       </div>
     </div>
