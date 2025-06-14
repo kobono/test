@@ -373,6 +373,247 @@ const Button = ({
   );
 };
 
+// PDF Export Functionality
+const exportToPDF = async (currentIdea) => {
+  const { jsPDF } = await import('jspdf');
+  require('jspdf-autotable');
+  
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.width;
+  const margin = 20;
+  let yPos = margin;
+  
+  // Helper function to add text with word wrap
+  const addWrappedText = (text, x, y, maxWidth, fontSize = 12) => {
+    doc.setFontSize(fontSize);
+    const lines = doc.splitTextToSize(text, maxWidth);
+    doc.text(lines, x, y);
+    return y + (lines.length * fontSize * 0.5);
+  };
+  
+  // Title
+  doc.setFontSize(24);
+  doc.setTextColor(20, 184, 166); // teal color
+  doc.text(currentIdea.name || 'Startup Idea', margin, yPos);
+  yPos += 15;
+  
+  // Subtitle
+  doc.setFontSize(12);
+  doc.setTextColor(100, 100, 100);
+  yPos = addWrappedText(currentIdea.description || '', margin, yPos, pageWidth - 2 * margin);
+  yPos += 10;
+  
+  // Industry and Date
+  doc.setFontSize(10);
+  doc.setTextColor(60, 60, 60);
+  doc.text(`Industry: ${currentIdea.industry || 'N/A'}`, margin, yPos);
+  doc.text(`Generated: ${new Date(currentIdea.created || Date.now()).toLocaleDateString()}`, pageWidth - 60, yPos);
+  yPos += 20;
+  
+  // Lean Canvas Section
+  doc.setFontSize(18);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Lean Canvas', margin, yPos);
+  yPos += 10;
+  
+  const leanCanvas = currentIdea.leanCanvas || {};
+  
+  // Problems
+  if (leanCanvas.problems && leanCanvas.problems.length > 0) {
+    doc.setFontSize(14);
+    doc.setTextColor(60, 60, 60);
+    doc.text('Problems:', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    leanCanvas.problems.forEach((problem, index) => {
+      yPos = addWrappedText(`${index + 1}. ${problem}`, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 2;
+    });
+    yPos += 5;
+  }
+  
+  // Solutions
+  if (leanCanvas.solutions && leanCanvas.solutions.length > 0) {
+    doc.setFontSize(14);
+    doc.setTextColor(60, 60, 60);
+    doc.text('Solutions:', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    leanCanvas.solutions.forEach((solution, index) => {
+      yPos = addWrappedText(`${index + 1}. ${solution}`, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 2;
+    });
+    yPos += 5;
+  }
+  
+  // Value Proposition
+  if (leanCanvas.valueProposition) {
+    doc.setFontSize(14);
+    doc.setTextColor(60, 60, 60);
+    doc.text('Value Proposition:', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    yPos = addWrappedText(leanCanvas.valueProposition, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+    yPos += 10;
+  }
+  
+  // Check if we need a new page
+  if (yPos > 250) {
+    doc.addPage();
+    yPos = margin;
+  }
+  
+  // Customer Segments
+  if (leanCanvas.customers && leanCanvas.customers.length > 0) {
+    doc.setFontSize(14);
+    doc.setTextColor(60, 60, 60);
+    doc.text('Customer Segments:', margin, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    leanCanvas.customers.forEach((customer, index) => {
+      yPos = addWrappedText(`${index + 1}. ${customer}`, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 2;
+    });
+    yPos += 10;
+  }
+  
+  // Critical Hypotheses
+  if (currentIdea.hypotheses && currentIdea.hypotheses.length > 0) {
+    if (yPos > 200) {
+      doc.addPage();
+      yPos = margin;
+    }
+    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Critical Hypotheses', margin, yPos);
+    yPos += 15;
+    
+    // Create table data for hypotheses
+    const hypothesesData = currentIdea.hypotheses.map(hypothesis => [
+      hypothesis.type || '',
+      hypothesis.text || '',
+      hypothesis.criticality || '',
+      hypothesis.method || ''
+    ]);
+    
+    doc.autoTable({
+      head: [['Type', 'Hypothesis', 'Criticality', 'Validation Method']],
+      body: hypothesesData,
+      startY: yPos,
+      theme: 'grid',
+      headStyles: { fillColor: [20, 184, 166] },
+      margin: { left: margin, right: margin },
+      styles: { fontSize: 9, cellPadding: 3 },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 70 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 45 }
+      }
+    });
+    
+    yPos = doc.lastAutoTable.finalY + 15;
+  }
+  
+  // Storytelling Section
+  if (currentIdea.storytelling) {
+    if (yPos > 220) {
+      doc.addPage();
+      yPos = margin;
+    }
+    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Brand & Storytelling', margin, yPos);
+    yPos += 15;
+    
+    const storytelling = currentIdea.storytelling;
+    
+    // Mission
+    if (storytelling.mission) {
+      doc.setFontSize(14);
+      doc.setTextColor(60, 60, 60);
+      doc.text('Mission:', margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      yPos = addWrappedText(storytelling.mission, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 8;
+    }
+    
+    // Vision
+    if (storytelling.vision) {
+      doc.setFontSize(14);
+      doc.setTextColor(60, 60, 60);
+      doc.text('Vision:', margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      yPos = addWrappedText(storytelling.vision, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 8;
+    }
+    
+    // Elevator Pitch
+    if (storytelling.elevatorPitch) {
+      doc.setFontSize(14);
+      doc.setTextColor(60, 60, 60);
+      doc.text('Elevator Pitch:', margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      yPos = addWrappedText(storytelling.elevatorPitch, margin + 5, yPos, pageWidth - 2 * margin - 10, 10);
+      yPos += 10;
+    }
+  }
+  
+  // Footer
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Generated by ZigZag Platform - Page ${i} of ${pageCount}`, margin, 285);
+    doc.text(`www.zigzagplatform.com`, pageWidth - 60, 285);
+  }
+  
+  // Save the PDF
+  const fileName = `${(currentIdea.name || 'startup_idea').replace(/[^a-z0-9]/gi, '_')}_business_plan.pdf`;
+  doc.save(fileName);
+};
+
+// Export Button Component
+const ExportButton = ({ currentIdea, variant = 'outline', size = 'medium' }) => {
+  const [isExporting, setIsExporting] = useState(false);
+  
+  const handleExport = async () => {
+    if (!currentIdea) return;
+    
+    setIsExporting(true);
+    try {
+      await exportToPDF(currentIdea);
+    } catch (error) {
+      console.error('Failed to export PDF:', error);
+      alert('Failed to export PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+  
+  return (
+    <Button
+      variant={variant}
+      size={size}
+      loading={isExporting}
+      onClick={handleExport}
+      disabled={!currentIdea}
+      className="flex items-center space-x-2"
+    >
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <span>{isExporting ? 'Exporting...' : 'Export PDF'}</span>
+    </Button>
+  );
+};
+
 // Login Page Component
 export const LoginPage = ({ onLogin }) => {
   return (
