@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,7 +6,7 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
 
@@ -20,7 +20,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="ZigZag Platform API", version="1.0.0")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -34,6 +34,59 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+# Startup Idea Models
+class LeanCanvas(BaseModel):
+    problems: List[str] = []
+    solutions: List[str] = []
+    customers: List[str] = []
+    competitors: List[str] = []
+    valueProposition: str = ""
+    channels: List[str] = []
+    revenue: List[str] = []
+    keyMetrics: List[str] = []
+
+class Hypothesis(BaseModel):
+    type: str  # Desirability, Viability, Feasibility
+    text: str
+    criticality: str  # High, Medium, Low
+    method: str
+
+class Storytelling(BaseModel):
+    names: List[str] = []
+    mission: str = ""
+    vision: str = ""
+    values: List[str] = []
+    elevatorPitch: str = ""
+
+class StartupIdea(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    industry: str
+    leanCanvas: LeanCanvas
+    hypotheses: List[Hypothesis] = []
+    storytelling: Storytelling
+    created: datetime = Field(default_factory=datetime.utcnow)
+    updated: datetime = Field(default_factory=datetime.utcnow)
+    userId: Optional[str] = None
+
+class StartupIdeaCreate(BaseModel):
+    name: str
+    description: str
+    industry: str
+    leanCanvas: LeanCanvas
+    hypotheses: List[Hypothesis] = []
+    storytelling: Storytelling
+    userId: Optional[str] = None
+
+class StartupIdeaUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    industry: Optional[str] = None
+    leanCanvas: Optional[LeanCanvas] = None
+    hypotheses: Optional[List[Hypothesis]] = None
+    storytelling: Optional[Storytelling] = None
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
