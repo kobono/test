@@ -1296,19 +1296,378 @@ const ReportsSection = () => {
   );
 };
 
-const SettingsSection = () => (
-  <div className="space-y-6">
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-      <p className="text-gray-600 mt-2">Configure your account and platform preferences</p>
+const SettingsSection = () => {
+  const [activeSettingsTab, setActiveSettingsTab] = useState('account');
+
+  const settingsTabs = [
+    { key: 'account', label: 'Account', icon: '👤' },
+    { key: 'team', label: 'Team & Access', icon: '👥' },
+    { key: 'notifications', label: 'Notifications', icon: '🔔' },
+    { key: 'integrations', label: 'Integrations', icon: '🔗' },
+    { key: 'billing', label: 'Billing', icon: '💳' },
+    { key: 'security', label: 'Security', icon: '🔒' }
+  ];
+
+  const AccountSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <input 
+              type="text" 
+              defaultValue="John Doe"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input 
+              type="email" 
+              defaultValue="john@company.com"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+            <input 
+              type="text" 
+              defaultValue="Startup Inc."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option>Founder</option>
+              <option>Co-founder</option>
+              <option>Product Manager</option>
+              <option>Marketing Manager</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div className="mt-6">
+          <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Startup Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Startup Name</label>
+            <input 
+              type="text" 
+              defaultValue="ProductivityApp"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Industry</label>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option>SaaS</option>
+              <option>E-commerce</option>
+              <option>Fintech</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Stage</label>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option>Idea</option>
+              <option>MVP</option>
+              <option>Early Stage</option>
+              <option>Growth</option>
+              <option>Scale</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Team Size</label>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option>1 person</option>
+              <option>2-5 people</option>
+              <option>6-10 people</option>
+              <option>11-25 people</option>
+              <option>25+ people</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
-      <div className="text-6xl mb-4">⚙️</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">Platform Settings</h3>
-      <p className="text-gray-600">Manage your account, team, and notification preferences</p>
+  );
+
+  const TeamSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Team Members</h3>
+          <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            + Invite Member
+          </button>
+        </div>
+        <div className="space-y-4">
+          {[
+            { name: 'John Doe', email: 'john@company.com', role: 'Owner', status: 'Active' },
+            { name: 'Jane Smith', email: 'jane@company.com', role: 'Admin', status: 'Active' },
+            { name: 'Mike Johnson', email: 'mike@company.com', role: 'Member', status: 'Pending' }
+          ].map((member, index) => (
+            <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                  {member.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{member.name}</p>
+                  <p className="text-sm text-gray-600">{member.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">{member.role}</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  member.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {member.status}
+                </span>
+                <button className="text-gray-400 hover:text-gray-600">⚙️</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+
+  const NotificationSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Notifications</h3>
+        <div className="space-y-4">
+          {[
+            { title: 'Experiment Completed', desc: 'When an A/B test or experiment finishes', enabled: true },
+            { title: 'New Insights Available', desc: 'When AI generates new insights from your data', enabled: true },
+            { title: 'Hypothesis Status Changes', desc: 'When a hypothesis is validated or invalidated', enabled: true },
+            { title: 'Weekly Summary', desc: 'Weekly progress report of your validation activities', enabled: false },
+            { title: 'Team Activity', desc: 'When team members add or update content', enabled: false }
+          ].map((notification, index) => (
+            <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">{notification.title}</p>
+                <p className="text-sm text-gray-600">{notification.desc}</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" defaultChecked={notification.enabled} className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const IntegrationSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Available Integrations</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { name: 'Google Analytics', desc: 'Track website performance', icon: '📊', connected: true },
+            { name: 'Slack', desc: 'Get notifications in Slack', icon: '💬', connected: false },
+            { name: 'Typeform', desc: 'Import survey responses', icon: '📝', connected: false },
+            { name: 'Intercom', desc: 'Sync customer feedback', icon: '🗨️', connected: true },
+            { name: 'Stripe', desc: 'Track payment metrics', icon: '💳', connected: false },
+            { name: 'Mixpanel', desc: 'Import user behavior data', icon: '📈', connected: false }
+          ].map((integration, index) => (
+            <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">{integration.icon}</span>
+                <div>
+                  <p className="font-medium text-gray-900">{integration.name}</p>
+                  <p className="text-sm text-gray-600">{integration.desc}</p>
+                </div>
+              </div>
+              <button className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                integration.connected 
+                  ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                  : 'bg-teal-100 text-teal-700 hover:bg-teal-200'
+              }`}>
+                {integration.connected ? 'Disconnect' : 'Connect'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const BillingSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Plan</h3>
+        <div className="flex items-center justify-between p-4 bg-teal-50 rounded-lg border border-teal-200">
+          <div>
+            <p className="font-medium text-gray-900">Pro Plan</p>
+            <p className="text-sm text-gray-600">$49/month • Unlimited hypotheses & experiments</p>
+          </div>
+          <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            Manage Plan
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div className="text-center p-4 border border-gray-200 rounded-lg">
+            <p className="text-2xl font-bold text-gray-900">24</p>
+            <p className="text-sm text-gray-600">Active Hypotheses</p>
+            <p className="text-xs text-gray-500">Unlimited available</p>
+          </div>
+          <div className="text-center p-4 border border-gray-200 rounded-lg">
+            <p className="text-2xl font-bold text-gray-900">8</p>
+            <p className="text-sm text-gray-600">Running Experiments</p>
+            <p className="text-xs text-gray-500">Unlimited available</p>
+          </div>
+          <div className="text-center p-4 border border-gray-200 rounded-lg">
+            <p className="text-2xl font-bold text-gray-900">3</p>
+            <p className="text-sm text-gray-600">Team Members</p>
+            <p className="text-xs text-gray-500">10 included</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Billing History</h3>
+        <div className="space-y-3">
+          {[
+            { date: 'Dec 1, 2024', amount: '$49.00', status: 'Paid', invoice: 'INV-001' },
+            { date: 'Nov 1, 2024', amount: '$49.00', status: 'Paid', invoice: 'INV-002' },
+            { date: 'Oct 1, 2024', amount: '$49.00', status: 'Paid', invoice: 'INV-003' }
+          ].map((bill, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">{bill.date}</p>
+                <p className="text-sm text-gray-600">{bill.invoice}</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="font-medium text-gray-900">{bill.amount}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                  {bill.status}
+                </span>
+                <button className="text-teal-600 hover:text-teal-700 text-sm">Download</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const SecuritySettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Settings</h3>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+            <div>
+              <p className="font-medium text-gray-900">Two-Factor Authentication</p>
+              <p className="text-sm text-gray-600">Extra security for your account</p>
+            </div>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              Enabled
+            </span>
+          </div>
+          
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div>
+              <p className="font-medium text-gray-900">Password</p>
+              <p className="text-sm text-gray-600">Last changed 3 months ago</p>
+            </div>
+            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+              Change Password
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div>
+              <p className="font-medium text-gray-900">Active Sessions</p>
+              <p className="text-sm text-gray-600">2 active sessions</p>
+            </div>
+            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+              Manage Sessions
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Data & Privacy</h3>
+        <div className="space-y-4">
+          <button className="w-full p-4 text-left bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <p className="font-medium text-gray-900">Export Your Data</p>
+            <p className="text-sm text-gray-600">Download all your validation data and reports</p>
+          </button>
+          
+          <button className="w-full p-4 text-left bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
+            <p className="font-medium text-red-900">Delete Account</p>
+            <p className="text-sm text-red-600">Permanently delete your account and all data</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderActiveSettings = () => {
+    switch (activeSettingsTab) {
+      case 'account': return <AccountSettings />;
+      case 'team': return <TeamSettings />;
+      case 'notifications': return <NotificationSettings />;
+      case 'integrations': return <IntegrationSettings />;
+      case 'billing': return <BillingSettings />;
+      case 'security': return <SecuritySettings />;
+      default: return <AccountSettings />;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+        <p className="text-gray-600 mt-2">Manage your account and platform preferences</p>
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Settings Navigation */}
+        <div className="lg:w-64">
+          <nav className="space-y-1">
+            {settingsTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveSettingsTab(tab.key)}
+                className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
+                  activeSettingsTab === tab.key
+                    ? 'bg-teal-50 text-teal-700 border-l-4 border-teal-500'
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <span className="mr-3 text-lg">{tab.icon}</span>
+                <span className="font-medium">{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Settings Content */}
+        <div className="flex-1">
+          {renderActiveSettings()}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Main Dashboard Component
 export const Dashboard = ({ onLogout }) => {
