@@ -1367,3 +1367,432 @@ const ConnectDashboardSection = () => {
     </div>
   );
 };
+
+// Lean Canvas Details Section - Dedicated page matching screenshots exactly
+const LeanCanvasDetailsSection = ({ currentIdea, onNavigate }) => {
+  if (!currentIdea || !currentIdea.leanCanvas) return null;
+
+  const leanCanvas = currentIdea.leanCanvas;
+
+  return (
+    <div className="space-y-8">
+      {/* Header with blue gradient background */}
+      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-lg p-8">
+        <div className="flex items-center mb-4">
+          <button 
+            onClick={() => onNavigate('business-prototype')}
+            className="text-white hover:text-blue-200 mr-4"
+          >
+            ← Back
+          </button>
+          <h1 className="text-3xl font-bold">Lean Canvas</h1>
+        </div>
+        <p className="text-blue-100">
+          Craft your startup vision by distilling ideas into a single blueprint. Dive into 
+          problem-solving, value propositions, and market-fit on one dynamic canvas.
+        </p>
+      </div>
+
+      {/* Customer Segments Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4">
+              <span className="text-2xl font-bold text-teal-600">A</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Customer Segments</h2>
+              <p className="text-gray-600">Identifies the specific market segment or audience who will most benefit from your product or service using the Jobs To Be Done framework.</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="text-right">
+              <div className="text-sm text-gray-500">On this page</div>
+              <div className="space-y-1 text-sm">
+                <div className="text-teal-600">Target Customers</div>
+                <div className="text-gray-400">Problem</div>
+                <div className="text-gray-400">Existing Alternatives</div>
+                <div className="text-gray-400">Solution</div>
+                <div className="text-gray-400">Unique Value Proposition</div>
+                <div className="text-gray-400">Channels</div>
+                <div className="text-gray-400">Revenue Streams</div>
+                <div className="text-gray-400">Cost Structure</div>
+                <div className="text-gray-400">Key Metrics</div>
+                <div className="text-gray-400">Unfair Advantage</div>
+              </div>
+            </div>
+            <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg">New</button>
+          </div>
+        </div>
+
+        {/* Customer Segments List */}
+        <div className="space-y-8">
+          {leanCanvas.customerSegments?.map((segment, index) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-6">
+              <div className="flex items-start">
+                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                  👤
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-gray-900">{segment.name}</h3>
+                    <button className="text-gray-400 hover:text-gray-600">Edit</button>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-8">
+                    {/* Persona Overview */}
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-3">Persona Overview</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">{segment.personaOverview}</p>
+                    </div>
+
+                    {/* Customer Jobs */}
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-3">Customer Jobs</h4>
+                      <div className="space-y-2">
+                        {segment.customerJobs?.map((job, jobIndex) => (
+                          <p key={jobIndex} className="text-sm text-gray-600">{job}</p>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Customer Pains */}
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-3">Customer Pains</h4>
+                      <div className="space-y-2">
+                        {segment.customerPains?.map((pain, painIndex) => (
+                          <p key={painIndex} className="text-sm text-gray-600">{pain}</p>
+                        ))}
+                      </div>
+                      <button className="text-gray-400 hover:text-gray-600 mt-2">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )) || (
+            // Fallback for old data structure
+            <div className="space-y-6">
+              {['Millennial Investors', 'Retirement Planners', 'Aspiring Full-time Traders', 'Financial Enthusiast Students'].map((segment, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-6">
+                  <div className="flex items-start">
+                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                      👤
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-semibold text-gray-900">{segment}</h3>
+                        <button className="text-gray-400 hover:text-gray-600">Edit</button>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-8">
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-3">Persona Overview</h4>
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            {index === 0 && "Sophia, aged 25-35, is an urban professional living in San Francisco who has recently become interested in investing. She is tech-savvy, values social interactions, and wants to make informed investment decisions by learning from more experienced traders."}
+                            {index === 1 && "Bob, aged 45-60, is a middle-class individual from Charlotte, NC, concerned about his retirement savings due to economic uncertainty. He's looking for alternative ways to grow his nest egg and ensure a comfortable retirement."}
+                            {index === 2 && "Miguel, aged 20-30, is an ambitious individual from Austin, Texas, who dreams of becoming a full-time trader. With some experience in stock trading, he is looking to sharpen his skills and build a personal brand around his trading strategy."}
+                            {index === 3 && "Emily, aged 18-24, is a college student from Boston, majoring in finance. She's enthusiastic about building her investment knowledge and looks for hands-on experience through practical platforms that can offer her a deeper understanding of the markets."}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-3">Customer Jobs</h4>
+                          <div className="space-y-2">
+                            {index === 0 && (
+                              <>
+                                <p className="text-sm text-gray-600">Finding reliable investment information.</p>
+                                <p className="text-sm text-gray-600">Engaging with a community of investors.</p>
+                                <p className="text-sm text-gray-600">Growing her portfolio through informed decisions...</p>
+                              </>
+                            )}
+                            {index === 1 && (
+                              <>
+                                <p className="text-sm text-gray-600">Diversifying retirement investments.</p>
+                                <p className="text-sm text-gray-600">Learning about trading and its benefits.</p>
+                                <p className="text-sm text-gray-600">Staying updated on financial markets...</p>
+                              </>
+                            )}
+                            {index === 2 && (
+                              <>
+                                <p className="text-sm text-gray-600">Mastering advanced trading techniques.</p>
+                                <p className="text-sm text-gray-600">Gaining a following on the platform.</p>
+                                <p className="text-sm text-gray-600">Networking with successful traders...</p>
+                              </>
+                            )}
+                            {index === 3 && (
+                              <>
+                                <p className="text-sm text-gray-600">Acquiring real-world trading experience.</p>
+                                <p className="text-sm text-gray-600">Connecting with mentors and experts in finance.</p>
+                                <p className="text-sm text-gray-600">Managing a small budget effectively for investment...</p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-3">Customer Pains</h4>
+                          <div className="space-y-2">
+                            {index === 0 && (
+                              <>
+                                <p className="text-sm text-gray-600">Overwhelming amount of investment data.</p>
+                                <p className="text-sm text-gray-600">Identifying trustworthy investment advice.</p>
+                                <p className="text-sm text-gray-600">Balancing time between learning about investments and her career...</p>
+                              </>
+                            )}
+                            {index === 1 && (
+                              <>
+                                <p className="text-sm text-gray-600">Worry about the adequacy of retirement savings.</p>
+                                <p className="text-sm text-gray-600">Feeling out of touch with modern investment tools.</p>
+                                <p className="text-sm text-gray-600">Confusion over complex trading strategies...</p>
+                              </>
+                            )}
+                            {index === 2 && (
+                              <>
+                                <p className="text-sm text-gray-600">Potentially unstable income.</p>
+                                <p className="text-sm text-gray-600">High competition for attention on the platform.</p>
+                                <p className="text-sm text-gray-600">Balancing risk and reward...</p>
+                              </>
+                            )}
+                            {index === 3 && (
+                              <>
+                                <p className="text-sm text-gray-600">Limited capital to invest.</p>
+                                <p className="text-sm text-gray-600">Navigating through an abundance of information.</p>
+                                <p className="text-sm text-gray-600">Balancing studies with investment learning...</p>
+                              </>
+                            )}
+                          </div>
+                          <button className="text-gray-400 hover:text-gray-600 mt-2">Edit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Insight Box */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <p className="text-sm text-gray-700 italic">
+              Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Problem Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+              <span className="text-2xl font-bold text-green-600">B</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Problem</h2>
+              <p className="text-gray-600">Highlights the issue, challenge, or pain point your target customers experience.</p>
+            </div>
+          </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg">Edit</button>
+        </div>
+
+        <div className="space-y-4 mb-6">
+          {leanCanvas.problems?.map((problem, index) => (
+            <div key={index} className="flex items-center">
+              <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+              <span className="text-gray-700">{problem}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-sm text-gray-700 italic">
+            Validate the problem through direct conversations with potential customers to ensure it's real, painful, and prevalent.
+          </p>
+        </div>
+      </div>
+
+      {/* Existing Alternatives Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center mr-4">
+              <span className="text-2xl font-bold text-cyan-600">C</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Existing Alternatives</h2>
+              <p className="text-gray-600">Describes the current solutions your target customers use to solve their problem.</p>
+            </div>
+          </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg">Edit</button>
+        </div>
+
+        <div className="grid grid-cols-3 gap-8">
+          {/* Direct Competitors */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Direct Competitors</h3>
+            <div className="space-y-2">
+              {leanCanvas.competitors?.direct?.map((competitor, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700">{competitor}</span>
+                </div>
+              )) || ['eToro', 'ZuluTrade', 'CopyMe', 'NAGA', 'TradingView', 'PeopTrade'].map((competitor, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700">{competitor}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Indirect Competitors */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Indirect Competitors</h3>
+            <div className="space-y-2">
+              {leanCanvas.competitors?.indirect?.map((competitor, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700">{competitor}</span>
+                </div>
+              )) || [
+                'Traditional brokerage firms like Fidelity and Charles Schwab',
+                'Forex trading platforms like MetaTrader',
+                'Online investment courses and webinars',
+                'Financial news and analysis websites like Investing.com',
+                'Stock market simulators',
+                'Independent financial advisors and consultants'
+              ].map((competitor, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700 text-sm">{competitor}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Alternative Solutions */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Alternative Solutions</h3>
+            <div className="space-y-2">
+              {leanCanvas.competitors?.alternatives?.map((alternative, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700">{alternative}</span>
+                </div>
+              )) || [
+                'Social media investment groups',
+                'Offline investment clubs',
+                'Personal network consultations',
+                'Do-it-yourself (DIY) investing using books and online resources',
+                'Investment podcasts and YouTube channels',
+                'Public forums like Reddit\'s r/investing'
+              ].map((alternative, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                  <span className="text-gray-700 text-sm">{alternative}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 mt-8">
+          <p className="text-sm text-gray-700 italic">
+            Identify existing competitors that address the same problem; understanding how they work will help differentiate your product.
+          </p>
+        </div>
+      </div>
+
+      {/* Solution Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+              <span className="text-2xl font-bold text-green-600">D</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Solution</h2>
+              <p className="text-gray-600">Presents your product or service that addresses the identified problem.</p>
+            </div>
+          </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg">Edit</button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8">
+          {/* Features */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Features</h3>
+            <div className="space-y-3">
+              {leanCanvas.solutions?.features?.map((feature, index) => (
+                <div key={index} className="flex items-start">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3 mt-2"></span>
+                  <span className="text-gray-700">{feature}</span>
+                </div>
+              )) || [
+                'Real-time social feed for trading insights',
+                'Copy-trading feature that replicates top traders\' actions',
+                'Community-driven content and educational resources',
+                'Performance analytics for self-improvement'
+              ].map((feature, index) => (
+                <div key={index} className="flex items-start">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full mr-3 mt-2"></span>
+                  <span className="text-gray-700">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Potential Ways-to-Play */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Potential Ways-to-Play</h3>
+            <div className="space-y-6">
+              {leanCanvas.solutions?.potentialWaysToPlay?.map((strategy, index) => (
+                <div key={index}>
+                  <h4 className="font-medium text-gray-800 mb-2">{strategy.title}</h4>
+                  <p className="text-sm text-gray-600">{strategy.description}</p>
+                </div>
+              )) || [
+                {
+                  title: 'Influencer-driven engagement',
+                  description: 'Leveraging financial influencers to drive platform engagement and credibility.'
+                },
+                {
+                  title: 'Tailored Educational Content',
+                  description: 'Providing customized educational content that helps users make more informed trading decisions.'
+                },
+                {
+                  title: 'Integration of Crypto Assets',
+                  description: 'Expanding the asset classes to include cryptocurrencies and tokens, catering to the interest in digital assets.'
+                },
+                {
+                  title: 'Behavioral Analytics for Matching',
+                  description: 'Using behavioral analytics to better match users with top-performing traders, improving the social aspect of trading.'
+                },
+                {
+                  title: 'Micro-investing Options',
+                  description: 'Offering micro-investing capabilities that allow users to mimic trades with smaller, incremental investments.'
+                },
+                {
+                  title: 'Robust Risk Management Tools',
+                  description: 'Building in advanced risk management features for users to apply when engaging in social trading.'
+                }
+              ].map((strategy, index) => (
+                <div key={index}>
+                  <h4 className="font-medium text-gray-800 mb-2">{strategy.title}</h4>
+                  <p className="text-sm text-gray-600">{strategy.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 mt-8">
+          <p className="text-sm text-gray-700 italic">
+            Aim for a solution that's 10x better than existing alternatives to make it worth the switch for your customers.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
