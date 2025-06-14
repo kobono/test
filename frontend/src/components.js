@@ -120,13 +120,149 @@ const GeneratedBadge = () => (
   </span>
 );
 
-// Simple Workspace - Just showing a basic version to get the preview working
+// Simple Workspace with Enhanced Features
 export const ZigZagWorkspace = ({ onLogout }) => {
-  const [currentIdea, setCurrentIdea] = useState({
-    name: 'TradeHive',
-    description: 'social trading platform',
-    industry: 'trading'
-  });
+  const [currentSection, setCurrentSection] = useState('startup-idea');
+  const [currentIdea, setCurrentIdea] = useState(null);
+  const [userIdeas, setUserIdeas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load user ideas on component mount
+  useEffect(() => {
+    loadUserIdeas();
+  }, []);
+
+  const loadUserIdeas = async () => {
+    try {
+      setLoading(true);
+      const ideas = await apiService.getStartupIdeas();
+      setUserIdeas(ideas);
+      
+      // Set the first idea as current if available, otherwise use default
+      if (ideas.length > 0) {
+        setCurrentIdea(ideas[0]);
+      } else {
+        // Default idea for new users
+        setCurrentIdea({
+          id: 'default',
+          name: 'TradeHive',
+          description: 'social trading platform',
+          industry: 'trading',
+          leanCanvas: {
+            problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets'],
+            solutions: ['Social trading platform', 'Real-time market insights'],
+            customers: ['Millennial investors', 'Retirement planners', 'Day traders', 'Financial enthusiast students'],
+            competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers'],
+            valueProposition: 'Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.',
+            channels: ['Mobile app', 'Financial blogs', 'Social media', 'Trading forums'],
+            revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
+            keyMetrics: ['Active traders', 'Trading volume', 'Platform assets', 'User retention rates']
+          },
+          hypotheses: [
+            { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
+            { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
+            { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
+          ],
+          storytelling: {
+            names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow'],
+            mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
+            vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
+            values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships'],
+            elevatorPitch: 'TradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge.'
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load user ideas:', err);
+      setError('Failed to load ideas. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNewIdea = () => {
+    setCurrentSection('new-idea');
+  };
+
+  const handleIdeaCreated = async (newIdea) => {
+    try {
+      // Save the new idea to the backend
+      const savedIdea = await apiService.createStartupIdea({
+        name: newIdea.name,
+        description: newIdea.description,
+        industry: newIdea.industry,
+        leanCanvas: newIdea.leanCanvas,
+        hypotheses: newIdea.hypotheses,
+        storytelling: newIdea.storytelling
+      });
+      
+      // Update local state
+      setCurrentIdea(savedIdea);
+      setUserIdeas(prev => [savedIdea, ...prev]);
+      setCurrentSection('startup-idea');
+    } catch (err) {
+      console.error('Failed to save new idea:', err);
+      setError('Failed to save idea. Please try again.');
+      // Still update local state for now
+      setCurrentIdea(newIdea);
+      setCurrentSection('startup-idea');
+    }
+  };
+
+  const handleSectionChange = (section) => {
+    setCurrentSection(section);
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your startup ideas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">⚠️</div>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button 
+            onClick={() => {
+              setError(null);
+              loadUserIdeas();
+            }}
+            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const renderMainContent = () => {
+    switch (currentSection) {
+      case 'new-idea':
+        return <NewIdeaSection onIdeaCreated={handleIdeaCreated} />;
+      case 'business-prototype':
+        return <BusinessPrototypeSection currentIdea={currentIdea} />;
+      case 'validation':
+        return <ValidationSection currentIdea={currentIdea} />;
+      case 'storytelling':
+        return <StorytellingSection currentIdea={currentIdea} />;
+      case 'connect-dashboard':
+        return <ConnectDashboardSection />;
+      default:
+        return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
