@@ -266,7 +266,7 @@ const GeneratedBadge = () => (
 );
 
 // Main Content Components
-const StartupIdeaSection = ({ onNavigate }) => {
+const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -282,7 +282,7 @@ const StartupIdeaSection = ({ onNavigate }) => {
         <div className="flex items-center space-x-4 mb-6">
           <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">social trading platform</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{currentIdea.description}</h2>
           </div>
         </div>
 
@@ -296,8 +296,8 @@ const StartupIdeaSection = ({ onNavigate }) => {
           </button>
         </div>
 
-        {/* Three Main Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Four Main Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Business Prototype */}
           <div 
             className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
@@ -364,6 +364,28 @@ const StartupIdeaSection = ({ onNavigate }) => {
               <div className="flex items-center text-sm text-gray-600">
                 <span className="text-green-500 mr-2">✓</span>
                 <span>Elevator Pitch</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Connect Dashboard */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('connect-dashboard')}
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect Dashboard</h3>
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-orange-500 mr-2">🔒</span>
+                <span>Mentors</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-orange-500 mr-2">🔒</span>
+                <span>Investors & Accelerators</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Perks</span>
               </div>
             </div>
           </div>
