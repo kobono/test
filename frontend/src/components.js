@@ -894,7 +894,283 @@ const StorytellingSection = ({ currentIdea }) => {
   );
 };
 
-const ConnectDashboardSection = () => {
+// Detailed Lean Canvas Page
+const LeanCanvasDetailsSection = ({ currentIdea }) => {
+  const [activeSection, setActiveSection] = useState('customer-segments');
+  
+  const canvas = currentIdea?.leanCanvas || {
+    problems: ['Problem identification needed', 'Market research required'],
+    solutions: ['Solution development needed', 'Technical implementation required'],
+    customers: ['Target customer analysis needed'],
+    competitors: ['Competitive analysis required'],
+    valueProposition: 'Value proposition to be defined',
+    channels: ['Distribution channels to be identified'],
+    revenue: ['Revenue model to be developed'],
+    keyMetrics: ['Key metrics to be defined']
+  };
+
+  // Generate detailed customer personas based on the startup idea
+  const generateCustomerPersonas = () => {
+    if (currentIdea?.industry === 'trading') {
+      return [
+        {
+          name: 'Millennial Investors',
+          overview: 'Sophia, aged 25-35, is an urban professional living in San Francisco who has recently become interested in investing. She is tech-savvy, values social interactions, and wants to make informed investment decisions by learning from more experienced traders.',
+          jobs: ['Finding reliable investment information', 'Engaging with a community of investors', 'Growing her portfolio through informed decisions'],
+          pains: ['Overwhelming amount of investment data', 'Identifying trustworthy investment advice', 'Balancing time between learning about investments and her career']
+        },
+        {
+          name: 'Retirement Replanners',
+          overview: 'Bob, aged 45-60, is a middle-class individual from Charlotte, NC, concerned about his retirement savings due to economic uncertainty. He\'s looking for alternative ways to grow his nest egg and ensure a comfortable retirement.',
+          jobs: ['Diversifying retirement investments', 'Learning about market trends and its benefits', 'Mitigating risks related to retirement funds', 'Staying updated on financial markets'],
+          pains: ['Worry about the adequacy of retirement savings', 'Feeling out of touch with modern investment tools', 'Confusion over complex trading strategies']
+        },
+        {
+          name: 'Aspiring Full-time Traders',
+          overview: 'Miguel, aged 20-30, is an ambitious individual from Austin, Texas, who dreams of becoming a full-time trader. With some experience in stock trading, he is looking to sharpen his skills and build a personal brand around his trading strategy.',
+          jobs: ['Mastering advanced trading techniques', 'Gaining a following on the platform', 'Networking with successful traders', 'Generating consistent profits from trading'],
+          pains: ['Potentially unstable income', 'High competition for attention on the platform', 'Balancing risk and reward', 'Finding reliable market insights']
+        },
+        {
+          name: 'Financial Enthusiast Students',
+          overview: 'Emily, aged 18-24, is a college student from Boston, majoring in finance. She\'s enthusiastic about building her investment knowledge and looks for hands-on experience through practical platforms that can offer her a deeper understanding of the markets.',
+          jobs: ['Acquiring real-world trading experience', 'Connecting with mentors and experts in finance', 'Managing a small budget effectively for investment'],
+          pains: ['Limited capital to invest', 'Navigating through an abundance of information', 'Balancing studies with investment learning', 'Avoiding misinformation and scams']
+        }
+      ];
+    }
+    // Add other industries as needed
+    return [
+      {
+        name: 'Primary Target Segment',
+        overview: 'Description of the primary customer segment for this startup idea.',
+        jobs: ['Key job to be done', 'Secondary important task'],
+        pains: ['Main pain point', 'Secondary concern']
+      }
+    ];
+  };
+
+  const customerPersonas = generateCustomerPersonas();
+
+  const sectionContent = {
+    'customer-segments': {
+      title: 'Customer Segments',
+      subtitle: 'Identifies the specific market segment or audience who will most benefit from your product or service using the Jobs To Be Done framework.',
+      content: (
+        <div className="space-y-8">
+          {customerPersonas.map((persona, index) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                  <span className="text-gray-600 font-semibold">👤</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900">{persona.name}</h3>
+                    <button className="text-teal-600 hover:text-teal-700 text-sm">Edit</button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Persona Overview</h4>
+                      <p className="text-sm text-gray-600 italic">{persona.overview}</p>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Customer Jobs</h4>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {persona.jobs.map((job, jobIndex) => (
+                          <li key={jobIndex}>• {job}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Customer Pains</h4>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {persona.pains.map((pain, painIndex) => (
+                          <li key={painIndex}>• {pain}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          <div className="bg-blue-50 rounded-lg p-4">
+            <p className="text-sm text-blue-800">
+              <strong>Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.</strong>
+            </p>
+          </div>
+        </div>
+      )
+    },
+    'problem': {
+      title: 'Problem',
+      subtitle: 'Highlights the issue, challenge, or pain point your target customers experience.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {canvas.problems.map((problem, index) => (
+              <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                <span className="text-blue-600 font-semibold">•</span>
+                <span className="text-gray-700">{problem}</span>
+                <button className="text-teal-600 hover:text-teal-700 text-sm ml-auto">Edit</button>
+              </div>
+            ))}
+          </div>
+          
+          <div className="bg-blue-50 rounded-lg p-4">
+            <p className="text-sm text-blue-800">
+              <strong>Validate the problem through direct conversations with potential customers to ensure it's real, painful, and prevalent.</strong>
+            </p>
+          </div>
+        </div>
+      )
+    },
+    'existing-alternatives': {
+      title: 'Existing Alternatives',
+      subtitle: 'Describes the current solutions your target customers use to solve their problem.',
+      content: (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Direct Competitors</h3>
+              <div className="space-y-2">
+                {canvas.competitors.slice(0, 6).map((competitor, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span className="text-gray-700 text-sm">• {competitor}</span>
+                    <button className="text-teal-600 hover:text-teal-700 text-xs">Edit</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Indirect Competitors</h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div>• Traditional brokerage firms like Fidelity and Charles Schwab</div>
+                <div>• Forex trading platforms like MetaTrader</div>
+                <div>• Online investment courses and webinars</div>
+                <div>• Financial news and analysis websites like Investing.com</div>
+                <div>• Stock market simulators</div>
+                <div>• Independent financial advisors and consultants</div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Alternative Solutions</h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div>• Social media investment groups</div>
+                <div>• Offline investment clubs</div>
+                <div>• Personal network consultations</div>
+                <div>• Do-it-yourself (DIY) investing using books and online resources</div>
+                <div>• Investment podcasts and YouTube channels</div>
+                <div>• Public forums like Reddit's r/investing</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-blue-50 rounded-lg p-4">
+            <p className="text-sm text-blue-800">
+              <strong>Identify existing competitors that address the same problem; understanding how they work will help differentiate your product.</strong>
+            </p>
+          </div>
+        </div>
+      )
+    }
+  };
+
+  const navigationItems = [
+    { key: 'customer-segments', label: 'Target Customers', color: 'orange' },
+    { key: 'problem', label: 'Problem', color: 'blue' },
+    { key: 'existing-alternatives', label: 'Existing Alternatives', color: 'gray' },
+    { key: 'solution', label: 'Solution', color: 'green' },
+    { key: 'unique-value-proposition', label: 'Unique Value Proposition', color: 'yellow' },
+    { key: 'channels', label: 'Channels', color: 'pink' },
+    { key: 'revenue-streams', label: 'Revenue Streams', color: 'green' },
+    { key: 'cost-structure', label: 'Cost Structure', color: 'gray' },
+    { key: 'key-metrics', label: 'Key Metrics', color: 'indigo' },
+    { key: 'unfair-advantage', label: 'Unfair Advantage', color: 'purple' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700">
+      {/* Header */}
+      <div className="bg-blue-900 text-white p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center space-x-4 mb-4">
+            <button 
+              onClick={() => window.history.back()}
+              className="w-10 h-10 bg-blue-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-200"
+            >
+              ←
+            </button>
+            <h1 className="text-3xl font-bold">Lean Canvas</h1>
+          </div>
+          <p className="text-blue-100 text-lg max-w-3xl">
+            Craft your startup vision by distilling ideas into a single blueprint. Dive into problem-solving, value propositions, and market-fit on one dynamic canvas.
+          </p>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto flex">
+        {/* Main Content */}
+        <div className="flex-1 p-8">
+          <div className="bg-white rounded-lg shadow-lg">
+            {/* Section Header */}
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className={`w-12 h-12 bg-${sectionContent[activeSection]?.color || 'blue'}-500 rounded-full flex items-center justify-center text-white font-bold text-lg`}>
+                    A
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{sectionContent[activeSection]?.title}</h2>
+                    <p className="text-gray-600 mt-1">{sectionContent[activeSection]?.subtitle}</p>
+                  </div>
+                </div>
+                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                  New
+                </button>
+              </div>
+            </div>
+
+            {/* Section Content */}
+            <div className="p-6">
+              {sectionContent[activeSection]?.content}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar Navigation */}
+        <div className="w-80 p-8">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-teal-600 font-medium mb-4 text-sm">On this page</h3>
+            <nav className="space-y-2">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setActiveSection(item.key)}
+                  className={`block w-full text-left text-sm transition-colors duration-200 ${
+                    activeSection === item.key 
+                      ? 'text-gray-900 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
   const mentors = [
     {
       name: 'Jenny Lawton',
