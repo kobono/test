@@ -993,11 +993,123 @@ const ValidationSection = ({ currentIdea }) => {
   );
 };
 
-// Storytelling Section - Matching screenshot 5
+// Storytelling Section - Matching screenshots exactly
 const StorytellingSection = ({ currentIdea }) => {
+  const [activeTab, setActiveTab] = useState('startup-naming'); // Default to tab 02 as shown in screenshot
+  
   if (!currentIdea || !currentIdea.storytelling) return null;
 
   const storytelling = currentIdea.storytelling;
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'brand-wheel':
+        return (
+          <div className="p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Mission</h3>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-700 leading-relaxed">{storytelling.mission}</p>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Vision</h3>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-700 leading-relaxed">{storytelling.vision}</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Values</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {storytelling.values?.map((value, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4">
+                    <p className="text-sm text-gray-700">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'startup-naming':
+        return (
+          <div className="p-8">
+            {/* Name Grid */}
+            <div className="grid grid-cols-5 gap-4 mb-8">
+              {['TradeHive', 'EmpowerTrade', 'CollabFX', 'CommuniTrade', 'AscendTrades'].map((name, index) => (
+                <div key={index} className="bg-gray-100 rounded-lg p-4 text-center">
+                  <div className="font-medium text-gray-900">{name}</div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="grid grid-cols-5 gap-4 mb-8">
+              {['UnityBucks', 'TradePulse', 'Empowave', 'TradeSphere', 'CollaboraTrade'].map((name, index) => (
+                <div key={index} className="bg-gray-100 rounded-lg p-4 text-center">
+                  <div className="font-medium text-gray-900">{name}</div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="grid grid-cols-5 gap-4 mb-8">
+              {['CommunityTrade', 'InnoTradix', 'TradeSynergy', 'EmpowerNet', 'TraderConnect'].map((name, index) => (
+                <div key={index} className="bg-gray-100 rounded-lg p-4 text-center">
+                  <div className="font-medium text-gray-900">{name}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Selected Name */}
+            <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200">
+              <div className="flex items-center">
+                <span className="text-lg font-medium text-gray-700 mr-4">Selected Name:</span>
+                <span className="text-xl font-semibold text-gray-900">TradeHive</span>
+                <button className="ml-3 text-teal-600 hover:text-teal-700">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="flex items-center">
+                <div className="w-64 bg-gray-200 rounded-full h-2 mr-4">
+                  <div className="bg-teal-500 h-2 rounded-full" style={{ width: '100%' }}></div>
+                </div>
+                <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'elevator-pitch':
+        return (
+          <div className="p-8">
+            <div className="mb-6">
+              <p className="text-gray-600 italic mb-4">Certainly! Here's your elevator pitch crafted in Markdown format:</p>
+            </div>
+            
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="prose prose-sm max-w-none">
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  <strong>Did you know that traders and investors struggle to find a collaborative community to share knowledge and insights?</strong> This is a multi-billion dollar opportunity in the financial market industry in every corner of the world.
+                </p>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  TradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge. Unlike other alternatives, TradeHive focuses on building a strong community-driven platform where users can interact, share tips, and empower each other in the world of trading and investing.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  Our team comprises experienced entrepreneurs and finance experts, and we generate revenue through subscription services and premium features. In essence, we are the "LinkedIn for traders," revolutionizing the way people engage in financial markets. Our vision...
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -1011,65 +1123,76 @@ const StorytellingSection = ({ currentIdea }) => {
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="border-b border-gray-200">
           <nav className="flex">
-            <button className="px-6 py-4 border-b-2 border-teal-500 text-teal-600 font-medium text-sm">
+            <button 
+              onClick={() => setActiveTab('brand-wheel')}
+              className={`px-6 py-4 font-medium text-sm ${
+                activeTab === 'brand-wheel' 
+                  ? 'border-b-2 border-teal-500 text-teal-600' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
               <div className="flex items-center">
-                <span className="mr-2 w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center text-xs">01</span>
+                <span className={`mr-2 w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                  activeTab === 'brand-wheel' ? 'bg-teal-100 text-teal-600' : 'bg-gray-100 text-gray-500'
+                }`}>01</span>
                 Brand Wheel
               </div>
               <div className="text-xs text-gray-500 mt-1">Define your brand positioning.</div>
-              <GeneratedBadge />
+              <div className="mt-1">
+                <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  Generated
+                </span>
+              </div>
             </button>
-            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+            
+            <button 
+              onClick={() => setActiveTab('startup-naming')}
+              className={`px-6 py-4 font-medium text-sm ${
+                activeTab === 'startup-naming' 
+                  ? 'border-b-2 border-teal-500 text-teal-600' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
               <div className="flex items-center">
-                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">02</span>
+                <span className={`mr-2 w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                  activeTab === 'startup-naming' ? 'bg-teal-100 text-teal-600' : 'bg-gray-100 text-gray-500'
+                }`}>02</span>
                 Startup Naming
               </div>
-              <div className="text-xs text-gray-400 mt-1">Find a compelling name.</div>
-              <GeneratedBadge />
+              <div className="text-xs text-gray-500 mt-1">Find a compelling name.</div>
+              <div className="mt-1">
+                <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  Generated
+                </span>
+              </div>
             </button>
-            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+            
+            <button 
+              onClick={() => setActiveTab('elevator-pitch')}
+              className={`px-6 py-4 font-medium text-sm ${
+                activeTab === 'elevator-pitch' 
+                  ? 'border-b-2 border-teal-500 text-teal-600' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
               <div className="flex items-center">
-                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">03</span>
+                <span className={`mr-2 w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                  activeTab === 'elevator-pitch' ? 'bg-teal-100 text-teal-600' : 'bg-gray-100 text-gray-500'
+                }`}>03</span>
                 Elevator Pitch
               </div>
-              <div className="text-xs text-gray-400 mt-1">Craft your story.</div>
-              <GeneratedBadge />
+              <div className="text-xs text-gray-500 mt-1">Craft your story.</div>
+              <div className="mt-1">
+                <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  Generated
+                </span>
+              </div>
             </button>
           </nav>
         </div>
 
-        {/* Brand Wheel Content */}
-        <div className="p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Mission */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Mission</h3>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.mission}</p>
-              </div>
-            </div>
-
-            {/* Vision */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Vision</h3>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.vision}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Brand Values */}
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Values</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {storytelling.values?.map((value, index) => (
-                <div key={index} className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-700">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Tab Content */}
+        {renderTabContent()}
       </div>
     </div>
   );
