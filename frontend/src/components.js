@@ -344,21 +344,46 @@ export const ZigZagWorkspace = ({ onLogout }) => {
       <div className="w-64 bg-gray-50 border-l border-gray-200 p-6">
         <div className="text-sm text-teal-600 font-medium mb-4">On this page</div>
         <nav className="space-y-2">
-          <a href="#" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+          <button 
+            onClick={() => handleSectionChange('startup-idea')}
+            className={`block w-full text-left text-sm transition-colors duration-200 ${
+              currentSection === 'startup-idea' ? 'text-teal-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Your startup idea
-          </a>
-          <a href="#" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+          </button>
+          <button 
+            onClick={() => handleSectionChange('business-prototype')}
+            className={`block w-full text-left text-sm transition-colors duration-200 ${
+              currentSection === 'business-prototype' ? 'text-teal-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Business Prototype
-          </a>
-          <a href="#" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+          </button>
+          <button 
+            onClick={() => handleSectionChange('validation')}
+            className={`block w-full text-left text-sm transition-colors duration-200 ${
+              currentSection === 'validation' ? 'text-teal-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Validation
-          </a>
-          <a href="#" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+          </button>
+          <button 
+            onClick={() => handleSectionChange('storytelling')}
+            className={`block w-full text-left text-sm transition-colors duration-200 ${
+              currentSection === 'storytelling' ? 'text-teal-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Storytelling Central
-          </a>
-          <a href="#" className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+          </button>
+          <button 
+            onClick={() => handleSectionChange('connect-dashboard')}
+            className={`block w-full text-left text-sm transition-colors duration-200 ${
+              currentSection === 'connect-dashboard' ? 'text-teal-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Connect Dashboard
-          </a>
+          </button>
         </nav>
       </div>
     </div>
