@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import { LoginPage, Dashboard } from './components';
+import { LoginPage, ZigZagWorkspace } from './components';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,15 +14,15 @@ function App() {
             path="/login" 
             element={
               isAuthenticated ? 
-              <Navigate to="/dashboard" replace /> : 
+              <Navigate to="/workspace" replace /> : 
               <LoginPage onLogin={() => setIsAuthenticated(true)} />
             } 
           />
           <Route 
-            path="/dashboard/*" 
+            path="/workspace/*" 
             element={
               isAuthenticated ? 
-              <Dashboard onLogout={() => setIsAuthenticated(false)} /> : 
+              <ZigZagWorkspace onLogout={() => setIsAuthenticated(false)} /> : 
               <Navigate to="/login" replace />
             } 
           />
