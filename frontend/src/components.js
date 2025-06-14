@@ -1048,25 +1048,128 @@ const ConnectDashboardSection = () => {
     </div>
   );
 };
+// New Idea Form Component
+const NewIdeaSection = ({ onIdeaCreated }) => {
+  const [ideaText, setIdeaText] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!ideaText.trim()) return;
+
+    setIsGenerating(true);
+    
+    // Simulate AI processing
+    setTimeout(() => {
+      const newIdea = {
+        name: ideaText.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(''),
+        description: ideaText,
+        created: new Date().toISOString()
+      };
+      
+      onIdeaCreated(newIdea);
+      setIsGenerating(false);
+    }, 3000);
+  };
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Startup Idea</h1>
+        <p className="text-gray-600">Describe your startup idea and let our AI Entrepreneur in Residence help you validate it.</p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="idea" className="block text-sm font-medium text-gray-700 mb-2">
+              What's your startup idea?
+            </label>
+            <textarea
+              id="idea"
+              value={ideaText}
+              onChange={(e) => setIdeaText(e.target.value)}
+              placeholder="e.g., A social platform for crypto traders to share insights and copy trades"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+              rows={4}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isGenerating || !ideaText.trim()}
+            className={`w-full px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
+              isGenerating || !ideaText.trim()
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-teal-600 text-white hover:bg-teal-700'
+            }`}
+          >
+            {isGenerating ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                Generating your startup validation plan...
+              </div>
+            ) : (
+              '🚀 Generate Startup Plan'
+            )}
+          </button>
+        </form>
+
+        {isGenerating && (
+          <div className="mt-8 p-6 bg-blue-50 rounded-lg">
+            <h3 className="font-semibold text-blue-900 mb-3">AI is working on your idea...</h3>
+            <div className="space-y-2 text-sm text-blue-800">
+              <div>✓ Analyzing market opportunity</div>
+              <div>✓ Identifying key hypotheses</div>
+              <div>✓ Creating business model canvas</div>
+              <div>⏳ Generating validation experiments</div>
+              <div>⏳ Crafting brand positioning</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Main Workspace Component
 export const ZigZagWorkspace = ({ onLogout }) => {
   const [currentSection, setCurrentSection] = useState('startup-idea');
+  const [currentIdea, setCurrentIdea] = useState({
+    name: 'TradeHive',
+    description: 'social trading platform'
+  });
 
   const handleSectionChange = (section) => {
     setCurrentSection(section);
   };
 
+  const handleNewIdea = () => {
+    setCurrentSection('new-idea');
+  };
+
+  const handleIdeaCreated = (newIdea) => {
+    setCurrentIdea(newIdea);
+    setCurrentSection('startup-idea');
+  };
+
   const renderMainContent = () => {
     switch (currentSection) {
+      case 'new-idea':
+        return <NewIdeaSection onIdeaCreated={handleIdeaCreated} />;
       case 'startup-idea':
-        return <StartupIdeaSection onNavigate={handleSectionChange} />;
+        return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
       case 'business-prototype':
-        return <BusinessPrototypeSection />;
+        return <BusinessPrototypeSection currentIdea={currentIdea} />;
       case 'validation':
-        return <ValidationSection />;
+        return <ValidationSection currentIdea={currentIdea} />;
       case 'storytelling':
-        return <StorytellingSection />;
+        return <StorytellingSection currentIdea={currentIdea} />;
+      case 'connect-dashboard':
+        return <ConnectDashboardSection />;
       default:
-        return <StartupIdeaSection onNavigate={handleSectionChange} />;
+        return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
     }
   };
 
@@ -1076,6 +1179,8 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         currentSection={currentSection}
         onSectionChange={handleSectionChange}
         onLogout={onLogout}
+        currentIdea={currentIdea}
+        onNewIdea={handleNewIdea}
       />
       
       <main className="flex-1 p-8">
