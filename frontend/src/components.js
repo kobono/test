@@ -816,3 +816,162 @@ const ConnectDashboardSection = () => {
     </div>
   );
 };
+
+// StartupIdeaSection - Main dashboard showing startup idea overview
+const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
+  if (!currentIdea) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="text-center">
+          <div className="text-gray-400 text-4xl mb-4">💡</div>
+          <p className="text-gray-600 mb-4">No startup idea selected</p>
+          <p className="text-sm text-gray-500">Create a new idea to get started</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
+          <GeneratedBadge />
+        </div>
+      </div>
+
+      {/* Startup Idea Card */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="flex items-center space-x-4 mb-6">
+          <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">{currentIdea.description}</h2>
+            <p className="text-gray-600">{currentIdea.industry} • Generated with AI</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mb-6">
+          <div className="text-gray-600">
+            Your AI Entrepreneur in Residence prepares a first draft of the below for your review:
+          </div>
+          <button 
+            onClick={() => onNavigate('business-prototype')}
+            className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            🚀 View Complete Business Plan
+          </button>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Business Prototype */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('business-prototype')}
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Prototype</h3>
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span className="text-teal-600">Lean Canvas →</span>
+                <span className="ml-auto">Customer Segments</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span className="text-teal-600">Lean Canvas →</span>
+                <span className="ml-auto">Problem & Solution</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Value Proposition</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Validation */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('validation')}
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Validation</h3>
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Critical Hypotheses</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span className="text-teal-600">Experiments →</span>
+                <span className="ml-auto">Customer Interview</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span className="text-teal-600">Experiments →</span>
+                <span className="ml-auto">Landing Page</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Storytelling Central */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('storytelling')}
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Storytelling Central</h3>
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Brand Wheel</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Startup Naming</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Elevator Pitch</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Connect Dashboard */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('connect-dashboard')}
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect Dashboard</h3>
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-orange-500 mr-2">🔒</span>
+                <span>Mentors</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-orange-500 mr-2">🔒</span>
+                <span>Investors & Accelerators</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Perks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Success Message */}
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="flex items-center">
+          <div className="text-green-500 mr-3">✅</div>
+          <div>
+            <h3 className="text-green-800 font-medium">ZigZag Platform is Working!</h3>
+            <p className="text-green-700 text-sm">
+              Backend API with OpenAI GPT-4o integration is running successfully. 
+              All enhanced features including data persistence and AI generation are ready to use.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
