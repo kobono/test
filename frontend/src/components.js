@@ -1212,8 +1212,29 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    A
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+                    activeSection === 'customer-segments' ? 'bg-orange-500' :
+                    activeSection === 'problem' ? 'bg-blue-500' :
+                    activeSection === 'existing-alternatives' ? 'bg-gray-500' :
+                    activeSection === 'solution' ? 'bg-green-500' :
+                    activeSection === 'unique-value-proposition' ? 'bg-yellow-500' :
+                    activeSection === 'channels' ? 'bg-pink-500' :
+                    activeSection === 'revenue-streams' ? 'bg-green-600' :
+                    activeSection === 'cost-structure' ? 'bg-gray-600' :
+                    activeSection === 'key-metrics' ? 'bg-indigo-500' :
+                    activeSection === 'unfair-advantage' ? 'bg-purple-500' :
+                    'bg-blue-500'
+                  }`}>
+                    {activeSection === 'customer-segments' ? 'A' :
+                     activeSection === 'problem' ? 'B' :
+                     activeSection === 'existing-alternatives' ? 'C' :
+                     activeSection === 'solution' ? 'D' :
+                     activeSection === 'unique-value-proposition' ? 'E' :
+                     activeSection === 'channels' ? 'F' :
+                     activeSection === 'revenue-streams' ? 'G' :
+                     activeSection === 'cost-structure' ? 'H' :
+                     activeSection === 'key-metrics' ? 'I' :
+                     activeSection === 'unfair-advantage' ? 'J' : 'A'}
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">{sectionContent[activeSection]?.title}</h2>
@@ -1221,7 +1242,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
                   </div>
                 </div>
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
-                  New
+                  Edit
                 </button>
               </div>
             </div>
@@ -1235,7 +1256,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
 
         {/* Right Sidebar Navigation */}
         <div className="w-80 p-8">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-teal-600 font-medium mb-4 text-sm">On this page</h3>
             <nav className="space-y-2">
               {navigationItems.map((item) => (
@@ -1253,6 +1274,15 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               ))}
             </nav>
           </div>
+          
+          {/* Guidance Sidebar */}
+          {sectionContent[activeSection]?.guidance && (
+            <div className="bg-gray-50 rounded-lg p-6">
+              <p className="text-sm text-gray-700 italic leading-relaxed">
+                {sectionContent[activeSection].guidance}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
