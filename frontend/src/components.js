@@ -1088,28 +1088,196 @@ const ConnectDashboardSection = () => {
     </div>
   );
 };
+// AI Research Agent - Generates content based on startup idea
+const generateStartupContent = (ideaText) => {
+  const idea = ideaText.toLowerCase();
+  
+  // Extract key industry/domain from the idea
+  const getIndustry = () => {
+    if (idea.includes('food') || idea.includes('restaurant') || idea.includes('delivery')) return 'food_tech';
+    if (idea.includes('fitness') || idea.includes('health') || idea.includes('wellness')) return 'health_tech';
+    if (idea.includes('education') || idea.includes('learning') || idea.includes('course')) return 'ed_tech';
+    if (idea.includes('finance') || idea.includes('payment') || idea.includes('banking')) return 'fin_tech';
+    if (idea.includes('trade') || idea.includes('trading') || idea.includes('investment')) return 'trading';
+    if (idea.includes('ai') || idea.includes('artificial intelligence') || idea.includes('machine learning')) return 'ai_tech';
+    if (idea.includes('social') || idea.includes('community') || idea.includes('network')) return 'social_tech';
+    if (idea.includes('ecommerce') || idea.includes('marketplace') || idea.includes('shopping')) return 'ecommerce';
+    if (idea.includes('travel') || idea.includes('booking') || idea.includes('tourism')) return 'travel_tech';
+    if (idea.includes('real estate') || idea.includes('property') || idea.includes('housing')) return 'prop_tech';
+    return 'general_tech';
+  };
+
+  const industry = getIndustry();
+  
+  const industryData = {
+    food_tech: {
+      names: ['FoodieHub', 'TasteCraft', 'CulinaryConnect', 'FlavorFlow', 'MealMaster', 'DishDash', 'NutriLink', 'FreshDelivery', 'CraveCure', 'KitchenKonnect'],
+      problems: ['High delivery costs and long wait times', 'Limited healthy food options', 'Food waste in restaurants'],
+      solutions: ['AI-powered delivery optimization', 'Personalized nutrition recommendations', 'Smart inventory management'],
+      customers: ['Busy professionals', 'Health-conscious consumers', 'College students'],
+      competitors: ['DoorDash', 'Uber Eats', 'Grubhub', 'HelloFresh', 'Blue Apron'],
+      valueProps: 'Fresh, healthy meals delivered faster and cheaper through AI optimization',
+      channels: ['Mobile app', 'Social media marketing', 'Restaurant partnerships'],
+      revenue: ['Commission from restaurants', 'Delivery fees', 'Premium subscriptions'],
+      keyMetrics: ['Order frequency', 'Customer lifetime value', 'Average order value'],
+      hypotheses: [
+        { type: 'Desirability', text: 'Customers want faster food delivery with healthier options', criticality: 'High', method: 'Customer survey' },
+        { type: 'Viability', text: 'Restaurants will pay 15% commission for optimized delivery', criticality: 'High', method: 'Partner interviews' },
+        { type: 'Feasibility', text: 'AI routing can reduce delivery time by 30%', criticality: 'Medium', method: 'Technical prototype' }
+      ],
+      mission: 'Revolutionize food delivery by making healthy, fresh meals accessible to everyone through intelligent technology.',
+      vision: 'To become the leading platform that connects food lovers with quality restaurants while promoting sustainable eating habits.',
+      values: ['Quality: Ensuring fresh, high-quality food delivery', 'Sustainability: Reducing food waste and environmental impact', 'Innovation: Using AI to optimize the entire food delivery experience']
+    },
+    health_tech: {
+      names: ['HealthSync', 'WellnessWave', 'FitTracker', 'VitalBoost', 'MediConnect', 'HealthHub', 'WellBeing', 'FitnessFusion', 'HealthMate', 'VitalityVault'],
+      problems: ['Lack of personalized health tracking', 'Expensive healthcare consultations', 'Poor medication adherence'],
+      solutions: ['AI-powered health monitoring', 'Telemedicine platform', 'Smart medication reminders'],
+      customers: ['Health-conscious individuals', 'Chronic disease patients', 'Fitness enthusiasts'],
+      competitors: ['MyFitnessPal', 'Fitbit', 'Teladoc', 'Headspace', 'Calm'],
+      valueProps: 'Personalized health insights and affordable healthcare access through technology',
+      channels: ['Health apps', 'Doctor partnerships', 'Fitness centers'],
+      revenue: ['Subscription fees', 'Consultation commissions', 'Premium features'],
+      keyMetrics: ['Daily active users', 'Health improvement scores', 'User retention'],
+      hypotheses: [
+        { type: 'Desirability', text: 'Users want personalized health recommendations based on their data', criticality: 'High', method: 'User interviews' },
+        { type: 'Viability', text: 'People will pay $20/month for AI health coaching', criticality: 'High', method: 'Pricing survey' },
+        { type: 'Feasibility', text: 'Wearable integration can provide accurate health insights', criticality: 'Medium', method: 'Technical validation' }
+      ],
+      mission: 'Empower individuals to take control of their health through personalized, AI-driven insights and accessible healthcare solutions.',
+      vision: 'To create a world where everyone has access to personalized healthcare and wellness guidance.',
+      values: ['Privacy: Protecting sensitive health data', 'Accessibility: Making healthcare affordable for all', 'Innovation: Using technology to improve health outcomes']
+    },
+    trading: {
+      names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow', 'TradePro', 'InvestLink', 'MarketMind', 'TradeSphere', 'CapitalConnect'],
+      problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets', 'High barriers to entry for new investors'],
+      solutions: ['Social trading platform', 'Real-time market insights', 'Copy-trading features'],
+      customers: ['Millennial investors', 'Retirement planners', 'Day traders'],
+      competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers', 'TD Ameritrade'],
+      valueProps: 'Democratic trading through social collaboration and expert insights',
+      channels: ['Mobile app', 'Financial blogs', 'Social media'],
+      revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
+      keyMetrics: ['Active traders', 'Trading volume', 'Platform assets'],
+      hypotheses: [
+        { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
+        { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
+        { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
+      ],
+      mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
+      vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
+      values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships']
+    },
+    ai_tech: {
+      names: ['AI-Boost', 'SmartTech', 'IntelliFlow', 'CogniCorp', 'BrainWave', 'NeuralNet', 'AIVantage', 'SmartCore', 'IntelliSuite', 'AInnova'],
+      problems: ['Complex AI implementation for businesses', 'Lack of AI expertise', 'High costs of AI development'],
+      solutions: ['No-code AI platform', 'AI consulting services', 'Pre-built AI models'],
+      customers: ['Small businesses', 'Enterprise companies', 'Developers'],
+      competitors: ['OpenAI', 'Google AI', 'Microsoft Azure AI', 'Amazon AWS AI', 'IBM Watson'],
+      valueProps: 'Accessible AI solutions that any business can implement without technical expertise',
+      channels: ['Enterprise sales', 'Developer communities', 'Tech conferences'],
+      revenue: ['Software licensing', 'Consulting fees', 'API usage fees'],
+      keyMetrics: ['API calls per month', 'Customer acquisition cost', 'Revenue per user'],
+      hypotheses: [
+        { type: 'Desirability', text: 'Small businesses want easy-to-use AI tools without hiring specialists', criticality: 'High', method: 'Business owner interviews' },
+        { type: 'Viability', text: 'Companies will pay $500/month for no-code AI solutions', criticality: 'High', method: 'Pricing validation' },
+        { type: 'Feasibility', text: 'Pre-built models can solve 80% of common business problems', criticality: 'Medium', method: 'Technical assessment' }
+      ],
+      mission: 'Make artificial intelligence accessible to every business, regardless of technical expertise or budget.',
+      vision: 'To democratize AI and enable every organization to harness the power of intelligent automation.',
+      values: ['Accessibility: Making AI simple for everyone', 'Innovation: Pushing the boundaries of what AI can do', 'Ethics: Responsible AI development and deployment']
+    }
+  };
+
+  const defaultData = {
+    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub', 'ScaleUp', 'VentureX', 'LaunchPad', 'NextGen', 'FutureNow'],
+    problems: ['Market inefficiencies', 'Customer pain points', 'Technology gaps'],
+    solutions: ['Innovative platform', 'Technology solution', 'Service optimization'],
+    customers: ['Target demographic', 'Business users', 'End consumers'],
+    competitors: ['Industry leader 1', 'Industry leader 2', 'Emerging competitor'],
+    valueProps: 'Innovative solution that solves key market problems efficiently',
+    channels: ['Digital marketing', 'Direct sales', 'Partnerships'],
+    revenue: ['Subscription fees', 'Transaction fees', 'Premium services'],
+    keyMetrics: ['User acquisition', 'Revenue growth', 'Customer satisfaction'],
+    hypotheses: [
+      { type: 'Desirability', text: 'Target customers have the problem we are solving', criticality: 'High', method: 'Customer interviews' },
+      { type: 'Viability', text: 'Business model generates sustainable revenue', criticality: 'High', method: 'Financial modeling' },
+      { type: 'Feasibility', text: 'Solution can be built with available technology', criticality: 'Medium', method: 'Technical validation' }
+    ],
+    mission: 'To solve important problems and create value for our customers through innovative solutions.',
+    vision: 'To become a leading company that transforms how people interact with technology.',
+    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference']
+  };
+
+  const data = industryData[industry] || defaultData;
+  
+  return {
+    name: data.names[0],
+    description: ideaText,
+    industry: industry,
+    leanCanvas: {
+      problems: data.problems,
+      solutions: data.solutions,
+      customers: data.customers,
+      competitors: data.competitors,
+      valueProposition: data.valueProps,
+      channels: data.channels,
+      revenue: data.revenue,
+      keyMetrics: data.keyMetrics
+    },
+    hypotheses: data.hypotheses,
+    storytelling: {
+      names: data.names,
+      mission: data.mission,
+      vision: data.vision,
+      values: data.values,
+      elevatorPitch: `Did you know that ${data.problems[0].toLowerCase()}? This represents a significant opportunity in the ${industry.replace('_', ' ')} industry.
+
+${data.names[0]} is ${ideaText} that ${data.solutions[0].toLowerCase()}. Unlike existing alternatives, we focus on ${data.valueProps.toLowerCase()}.
+
+Our team has deep expertise in this space, and we generate revenue through ${data.revenue[0].toLowerCase()}. In essence, we are revolutionizing how ${data.customers[0].toLowerCase()} interact with this market. Our vision is ${data.vision.toLowerCase()}`
+    },
+    created: new Date().toISOString()
+  };
+};
+
 // New Idea Form Component
 const NewIdeaSection = ({ onIdeaCreated }) => {
   const [ideaText, setIdeaText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0);
+
+  const generationSteps = [
+    'Analyzing market opportunity...',
+    'Identifying target customers...',
+    'Researching competitors...',
+    'Creating business model...',
+    'Generating critical hypotheses...',
+    'Developing brand strategy...',
+    'Finalizing validation plan...'
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!ideaText.trim()) return;
 
     setIsGenerating(true);
+    setGenerationStep(0);
     
-    // Simulate AI processing
-    setTimeout(() => {
-      const newIdea = {
-        name: ideaText.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(''),
-        description: ideaText,
-        created: new Date().toISOString()
-      };
-      
-      onIdeaCreated(newIdea);
-      setIsGenerating(false);
-    }, 3000);
+    // Simulate AI processing with step-by-step updates
+    const interval = setInterval(() => {
+      setGenerationStep(prev => {
+        if (prev < generationSteps.length - 1) {
+          return prev + 1;
+        } else {
+          clearInterval(interval);
+          // Generate comprehensive startup data
+          const newIdea = generateStartupContent(ideaText);
+          onIdeaCreated(newIdea);
+          setIsGenerating(false);
+          return prev;
+        }
+      });
+    }, 500);
   };
 
   return (
