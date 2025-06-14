@@ -486,3 +486,418 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     </div>
   );
 };
+// Additional Components for Enhanced Functionality
+
+// New Idea Creation Section
+const NewIdeaSection = ({ onIdeaCreated }) => {
+  const [ideaText, setIdeaText] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0);
+  
+  const generationSteps = [
+    'Analyzing your idea...',
+    'Detecting industry patterns...',
+    'Generating customer insights...',
+    'Creating business model...',
+    'Developing validation hypotheses...',
+    'Crafting storytelling elements...',
+    'Finalizing comprehensive plan...'
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!ideaText.trim()) return;
+
+    setIsGenerating(true);
+    setGenerationStep(0);
+    
+    try {
+      const interval = setInterval(async () => {
+        setGenerationStep(prev => {
+          if (prev < generationSteps.length - 1) {
+            return prev + 1;
+          } else {
+            clearInterval(interval);
+            generateIdeaFromBackend();
+            return prev;
+          }
+        });
+      }, 800);
+    } catch (error) {
+      console.error('Error generating idea:', error);
+      setIsGenerating(false);
+    }
+  };
+
+  const generateIdeaFromBackend = async () => {
+    try {
+      const generatedContent = await apiService.generateStartupContent(ideaText);
+      
+      const newIdea = {
+        name: generatedContent.name,
+        description: ideaText,
+        industry: generatedContent.industry,
+        leanCanvas: generatedContent.leanCanvas,
+        hypotheses: generatedContent.hypotheses,
+        storytelling: generatedContent.storytelling,
+        created: new Date().toISOString()
+      };
+      
+      onIdeaCreated(newIdea);
+    } catch (error) {
+      console.error('Backend generation failed:', error);
+      const newIdea = {
+        name: 'New Startup Idea',
+        description: ideaText,
+        industry: 'general_tech',
+        leanCanvas: {
+          problems: ['Market inefficiency', 'Customer pain points'],
+          solutions: ['Innovative platform', 'Technology solution'],
+          customers: ['Target demographic', 'Business users'],
+          competitors: ['Industry leader 1', 'Industry leader 2'],
+          valueProposition: 'Innovative solution that solves key market problems',
+          channels: ['Digital marketing', 'Direct sales'],
+          revenue: ['Subscription fees', 'Transaction fees'],
+          keyMetrics: ['User acquisition', 'Revenue growth']
+        },
+        hypotheses: [
+          { type: 'Desirability', text: 'Customers have the problem we are solving', criticality: 'High', method: 'Customer interviews' }
+        ],
+        storytelling: {
+          names: ['StartupCo', 'InnovateTech'],
+          mission: 'To solve important problems with innovative solutions',
+          vision: 'To become a leading company in our industry',
+          values: ['Innovation', 'Quality', 'Impact'],
+          elevatorPitch: 'Our startup addresses key market needs through innovative technology solutions.'
+        },
+        created: new Date().toISOString()
+      };
+      onIdeaCreated(newIdea);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">🚀 Create Your Startup Idea</h1>
+        <p className="text-xl text-gray-600 mb-8">
+          Describe your startup idea and let our AI generate a comprehensive business plan in minutes
+        </p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="idea" className="block text-sm font-medium text-gray-700 mb-2">
+              Describe your startup idea
+            </label>
+            <textarea
+              id="idea"
+              value={ideaText}
+              onChange={(e) => setIdeaText(e.target.value)}
+              placeholder="e.g., A social trading platform that allows retail investors to follow and copy the trades of experienced traders in real-time..."
+              className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+              rows={6}
+              disabled={isGenerating}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={!ideaText.trim() || isGenerating}
+            className="w-full flex items-center justify-center px-6 py-4 bg-teal-600 text-white text-lg font-medium rounded-lg hover:bg-teal-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            {isGenerating ? (
+              <div className="flex items-center">
+                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-3"></div>
+                <span>Generating Your Business Plan...</span>
+              </div>
+            ) : (
+              <>
+                <span>🎯 Generate Business Plan</span>
+                <span className="ml-2 text-sm opacity-75">(~2 minutes)</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+
+      {isGenerating && (
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <div className="animate-spin w-6 h-6 border-2 border-teal-500 border-t-transparent rounded-full mr-3"></div>
+            <h3 className="text-lg font-semibold text-gray-900">AI is working on your idea...</h3>
+          </div>
+          
+          <div className="space-y-3">
+            {generationSteps.map((step, index) => (
+              <div key={index} className="flex items-center">
+                <div className={`w-6 h-6 rounded-full mr-3 flex items-center justify-center text-xs font-medium ${
+                  index < generationStep ? 'bg-green-500 text-white' :
+                  index === generationStep ? 'bg-teal-500 text-white animate-pulse' :
+                  'bg-gray-200 text-gray-500'
+                }`}>
+                  {index < generationStep ? '✓' : index + 1}
+                </div>
+                <span className={`${
+                  index <= generationStep ? 'text-gray-900' : 'text-gray-500'
+                }`}>
+                  {step}
+                </span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-teal-600 h-2 rounded-full transition-all duration-500" 
+                style={{ width: `${((generationStep + 1) / generationSteps.length) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-600 mt-2 text-center">
+              {Math.round(((generationStep + 1) / generationSteps.length) * 100)}% complete
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Business Prototype Section
+const BusinessPrototypeSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.leanCanvas) return null;
+
+  const leanCanvas = currentIdea.leanCanvas;
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
+        <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <h3 className="font-semibold text-red-900 mb-3">A. Problems</h3>
+            <div className="space-y-2">
+              {leanCanvas.problems.map((problem, index) => (
+                <div key={index} className="text-sm text-red-800">{problem}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h3 className="font-semibold text-green-900 mb-3">B. Solutions</h3>
+            <div className="space-y-2">
+              {leanCanvas.solutions.map((solution, index) => (
+                <div key={index} className="text-sm text-green-800">{solution}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <h3 className="font-semibold text-purple-900 mb-3">C. Value Proposition</h3>
+            <div className="text-sm text-purple-800">{leanCanvas.valueProposition}</div>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-3">D. Customer Segments</h3>
+            <div className="space-y-2">
+              {leanCanvas.customers.map((customer, index) => (
+                <div key={index} className="text-sm text-blue-800">{customer}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 className="font-semibold text-yellow-900 mb-3">E. Channels</h3>
+            <div className="space-y-2">
+              {leanCanvas.channels.map((channel, index) => (
+                <div key={index} className="text-sm text-yellow-800">{channel}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+            <h3 className="font-semibold text-teal-900 mb-3">F. Revenue Streams</h3>
+            <div className="space-y-2">
+              {leanCanvas.revenue.map((revenue, index) => (
+                <div key={index} className="text-sm text-teal-800">{revenue}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Validation Section
+const ValidationSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.hypotheses) return null;
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Validation</h1>
+        <p className="text-gray-600">Critical hypotheses that need validation to ensure your startup success.</p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold mb-4">Critical Hypotheses</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Hypothesis</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Criticality</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentIdea.hypotheses.map((hypothesis, index) => (
+                <tr key={index} className="border-b border-gray-100">
+                  <td className="py-3 px-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      hypothesis.type === 'Desirability' ? 'bg-green-100 text-green-800' :
+                      hypothesis.type === 'Viability' ? 'bg-blue-100 text-blue-800' :
+                      'bg-purple-100 text-purple-800'
+                    }`}>
+                      {hypothesis.type}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-700">{hypothesis.text}</td>
+                  <td className="py-3 px-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
+                      hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {hypothesis.criticality}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-600">{hypothesis.method}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Storytelling Section
+const StorytellingSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.storytelling) return null;
+
+  const storytelling = currentIdea.storytelling;
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Storytelling Central</h1>
+        <p className="text-gray-600">Craft compelling narratives that resonate with your audience.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold mb-4">Startup Names</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {storytelling.names.map((name, index) => (
+              <div key={index} className="p-3 bg-gray-50 rounded-lg text-center font-medium">
+                {name}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold mb-4">Mission & Vision</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-medium text-gray-700 mb-2">Mission</h4>
+              <p className="text-sm text-gray-600">{storytelling.mission}</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-700 mb-2">Vision</h4>
+              <p className="text-sm text-gray-600">{storytelling.vision}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold mb-4">Core Values</h3>
+          <div className="space-y-3">
+            {storytelling.values.map((value, index) => (
+              <div key={index} className="flex items-start">
+                <div className="w-2 h-2 bg-teal-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <p className="text-sm text-gray-700">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold mb-4">Elevator Pitch</h3>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-sm text-gray-700 leading-relaxed">{storytelling.elevatorPitch}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Connect Dashboard Section
+const ConnectDashboardSection = () => {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
+        <p className="text-gray-600">Connect with mentors, investors, and access exclusive startup perks.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Mentors</h3>
+            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Connect with experienced entrepreneurs and industry experts.</p>
+          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+            🔒 Unlock Mentorship
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Investors & Accelerators</h3>
+            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Get discovered by investors and accelerator programs.</p>
+          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+            🔒 Access Funding
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Startup Perks</h3>
+            <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Available</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Access exclusive deals and credits for startup tools.</p>
+          <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            🎁 View Perks
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
