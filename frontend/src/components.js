@@ -549,7 +549,13 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
   );
 };
 
-const ValidationSection = () => {
+const ValidationSection = ({ currentIdea }) => {
+  const hypotheses = currentIdea?.hypotheses || [
+    { type: 'Desirability', text: 'Target customers need this solution', criticality: 'High', method: 'Customer interviews' },
+    { type: 'Viability', text: 'Business model is financially sustainable', criticality: 'High', method: 'Financial analysis' },
+    { type: 'Feasibility', text: 'Solution is technically achievable', criticality: 'Medium', method: 'Technical validation' }
+  ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -585,66 +591,36 @@ const ValidationSection = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              <tr className="hover:bg-gray-50">
-                <td className="py-4 px-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">01</div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Desirability</h4>
-                      <p className="text-sm text-gray-600">Traders are interested in a social trading platform that allows them to connect, share insights, and collaborate with other traders.</p>
+              {hypotheses.map((hypothesis, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="py-4 px-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 mb-1">{hypothesis.type}</h4>
+                        <p className="text-sm text-gray-600">{hypothesis.text}</p>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">High</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-gray-600">Validation survey</span>
-                </td>
-                <td className="py-4 px-4">
-                  <button className="text-gray-400 hover:text-gray-600">Edit</button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="py-4 px-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">02</div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Viability</h4>
-                      <p className="text-sm text-gray-600">The commission model for mirroring trades on the platform is competitive and sustainable for the business.</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">High</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-gray-600">Financial projection analysis</span>
-                </td>
-                <td className="py-4 px-4">
-                  <button className="text-gray-400 hover:text-gray-600">Edit</button>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="py-4 px-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">03</div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Feasibility</h4>
-                      <p className="text-sm text-gray-600">The technology infrastructure required to support real-time data feeds and trade execution can be built within budget constraints.</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">High</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-gray-600">Expert interview</span>
-                </td>
-                <td className="py-4 px-4">
-                  <button className="text-gray-400 hover:text-gray-600">Edit</button>
-                </td>
-              </tr>
+                  </td>
+                  <td className="py-4 px-4">
+                    <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                      hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
+                      hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {hypothesis.criticality}
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">
+                    <span className="text-sm text-gray-600">{hypothesis.method}</span>
+                  </td>
+                  <td className="py-4 px-4">
+                    <button className="text-gray-400 hover:text-gray-600">Edit</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -668,7 +644,7 @@ const ValidationSection = () => {
                 <GeneratedBadge />
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-4">Create a tailored questionnaire for customer discovery and problem exploration.</p>
+            <p className="text-sm text-gray-600 mb-4">Create a tailored questionnaire for customer discovery and problem exploration specific to {currentIdea?.description || 'your startup idea'}.</p>
             <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
               👁️ Details
             </button>
@@ -683,7 +659,7 @@ const ValidationSection = () => {
                 <GeneratedBadge />
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-4">Develop a simple webpage to illustrate your value proposition.</p>
+            <p className="text-sm text-gray-600 mb-4">Develop a simple webpage to test market demand and collect early user interest for your concept.</p>
             <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
               ✏️ Details
             </button>
