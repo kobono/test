@@ -215,6 +215,24 @@ const RightSidebar = ({ currentSection }) => {
           'Startup Naming',
           'Elevator Pitch'
         ];
+      case 'connect-dashboard':
+        return [
+          'Your startup idea',
+          'Business Prototype',
+          'Lean Canvas',
+          'Validation',
+          'Critical Hypotheses',
+          'Validation Experiments',
+          'Storytelling Central',
+          'Brand Wheel',
+          'Startup Naming',
+          'Elevator Pitch',
+          'Connect Dashboard',
+          'Mentors',
+          'Investors & Accelerators',
+          'Perks',
+          'Service Providers'
+        ];
       default:
         return [];
     }
