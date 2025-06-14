@@ -214,7 +214,16 @@ const generateStartupContent = (ideaText) => {
 };
 
 // Left Sidebar Component
-const LeftSidebar = ({ currentSection, onSectionChange, onLogout, currentIdea, onNewIdea }) => {
+const LeftSidebar = ({ 
+  currentSection, 
+  onSectionChange, 
+  onLogout, 
+  currentIdea, 
+  onNewIdea, 
+  userIdeas = [], 
+  onIdeaSelect, 
+  onIdeaDelete 
+}) => {
   return (
     <div className="w-64 bg-blue-900 text-white min-h-screen flex flex-col">
       {/* Logo */}
@@ -255,24 +264,76 @@ const LeftSidebar = ({ currentSection, onSectionChange, onLogout, currentIdea, o
       </div>
 
       {/* Your Ideas Section */}
-      <div className="px-4">
-        <h3 className="text-sm font-medium text-blue-300 mb-3">Your Ideas</h3>
-        <button
-          onClick={() => onSectionChange('startup-idea')}
-          className={`w-full flex items-center px-4 py-3 rounded-lg transition-colors duration-200 mb-2 ${
-            currentSection === 'startup-idea' ? 'bg-blue-800' : 'hover:bg-blue-800'
-          }`}
-        >
-          <span className="mr-3">🌐</span>
-          <div className="text-left flex-1">
-            <div className="font-medium">{currentIdea.name}</div>
-            <div className="text-xs text-blue-300">{currentIdea.description}</div>
+      <div className="px-4 flex-1 overflow-y-auto">
+        <h3 className="text-sm font-medium text-blue-300 mb-3">Your Ideas ({userIdeas.length})</h3>
+        
+        {userIdeas.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="text-blue-400 text-2xl mb-2">💭</div>
+            <p className="text-blue-300 text-sm">No ideas yet</p>
+            <p className="text-blue-400 text-xs">Create your first startup idea!</p>
           </div>
-          <div className="ml-auto flex space-x-1">
-            <button className="text-blue-300 hover:text-white">✏️</button>
-            <button className="text-blue-300 hover:text-white">🗑️</button>
+        ) : (
+          <div className="space-y-2">
+            {userIdeas.map((idea) => (
+              <div
+                key={idea.id}
+                className={`flex items-center px-4 py-3 rounded-lg transition-colors duration-200 cursor-pointer ${
+                  currentIdea && currentIdea.id === idea.id ? 'bg-blue-800' : 'hover:bg-blue-800'
+                }`}
+                onClick={() => onIdeaSelect && onIdeaSelect(idea.id)}
+              >
+                <span className="mr-3">🌐</span>
+                <div className="text-left flex-1 min-w-0">
+                  <div className="font-medium truncate">{idea.name}</div>
+                  <div className="text-xs text-blue-300 truncate">{idea.description}</div>
+                  <div className="text-xs text-blue-400 mt-1">
+                    {new Date(idea.created).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="ml-auto flex space-x-1">
+                  <button 
+                    className="text-blue-300 hover:text-white p-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // TODO: Implement edit functionality
+                      console.log('Edit idea:', idea.id);
+                    }}
+                    title="Edit idea"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="text-blue-300 hover:text-red-300 p-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm('Are you sure you want to delete this idea?')) {
+                        onIdeaDelete && onIdeaDelete(idea.id);
+                      }
+                    }}
+                    title="Delete idea"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </button>
+        )}
+        
+        {/* Show current idea if it's the default one */}
+        {currentIdea && currentIdea.id === 'default' && (
+          <div className="mt-4 p-3 bg-blue-800 rounded-lg">
+            <div className="flex items-center mb-2">
+              <span className="mr-2">🌐</span>
+              <div className="text-left flex-1">
+                <div className="font-medium">{currentIdea.name}</div>
+                <div className="text-xs text-blue-300">{currentIdea.description}</div>
+              </div>
+            </div>
+            <div className="text-xs text-blue-400">Example startup idea</div>
+          </div>
+        )}
       </div>
 
       {/* More Section */}
