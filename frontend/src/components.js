@@ -44,10 +44,6 @@ ChartJS.register(
   Legend,
   ArcElement
 );
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
