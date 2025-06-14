@@ -209,65 +209,170 @@ async def generate_startup_content(request: Dict[str, Any]):
         prompt = f"""
         Based on the following startup idea description: "{description}"
         
-        Please generate a comprehensive startup business plan analysis. Analyze the idea and provide:
+        Please generate a comprehensive startup business plan analysis. Analyze the idea and provide detailed, industry-specific insights:
 
         1. **Industry Classification**: Determine the most appropriate industry category
         2. **Business Name**: Suggest a compelling, memorable business name
-        3. **Lean Canvas Components**: All 9 key sections with detailed, realistic content
-        4. **Critical Hypotheses**: 3-5 key assumptions that need validation
-        5. **Storytelling Elements**: Mission, vision, values, and elevator pitch
+        3. **Detailed Customer Segments**: Create 4 specific customer personas with detailed descriptions
+        4. **Comprehensive Problems**: List 3-4 specific problems this startup solves
+        5. **Detailed Solutions**: Provide specific features and capabilities
+        6. **Competitors Analysis**: Direct, indirect competitors and alternative solutions
+        7. **Revenue Streams**: Multiple specific revenue sources
+        8. **All Lean Canvas Components**: Detailed content for each section
 
         Please respond with a JSON object in this exact format:
         {{
             "industry": "industry_category",
             "name": "Business Name",
             "leanCanvas": {{
-                "problems": ["problem 1", "problem 2", "problem 3"],
-                "solutions": ["solution 1", "solution 2", "solution 3"],
-                "customers": ["customer segment 1", "customer segment 2", "customer segment 3", "customer segment 4"],
-                "competitors": ["competitor 1", "competitor 2", "competitor 3", "competitor 4", "competitor 5", "competitor 6"],
-                "valueProposition": "Single, clear compelling value proposition",
-                "channels": ["channel 1", "channel 2", "channel 3", "channel 4"],
-                "revenue": ["revenue stream 1", "revenue stream 2", "revenue stream 3"],
-                "keyMetrics": ["metric 1", "metric 2", "metric 3", "metric 4", "metric 5"]
+                "customerSegments": [
+                    {{
+                        "name": "Primary Customer Segment",
+                        "personaOverview": "Detailed persona description with age, location, background, and characteristics",
+                        "customerJobs": [
+                            "Specific job or task they need to accomplish",
+                            "Another important job to be done",
+                            "Third job to be done"
+                        ],
+                        "customerPains": [
+                            "Specific pain point they experience",
+                            "Another frustration or challenge",
+                            "Third pain point"
+                        ]
+                    }},
+                    {{
+                        "name": "Secondary Customer Segment",
+                        "personaOverview": "Detailed persona description",
+                        "customerJobs": ["job1", "job2", "job3"],
+                        "customerPains": ["pain1", "pain2", "pain3"]
+                    }},
+                    {{
+                        "name": "Third Customer Segment", 
+                        "personaOverview": "Detailed persona description",
+                        "customerJobs": ["job1", "job2", "job3"],
+                        "customerPains": ["pain1", "pain2", "pain3"]
+                    }},
+                    {{
+                        "name": "Fourth Customer Segment",
+                        "personaOverview": "Detailed persona description", 
+                        "customerJobs": ["job1", "job2", "job3"],
+                        "customerPains": ["pain1", "pain2", "pain3"]
+                    }}
+                ],
+                "problems": [
+                    "Specific problem 1 that affects target customers",
+                    "Specific problem 2 related to the industry/market",
+                    "Specific problem 3 that creates pain points"
+                ],
+                "solutions": {{
+                    "features": [
+                        "Core feature 1 that solves the main problem",
+                        "Feature 2 that provides additional value",
+                        "Feature 3 that differentiates from competitors",
+                        "Feature 4 for enhanced user experience"
+                    ],
+                    "potentialWaysToPlay": [
+                        {{
+                            "title": "Strategy 1 Title",
+                            "description": "Detailed description of how this strategy would work and benefit users"
+                        }},
+                        {{
+                            "title": "Strategy 2 Title", 
+                            "description": "Detailed description of second strategic approach"
+                        }},
+                        {{
+                            "title": "Strategy 3 Title",
+                            "description": "Detailed description of third strategic option"
+                        }}
+                    ]
+                }},
+                "competitors": {{
+                    "direct": [
+                        "Direct Competitor 1",
+                        "Direct Competitor 2", 
+                        "Direct Competitor 3",
+                        "Direct Competitor 4"
+                    ],
+                    "indirect": [
+                        "Indirect Competitor 1",
+                        "Indirect Competitor 2",
+                        "Indirect Competitor 3",
+                        "Traditional solution or method"
+                    ],
+                    "alternatives": [
+                        "Alternative solution 1",
+                        "Alternative approach 2", 
+                        "DIY or manual approach",
+                        "Offline equivalent"
+                    ]
+                }},
+                "valueProposition": "Single, clear compelling value proposition that explains why customers should choose this solution",
+                "channels": [
+                    "Primary distribution channel",
+                    "Secondary marketing channel", 
+                    "Third customer acquisition method",
+                    "Fourth outreach strategy"
+                ],
+                "revenue": [
+                    "Primary revenue stream with specific model",
+                    "Secondary revenue source",
+                    "Potential third income stream"
+                ],
+                "keyMetrics": [
+                    "Key metric 1 specific to the business model",
+                    "Important metric 2 for tracking growth",
+                    "Critical metric 3 for success measurement",
+                    "Essential metric 4 for business health"
+                ],
+                "costStructure": [
+                    "Major cost category 1",
+                    "Important cost factor 2",
+                    "Ongoing expense 3",
+                    "Investment requirement 4"
+                ],
+                "unfairAdvantage": "Specific competitive advantage that would be hard to replicate"
             }},
             "hypotheses": [
                 {{
                     "type": "Desirability",
-                    "text": "hypothesis about customer need",
+                    "text": "Specific hypothesis about customer demand and need for this solution",
                     "criticality": "High",
-                    "method": "validation method"
+                    "method": "Specific validation method like customer interviews or surveys"
                 }},
                 {{
                     "type": "Viability", 
-                    "text": "hypothesis about business model",
+                    "text": "Specific hypothesis about the business model and revenue generation",
                     "criticality": "High",
-                    "method": "validation method"
+                    "method": "Specific method to test business viability"
                 }},
                 {{
                     "type": "Feasibility",
-                    "text": "hypothesis about technical/operational capability",
+                    "text": "Specific hypothesis about technical or operational capability to deliver the solution",
                     "criticality": "Medium",
-                    "method": "validation method"
+                    "method": "Specific method to validate technical feasibility"
                 }}
             ],
             "storytelling": {{
-                "names": ["Name Option 1", "Name Option 2", "Name Option 3", "Name Option 4", "Name Option 5"],
-                "mission": "Mission statement",
-                "vision": "Vision statement", 
-                "values": ["Value 1: Description", "Value 2: Description", "Value 3: Description"],
-                "elevatorPitch": "Compelling 60-second elevator pitch"
+                "names": ["Name Option 1 relevant to industry", "Name Option 2", "Name Option 3", "Name Option 4", "Name Option 5"],
+                "mission": "Specific mission statement that reflects the startup's purpose in this industry",
+                "vision": "Specific vision statement for the company's future in this market", 
+                "values": [
+                    "Value 1: Detailed description relevant to the industry",
+                    "Value 2: Another important value with explanation",
+                    "Value 3: Third core value with context"
+                ],
+                "elevatorPitch": "Compelling elevator pitch that specifically addresses the problem, solution, market, and unique value proposition for this particular startup idea"
             }}
         }}
 
         Important guidelines:
-        - Make all content specific to the industry and business model
-        - Provide realistic, research-backed insights
-        - Include actual competitor names where possible
-        - Create customer segments that are specific and actionable
-        - Ensure revenue streams align with the business model
-        - Make hypotheses testable and specific
-        - Write elevator pitch in first person as the founder
+        - Make ALL content specific to the actual startup idea provided
+        - Create realistic customer personas with specific demographics and psychographics
+        - Identify real competitors and alternatives in the relevant industry
+        - Ensure all problems and solutions are directly related to the described startup
+        - Use industry-specific terminology and insights
+        - Make the business model realistic and appropriate for the market
+        - Create testable, specific hypotheses rather than generic ones
         """
         
         # Send message to AI
