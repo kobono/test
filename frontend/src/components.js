@@ -395,7 +395,18 @@ const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
   );
 };
 
-const BusinessPrototypeSection = () => {
+const BusinessPrototypeSection = ({ currentIdea }) => {
+  const canvas = currentIdea?.leanCanvas || {
+    problems: ['Problem identification needed', 'Market research required'],
+    solutions: ['Solution development needed', 'Technical implementation required'],
+    customers: ['Target customer analysis needed'],
+    competitors: ['Competitive analysis required'],
+    valueProposition: 'Value proposition to be defined',
+    channels: ['Distribution channels to be identified'],
+    revenue: ['Revenue model to be developed'],
+    keyMetrics: ['Key metrics to be defined']
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -425,8 +436,9 @@ const BusinessPrototypeSection = () => {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h3 className="font-semibold text-blue-900 mb-2 text-sm">B. Problem</h3>
             <div className="text-xs text-blue-800 space-y-1">
-              <div>• Difficulty in making informed trading decisions for new investors</div>
-              <div>• Lack of transparency and trust in financial markets</div>
+              {canvas.problems.map((problem, index) => (
+                <div key={index}>• {problem}</div>
+              ))}
             </div>
           </div>
 
@@ -434,8 +446,9 @@ const BusinessPrototypeSection = () => {
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <h3 className="font-semibold text-green-900 mb-2 text-sm">D. Solution</h3>
             <div className="text-xs text-green-800 space-y-1">
-              <div>• Real-time social feed for trading insights</div>
-              <div>• Copy-trading feature that replicates top traders' actions</div>
+              {canvas.solutions.map((solution, index) => (
+                <div key={index}>• {solution}</div>
+              ))}
             </div>
           </div>
 
@@ -443,7 +456,7 @@ const BusinessPrototypeSection = () => {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <h3 className="font-semibold text-yellow-900 mb-2 text-sm">E. Unique Value Proposition</h3>
             <div className="text-xs text-yellow-800">
-              Trade smarter together. Access real-time insights and follow top traders' moves on a collaborative platform.
+              {canvas.valueProposition}
             </div>
           </div>
 
@@ -451,7 +464,7 @@ const BusinessPrototypeSection = () => {
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
             <h3 className="font-semibold text-purple-900 mb-2 text-sm">J. Unfair Advantage</h3>
             <div className="text-xs text-purple-800">
-              Proprietary algorithm that surfaces trending trades and insights
+              Proprietary technology and first-mover advantage in this specific market segment
             </div>
           </div>
 
@@ -459,10 +472,9 @@ const BusinessPrototypeSection = () => {
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
             <h3 className="font-semibold text-orange-900 mb-2 text-sm">A. Customer Segments</h3>
             <div className="text-xs text-orange-800 space-y-1">
-              <div>• Millennial Investors</div>
-              <div>• Retirement Account Planners</div>
-              <div>• Aspiring Full-time Traders</div>
-              <div>• Financial Enthusiast Students</div>
+              {canvas.customers.map((customer, index) => (
+                <div key={index}>• {customer}</div>
+              ))}
             </div>
           </div>
 
@@ -470,13 +482,9 @@ const BusinessPrototypeSection = () => {
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 mb-2 text-sm">C. Existing Alternatives</h3>
             <div className="text-xs text-gray-700 space-y-1">
-              <div>• eToro</div>
-              <div>• ZuluTrade</div>
-              <div>• CopyMe</div>
-              <div>• NAGA</div>
-              <div>• TradingView</div>
-              <div>• PegTrade</div>
-              <div>• Traditional</div>
+              {canvas.competitors.map((competitor, index) => (
+                <div key={index}>• {competitor}</div>
+              ))}
             </div>
           </div>
 
@@ -484,10 +492,9 @@ const BusinessPrototypeSection = () => {
           <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
             <h3 className="font-semibold text-indigo-900 mb-2 text-sm">I. Key Metrics</h3>
             <div className="text-xs text-indigo-800 space-y-1">
-              <div>• Number of active users</div>
-              <div>• Volume of trades executed</div>
-              <div>• User retention rates</div>
-              <div>• Social engagement</div>
+              {canvas.keyMetrics.map((metric, index) => (
+                <div key={index}>• {metric}</div>
+              ))}
             </div>
           </div>
 
@@ -495,19 +502,17 @@ const BusinessPrototypeSection = () => {
           <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">
             <h3 className="font-semibold text-pink-900 mb-2 text-sm">F. Channels</h3>
             <div className="text-xs text-pink-800 space-y-1">
-              <div>• Mobile and desktop applications</div>
-              <div>• Social media</div>
-              <div>• Trading forums and communities</div>
-              <div>• Financial blogs</div>
+              {canvas.channels.map((channel, index) => (
+                <div key={index}>• {channel}</div>
+              ))}
             </div>
           </div>
 
           {/* Early Adopters */}
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
             <h3 className="font-semibold text-teal-900 mb-2 text-sm">Early Adopters</h3>
-            <div className="text-xs text-teal-800 space-y-1">
-              <div>• Young traders savvy with social media</div>
-              <div>• Investors seeking community</div>
+            <div className="text-xs text-teal-800">
+              {canvas.customers[0]} who are actively seeking solutions and willing to try new products
             </div>
           </div>
 
@@ -515,18 +520,28 @@ const BusinessPrototypeSection = () => {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <h3 className="font-semibold text-red-900 mb-2 text-sm">High Level Concept</h3>
             <div className="text-xs text-red-800">
-              Social network meets trading floor
+              {currentIdea?.description || 'Innovative solution for market needs'}
             </div>
           </div>
 
           {/* Cost Structure */}
           <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 col-span-2">
             <h3 className="font-semibold text-gray-900 mb-2 text-sm">H. Cost Structure</h3>
+            <div className="text-xs text-gray-700">
+              • Technology development and maintenance
+              • Customer acquisition costs
+              • Operational expenses
+            </div>
           </div>
 
           {/* Revenue Streams */}
           <div className="bg-green-100 border border-green-300 rounded-lg p-4 col-span-3">
             <h3 className="font-semibold text-green-900 mb-2 text-sm">G. Revenue Streams</h3>
+            <div className="text-xs text-green-800 space-y-1">
+              {canvas.revenue.map((revenue, index) => (
+                <span key={index}>• {revenue} </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
