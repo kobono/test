@@ -610,3 +610,514 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
     </div>
   );
 };
+// StartupIdeaSection - Main dashboard matching screenshot 1
+const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
+  if (!currentIdea) return null;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
+          <GeneratedBadge />
+        </div>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => onNavigate('business-prototype')}
+            className="flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            <span className="mr-2">🚀</span>
+            Unleash your Startup Idea
+            <span className="ml-2 text-sm bg-teal-700 px-2 py-1 rounded">in 2 mins</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Startup Idea Card */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center space-x-4 mb-8">
+          <div className="w-16 h-16 bg-gray-300 rounded-full"></div>
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900">{currentIdea.description}</h2>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <p className="text-gray-600">
+            Your AI Entrepreneur in Residence prepares a first draft of the below for your review:
+          </p>
+        </div>
+
+        {/* Feature Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Business Prototype */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('business-prototype')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Business Prototype</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Lean Canvas →</span>
+                <span className="ml-auto text-gray-500">Customer Segments</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Lean Canvas →</span>
+                <span className="ml-auto text-gray-500">Existing Alternatives</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Lean Canvas</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Validation */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('validation')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Validation</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Critical Hypotheses</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Experiments →</span>
+                <span className="ml-auto text-gray-500">Customer Interview</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="text-teal-600 font-medium">Experiments →</span>
+                <span className="ml-auto text-gray-500">Landing Page</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Storytelling Central */}
+          <div 
+            className="border border-gray-200 rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            onClick={() => onNavigate('storytelling')}
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Storytelling Central</h3>
+            <div className="space-y-4">
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Brand Wheel</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Startup Naming</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="text-green-500 mr-3">✓</span>
+                <span className="font-medium">Elevator Pitch</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Business Prototype Section - Matching screenshot 2
+const BusinessPrototypeSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.leanCanvas) return null;
+
+  const leanCanvas = currentIdea.leanCanvas;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
+        <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
+      </div>
+
+      {/* Lean Canvas */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">Lean Canvas</h2>
+            <GeneratedBadge />
+            <p className="text-gray-600 text-sm mt-2">A streamlined one-page business plan template that succinctly captures your startup's vision.</p>
+          </div>
+          <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            <span className="mr-2">👁️</span>
+            Details
+          </button>
+        </div>
+
+        {/* Lean Canvas Grid */}
+        <div className="grid grid-cols-5 gap-4 mb-6">
+          {/* Top Row */}
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-3 text-sm">B. Problem</h3>
+            <div className="space-y-2">
+              {leanCanvas.problems?.map((problem, index) => (
+                <div key={index} className="text-xs text-blue-800">• {problem}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+            <h3 className="font-semibold text-green-900 mb-3 text-sm">D. Solution</h3>
+            <div className="space-y-2">
+              {leanCanvas.solutions?.map((solution, index) => (
+                <div key={index} className="text-xs text-green-800">• {solution}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+            <h3 className="font-semibold text-purple-900 mb-3 text-sm">E. Unique Value Proposition</h3>
+            <div className="text-xs text-purple-800 font-medium mb-2">Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.</div>
+          </div>
+
+          <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+            <h3 className="font-semibold text-orange-900 mb-3 text-sm">J. Unfair Advantage</h3>
+            <div className="text-xs text-orange-800">Proprietary algorithm that surfaces trending trades and insights</div>
+          </div>
+
+          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+            <h3 className="font-semibold text-red-900 mb-3 text-sm">A. Customer Segments</h3>
+            <div className="space-y-1">
+              {leanCanvas.customers?.map((customer, index) => (
+                <div key={index} className="text-xs text-red-800">• {customer}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-5 gap-4">
+          {/* Bottom Row */}
+          <div className="bg-teal-50 border-2 border-teal-200 rounded-lg p-4">
+            <h3 className="font-semibold text-teal-900 mb-3 text-sm">C. Existing Alternatives</h3>
+            <div className="space-y-1">
+              {leanCanvas.competitors?.map((competitor, index) => (
+                <div key={index} className="text-xs text-teal-800">• {competitor}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+            <h3 className="font-semibold text-yellow-900 mb-3 text-sm">I. Key Metrics</h3>
+            <div className="space-y-1">
+              {leanCanvas.keyMetrics?.map((metric, index) => (
+                <div key={index} className="text-xs text-yellow-800">• {metric}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">F. Channels</h3>
+            <div className="text-xs text-gray-700 font-medium mb-2">High Level Concept</div>
+            <div className="text-xs text-gray-600">Social network meets trading floor</div>
+            <div className="space-y-1 mt-2">
+              {leanCanvas.channels?.map((channel, index) => (
+                <div key={index} className="text-xs text-gray-700">• {channel}</div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
+            <h3 className="font-semibold text-indigo-900 mb-3 text-sm">Early Adopters</h3>
+            <div className="space-y-1">
+              <div className="text-xs text-indigo-800">• Young traders savvy with social media</div>
+              <div className="text-xs text-indigo-800">• Investors</div>
+            </div>
+          </div>
+
+          <div className="bg-pink-50 border-2 border-pink-200 rounded-lg p-4">
+            <h3 className="font-semibold text-pink-900 mb-3 text-sm">H. Cost Structure</h3>
+            <div className="space-y-1">
+              <div className="text-xs text-pink-800">• Platform development</div>
+              <div className="text-xs text-pink-800">• Data feeds</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-5 gap-4 mt-4">
+          <div className="col-span-2"></div>
+          <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4">
+            <h3 className="font-semibold text-emerald-900 mb-3 text-sm">G. Revenue Streams</h3>
+            <div className="space-y-1">
+              {leanCanvas.revenue?.map((revenue, index) => (
+                <div key={index} className="text-xs text-emerald-800">• {revenue}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Validation Section - Matching screenshots 3 & 4
+const ValidationSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.hypotheses) return null;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Validation</h1>
+        <p className="text-gray-600">Navigate your startup's viability by identifying critical hypotheses and conducting experiments, ensuring you meet market needs.</p>
+      </div>
+
+      {/* Critical Hypotheses */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">Critical Hypotheses</h2>
+            <GeneratedBadge />
+            <p className="text-gray-600 text-sm mt-2">Identify and prioritize the fundamental assumptions underpinning your business, setting the stage for essential validation tests.</p>
+          </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+            New
+          </button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Hypothesis</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Criticality</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700">Testing Method</th>
+                <th className="text-left py-4 px-4 font-medium text-gray-700"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentIdea.hypotheses.map((hypothesis, index) => (
+                <tr key={index} className="border-b border-gray-100">
+                  <td className="py-6 px-4">
+                    <div className="flex items-start">
+                      <div className={`w-8 h-8 rounded-full mr-4 flex items-center justify-center text-sm font-medium ${
+                        hypothesis.type === 'Desirability' ? 'bg-green-100 text-green-800' :
+                        hypothesis.type === 'Viability' ? 'bg-blue-100 text-blue-800' :
+                        'bg-purple-100 text-purple-800'
+                      }`}>
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 mb-1">{hypothesis.type}</div>
+                        <div className="text-sm text-gray-600">{hypothesis.text}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-6 px-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
+                      hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {hypothesis.criticality}
+                    </span>
+                  </td>
+                  <td className="py-6 px-4 text-sm text-gray-700">{hypothesis.method}</td>
+                  <td className="py-6 px-4">
+                    <button className="text-gray-400 hover:text-gray-600">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Validation Experiments */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Validation Experiments</h2>
+          <p className="text-gray-600 text-sm">Design and execute strategic tests to validate or refute your startup's hypotheses, ensuring data-driven decisions in your entrepreneurial journey.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Customer Interview */}
+          <div className="border border-gray-200 rounded-lg p-6">
+            <div className="flex items-start mb-4">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                🎤
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Customer Interview</h3>
+                <GeneratedBadge />
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">Create a tailored questionnaire for customer discovery and problem exploration.</p>
+            <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 text-sm">
+              <span className="mr-2">👁️</span>
+              Details
+            </button>
+          </div>
+
+          {/* Landing Page */}
+          <div className="border border-gray-200 rounded-lg p-6">
+            <div className="flex items-start mb-4">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                🌐
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Landing Page</h3>
+                <GeneratedBadge />
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">Develop a simple webpage to illustrate your value proposition.</p>
+            <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 text-sm">
+              <span className="mr-2">✏️</span>
+              Details
+            </button>
+          </div>
+
+          {/* Create New Experiment */}
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+              📧
+            </div>
+            <h3 className="font-medium text-gray-600 mb-1">Create a new</h3>
+            <p className="text-sm text-gray-500 mb-3">Experiment</p>
+            <p className="text-xs text-gray-400">(Coming soon)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Storytelling Section - Matching screenshot 5
+const StorytellingSection = ({ currentIdea }) => {
+  if (!currentIdea || !currentIdea.storytelling) return null;
+
+  const storytelling = currentIdea.storytelling;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Storytelling Central</h1>
+        <p className="text-gray-600">Craft a compelling narrative for your brand, select your startup's name, and captivate audiences with an unforgettable pitch.</p>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="border-b border-gray-200">
+          <nav className="flex">
+            <button className="px-6 py-4 border-b-2 border-teal-500 text-teal-600 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center text-xs">01</span>
+                Brand Wheel
+              </div>
+              <div className="text-xs text-gray-500 mt-1">Define your brand positioning.</div>
+              <GeneratedBadge />
+            </button>
+            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">02</span>
+                Startup Naming
+              </div>
+              <div className="text-xs text-gray-400 mt-1">Find a compelling name.</div>
+              <GeneratedBadge />
+            </button>
+            <button className="px-6 py-4 text-gray-500 hover:text-gray-700 font-medium text-sm">
+              <div className="flex items-center">
+                <span className="mr-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs">03</span>
+                Elevator Pitch
+              </div>
+              <div className="text-xs text-gray-400 mt-1">Craft your story.</div>
+              <GeneratedBadge />
+            </button>
+          </nav>
+        </div>
+
+        {/* Brand Wheel Content */}
+        <div className="p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Mission */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Mission</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.mission}</p>
+              </div>
+            </div>
+
+            {/* Vision */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Vision</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">{storytelling.vision}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Brand Values */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Brand Values</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {storytelling.values?.map((value, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-700">{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Connect Dashboard Section
+const ConnectDashboardSection = () => {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
+        <p className="text-gray-600">Connect with mentors, investors, and access exclusive startup perks.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Mentors</h3>
+            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Connect with experienced entrepreneurs and industry experts.</p>
+          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+            🔒 Unlock Mentorship
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Investors & Accelerators</h3>
+            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Get discovered by investors and accelerator programs.</p>
+          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+            🔒 Access Funding
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <h3 className="text-lg font-semibold">Startup Perks</h3>
+            <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Available</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Access exclusive deals and credits for startup tools.</p>
+          <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            🎁 View Perks
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
