@@ -1297,7 +1297,7 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
               id="idea"
               value={ideaText}
               onChange={(e) => setIdeaText(e.target.value)}
-              placeholder="e.g., A social platform for crypto traders to share insights and copy trades"
+              placeholder="e.g., AI-powered fitness app that creates personalized workout plans"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
               rows={4}
               required
@@ -1316,23 +1316,32 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
             {isGenerating ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                Generating your startup validation plan...
+                Generating your comprehensive startup plan...
               </div>
             ) : (
-              '🚀 Generate Startup Plan'
+              '🚀 Generate Complete Startup Plan'
             )}
           </button>
         </form>
 
         {isGenerating && (
           <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-3">AI is working on your idea...</h3>
-            <div className="space-y-2 text-sm text-blue-800">
-              <div>✓ Analyzing market opportunity</div>
-              <div>✓ Identifying key hypotheses</div>
-              <div>✓ Creating business model canvas</div>
-              <div>⏳ Generating validation experiments</div>
-              <div>⏳ Crafting brand positioning</div>
+            <h3 className="font-semibold text-blue-900 mb-4">AI Research Agent is analyzing your idea...</h3>
+            <div className="space-y-3">
+              {generationSteps.map((step, index) => (
+                <div key={index} className={`flex items-center text-sm ${
+                  index <= generationStep ? 'text-blue-800' : 'text-blue-400'
+                }`}>
+                  {index < generationStep ? (
+                    <span className="text-green-500 mr-2">✓</span>
+                  ) : index === generationStep ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full mr-2"></div>
+                  ) : (
+                    <span className="text-gray-400 mr-2">○</span>
+                  )}
+                  {step}
+                </div>
+              ))}
             </div>
           </div>
         )}
