@@ -175,14 +175,127 @@ async def delete_startup_idea(idea_id: str):
 # AI Content Generation endpoint
 @api_router.post("/generate-startup-content")
 async def generate_startup_content(request: Dict[str, Any]):
-    """Generate comprehensive startup content based on idea description"""
+    """Generate comprehensive startup content using OpenAI GPT"""
     description = request.get("description", "")
     
     if not description:
         raise HTTPException(status_code=400, detail="Description is required")
     
-    # This will be enhanced with real AI integration later
-    # For now, using the existing logic from frontend
+    try:
+        # Import the emergentintegrations library
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        
+        # Get OpenAI API key from environment
+        openai_api_key = os.environ.get('OPENAI_API_KEY')
+        if not openai_api_key:
+            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+        
+        # Initialize LLM chat with unique session ID
+        session_id = f"startup_generation_{uuid.uuid4().hex[:8]}"
+        
+        chat = LlmChat(
+            api_key=openai_api_key,
+            session_id=session_id,
+            system_message="""You are an expert startup advisor and business strategist with deep knowledge across multiple industries. 
+            Your role is to help entrepreneurs develop comprehensive business plans based on their startup ideas.
+            
+            You should provide detailed, industry-specific insights and practical advice that can help validate and develop their business concept.
+            Focus on creating realistic, actionable content that demonstrates deep understanding of market dynamics, customer needs, and business models.
+            
+            Always format your responses as valid JSON with the exact structure requested."""
+        ).with_model("openai", "gpt-4o").with_max_tokens(4096)
+        
+        # Create the prompt for generating startup content
+        prompt = f"""
+        Based on the following startup idea description: "{description}"
+        
+        Please generate a comprehensive startup business plan analysis. Analyze the idea and provide:
+
+        1. **Industry Classification**: Determine the most appropriate industry category
+        2. **Business Name**: Suggest a compelling, memorable business name
+        3. **Lean Canvas Components**: All 9 key sections with detailed, realistic content
+        4. **Critical Hypotheses**: 3-5 key assumptions that need validation
+        5. **Storytelling Elements**: Mission, vision, values, and elevator pitch
+
+        Please respond with a JSON object in this exact format:
+        {{
+            "industry": "industry_category",
+            "name": "Business Name",
+            "leanCanvas": {{
+                "problems": ["problem 1", "problem 2", "problem 3"],
+                "solutions": ["solution 1", "solution 2", "solution 3"],
+                "customers": ["customer segment 1", "customer segment 2", "customer segment 3", "customer segment 4"],
+                "competitors": ["competitor 1", "competitor 2", "competitor 3", "competitor 4", "competitor 5", "competitor 6"],
+                "valueProposition": "Single, clear compelling value proposition",
+                "channels": ["channel 1", "channel 2", "channel 3", "channel 4"],
+                "revenue": ["revenue stream 1", "revenue stream 2", "revenue stream 3"],
+                "keyMetrics": ["metric 1", "metric 2", "metric 3", "metric 4", "metric 5"]
+            }},
+            "hypotheses": [
+                {{
+                    "type": "Desirability",
+                    "text": "hypothesis about customer need",
+                    "criticality": "High",
+                    "method": "validation method"
+                }},
+                {{
+                    "type": "Viability", 
+                    "text": "hypothesis about business model",
+                    "criticality": "High",
+                    "method": "validation method"
+                }},
+                {{
+                    "type": "Feasibility",
+                    "text": "hypothesis about technical/operational capability",
+                    "criticality": "Medium",
+                    "method": "validation method"
+                }}
+            ],
+            "storytelling": {{
+                "names": ["Name Option 1", "Name Option 2", "Name Option 3", "Name Option 4", "Name Option 5"],
+                "mission": "Mission statement",
+                "vision": "Vision statement", 
+                "values": ["Value 1: Description", "Value 2: Description", "Value 3: Description"],
+                "elevatorPitch": "Compelling 60-second elevator pitch"
+            }}
+        }}
+
+        Important guidelines:
+        - Make all content specific to the industry and business model
+        - Provide realistic, research-backed insights
+        - Include actual competitor names where possible
+        - Create customer segments that are specific and actionable
+        - Ensure revenue streams align with the business model
+        - Make hypotheses testable and specific
+        - Write elevator pitch in first person as the founder
+        """
+        
+        # Send message to AI
+        user_message = UserMessage(text=prompt)
+        ai_response = await chat.send_message(user_message)
+        
+        # Parse AI response as JSON
+        import json
+        try:
+            generated_content = json.loads(ai_response)
+            return generated_content
+        except json.JSONDecodeError:
+            # If JSON parsing fails, try to extract JSON from the response
+            import re
+            json_match = re.search(r'\{.*\}', ai_response, re.DOTALL)
+            if json_match:
+                generated_content = json.loads(json_match.group())
+                return generated_content
+            else:
+                raise HTTPException(status_code=500, detail="Failed to parse AI response")
+        
+    except Exception as e:
+        logger.error(f"AI generation failed: {str(e)}")
+        # Fallback to local generation if AI fails
+        return generate_fallback_content(description)
+
+def generate_fallback_content(description: str):
+    """Fallback content generation if AI fails"""
     idea_lower = description.lower()
     
     # Industry detection logic
@@ -202,7 +315,7 @@ async def generate_startup_content(request: Dict[str, Any]):
     
     # Industry-specific data (example with trading)
     if industry == 'trading':
-        content = {
+        return {
             "industry": industry,
             "name": "TradeHive",
             "leanCanvas": {
@@ -281,7 +394,7 @@ async def generate_startup_content(request: Dict[str, Any]):
         }
     else:
         # Default content for other industries
-        content = {
+        return {
             "industry": industry,
             "name": "StartupCo",
             "leanCanvas": {
@@ -326,8 +439,6 @@ async def generate_startup_content(request: Dict[str, Any]):
                 "elevatorPitch": "Our startup addresses key market needs through innovative technology solutions that create value for customers and drive business growth."
             }
         }
-    
-    return content
 
 # Include the router in the main app
 app.include_router(api_router)
