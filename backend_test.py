@@ -2,11 +2,19 @@ import requests
 import json
 import time
 import uuid
+import os
 from typing import Dict, Any, List, Optional
+from dotenv import load_dotenv
+from pathlib import Path
 
 # Get the backend URL from the frontend .env file
-BACKEND_URL = "http://localhost:8001"
+FRONTEND_ENV_PATH = Path("/app/frontend/.env")
+load_dotenv(FRONTEND_ENV_PATH)
+
+BACKEND_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001")
 API_BASE_URL = f"{BACKEND_URL}/api"
+
+print(f"Using backend URL: {BACKEND_URL}")
 
 class ZigZagBackendTester:
     def __init__(self):
