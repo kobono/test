@@ -69,7 +69,7 @@ export const LoginPage = ({ onLogin }) => {
 };
 
 // Left Sidebar Component
-const LeftSidebar = ({ currentSection, onSectionChange, onLogout }) => {
+const LeftSidebar = ({ currentSection, onSectionChange, onLogout, currentIdea, onNewIdea }) => {
   return (
     <div className="w-64 bg-blue-900 text-white min-h-screen flex flex-col">
       {/* Logo */}
@@ -101,7 +101,7 @@ const LeftSidebar = ({ currentSection, onSectionChange, onLogout }) => {
       {/* New Idea Button */}
       <div className="p-4">
         <button
-          onClick={() => onSectionChange('new-idea')}
+          onClick={() => onNewIdea()}
           className="w-full flex items-center px-4 py-3 bg-blue-800 hover:bg-blue-700 rounded-lg transition-colors duration-200"
         >
           <span className="mr-3">💡</span>
@@ -119,9 +119,9 @@ const LeftSidebar = ({ currentSection, onSectionChange, onLogout }) => {
           }`}
         >
           <span className="mr-3">🌐</span>
-          <div className="text-left">
-            <div className="font-medium">TradeHive</div>
-            <div className="text-xs text-blue-300">social trading platform</div>
+          <div className="text-left flex-1">
+            <div className="font-medium">{currentIdea.name}</div>
+            <div className="text-xs text-blue-300">{currentIdea.description}</div>
           </div>
           <div className="ml-auto flex space-x-1">
             <button className="text-blue-300 hover:text-white">✏️</button>
