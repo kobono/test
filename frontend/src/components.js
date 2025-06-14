@@ -477,19 +477,266 @@ const CriticalHypothesesSection = () => {
   );
 };
 
-const ExperimentsSection = () => (
-  <div className="space-y-6">
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900">Experiments</h1>
-      <p className="text-gray-600 mt-2">Design and run A/B tests to validate your hypotheses</p>
+const ExperimentsSection = () => {
+  const [activeTab, setActiveTab] = useState('running');
+
+  const mockExperiments = {
+    running: [
+      {
+        id: 1,
+        name: "Landing Page A/B Test - Pricing Sensitivity",
+        type: "A/B Test",
+        status: "running",
+        progress: 67,
+        participants: 1247,
+        targetParticipants: 2000,
+        startDate: "Nov 15, 2024",
+        endDate: "Dec 15, 2024",
+        hypothesis: "Users will convert 25% better with $19/month vs $29/month pricing",
+        variants: ["Version A: $29/month", "Version B: $19/month"],
+        currentResults: { conversionA: "3.2%", conversionB: "4.1%" }
+      },
+      {
+        id: 2,
+        name: "Customer Interview - Pain Point Validation",
+        type: "Interview",
+        status: "running",
+        progress: 45,
+        participants: 18,
+        targetParticipants: 40,
+        startDate: "Nov 20, 2024",
+        endDate: "Dec 10, 2024",
+        hypothesis: "Remote workers struggle with time tracking and need automated solution",
+        variants: ["Structured Interview Protocol"],
+        currentResults: { painPointConfirmed: "83%", willingToPay: "67%" }
+      },
+      {
+        id: 3,
+        name: "Feature Prototype Test - Mobile vs Desktop",
+        type: "Prototype Test",
+        status: "running",
+        progress: 23,
+        participants: 89,
+        targetParticipants: 200,
+        startDate: "Nov 25, 2024",
+        endDate: "Dec 20, 2024",
+        hypothesis: "Mobile-first interface will have higher engagement than desktop",
+        variants: ["Mobile Interface", "Desktop Interface"],
+        currentResults: { engagementMobile: "78%", engagementDesktop: "65%" }
+      }
+    ],
+    completed: [
+      {
+        id: 4,
+        name: "Market Size Survey - SMB Segment",
+        type: "Survey",
+        status: "completed",
+        progress: 100,
+        participants: 500,
+        targetParticipants: 500,
+        startDate: "Oct 1, 2024",
+        endDate: "Nov 1, 2024",
+        hypothesis: "SMBs with 10-50 employees are willing to pay for productivity tools",
+        variants: ["Survey with 15 questions"],
+        results: { marketSize: "2.3M companies", willingToPay: "42%", avgBudget: "$125/month" }
+      },
+      {
+        id: 5,
+        name: "Email Signup Form - Optimization",
+        type: "A/B Test",
+        status: "completed",
+        progress: 100,
+        participants: 3200,
+        targetParticipants: 3000,
+        startDate: "Oct 15, 2024",
+        endDate: "Nov 10, 2024",
+        hypothesis: "Single-field email form will outperform multi-field form",
+        variants: ["Single Email Field", "Email + Name + Company"],
+        results: { conversionSingle: "12.4%", conversionMulti: "8.7%", winner: "Single Field" }
+      }
+    ],
+    planned: [
+      {
+        id: 6,
+        name: "Freemium vs Paid Model Test",
+        type: "Business Model Test",
+        status: "planned",
+        progress: 0,
+        participants: 0,
+        targetParticipants: 1000,
+        startDate: "Dec 1, 2024",
+        endDate: "Jan 15, 2025",
+        hypothesis: "Freemium model will drive 3x more signups than paid-only model",
+        variants: ["Freemium with 14-day trial", "Paid-only with demo"],
+        currentResults: {}
+      }
+    ]
+  };
+
+  const ExperimentCard = ({ experiment }) => {
+    const statusColors = {
+      'running': 'bg-blue-100 text-blue-800',
+      'completed': 'bg-green-100 text-green-800',
+      'planned': 'bg-gray-100 text-gray-800'
+    };
+
+    const typeIcons = {
+      'A/B Test': '🔀',
+      'Interview': '🎤',
+      'Survey': '📋',
+      'Prototype Test': '🎨',
+      'Business Model Test': '💰'
+    };
+
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl">{typeIcons[experiment.type]}</span>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{experiment.name}</h3>
+              <p className="text-sm text-gray-600">{experiment.type}</p>
+            </div>
+          </div>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[experiment.status]}`}>
+            {experiment.status.charAt(0).toUpperCase() + experiment.status.slice(1)}
+          </span>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-sm text-gray-700 mb-2"><strong>Hypothesis:</strong> {experiment.hypothesis}</p>
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <span>{experiment.startDate} - {experiment.endDate}</span>
+            <span>{experiment.participants}/{experiment.targetParticipants} participants</span>
+          </div>
+        </div>
+
+        {experiment.progress > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm font-medium text-gray-700">Progress</span>
+              <span className="text-sm text-gray-600">{experiment.progress}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-teal-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${experiment.progress}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        {experiment.currentResults && Object.keys(experiment.currentResults).length > 0 && (
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <p className="text-sm font-medium text-gray-700 mb-2">Current Results:</p>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {Object.entries(experiment.currentResults).map(([key, value]) => (
+                <div key={key}>
+                  <span className="text-gray-600">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</span>
+                  <span className="font-medium ml-1">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {experiment.results && (
+          <div className="mb-4 p-3 bg-green-50 rounded-lg">
+            <p className="text-sm font-medium text-gray-700 mb-2">Final Results:</p>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {Object.entries(experiment.results).map(([key, value]) => (
+                <div key={key}>
+                  <span className="text-gray-600">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</span>
+                  <span className="font-medium ml-1">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex space-x-2">
+          <button className="px-3 py-1 text-sm text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors duration-200">
+            View Details
+          </button>
+          {experiment.status === 'running' && (
+            <button className="px-3 py-1 text-sm text-orange-600 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
+              Pause
+            </button>
+          )}
+          {experiment.status === 'planned' && (
+            <button className="px-3 py-1 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors duration-200">
+              Start
+            </button>
+          )}
+          <button className="px-3 py-1 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            Edit
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Experiments</h1>
+          <p className="text-gray-600 mt-2">Design and run experiments to validate your startup hypotheses</p>
+        </div>
+        <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+          + New Experiment
+        </button>
+      </div>
+
+      {/* Experiment Type Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {[
+          { type: 'A/B Test', icon: '🔀', desc: 'Compare two versions' },
+          { type: 'Survey', icon: '📋', desc: 'Collect user feedback' },
+          { type: 'Interview', icon: '🎤', desc: 'Deep user insights' },
+          { type: 'Prototype', icon: '🎨', desc: 'Test new features' },
+          { type: 'Landing Page', icon: '🌐', desc: 'Validate demand' }
+        ].map((item, index) => (
+          <button key={index} className="p-4 bg-white rounded-lg border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition-all duration-200 text-center">
+            <div className="text-2xl mb-2">{item.icon}</div>
+            <div className="font-medium text-gray-900 text-sm">{item.type}</div>
+            <div className="text-xs text-gray-600">{item.desc}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8">
+          {[
+            { key: 'running', label: 'Running', count: mockExperiments.running.length },
+            { key: 'completed', label: 'Completed', count: mockExperiments.completed.length },
+            { key: 'planned', label: 'Planned', count: mockExperiments.planned.length }
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === tab.key
+                  ? 'border-teal-500 text-teal-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Experiments List */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {mockExperiments[activeTab].map((experiment) => (
+          <ExperimentCard key={experiment.id} experiment={experiment} />
+        ))}
+      </div>
     </div>
-    <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
-      <div className="text-6xl mb-4">⚗️</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">Experiments Dashboard</h3>
-      <p className="text-gray-600">Set up and monitor your A/B tests and experiments</p>
-    </div>
-  </div>
-);
+  );
+};
 
 const InsightsSection = () => (
   <div className="space-y-6">
