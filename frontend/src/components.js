@@ -647,6 +647,104 @@ const ValidationSection = () => {
 };
 
 const StorytellingSection = () => {
+  const [activeTab, setActiveTab] = useState('brand-wheel');
+
+  const startupNames = [
+    'TradeHive', 'EmpowerTrade', 'CollabFX', 'CommuniTrade', 'AscendTrades',
+    'UnityBucks', 'TradePulse', 'Empowave', 'TradeSphere', 'CollaboraTrade',
+    'CommunifyTrade', 'InnoTradix', 'TradeSynergy', 'EmpowerNet', 'TraderConnect'
+  ];
+
+  const [selectedName, setSelectedName] = useState('TradeHive');
+
+  const BrandWheelTab = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Mission</h3>
+            <p className="text-gray-700">Empower individuals to trade, connect, and learn from each other through a social trading platform, revolutionizing the way people engage in financial markets and investing.</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Vision</h3>
+            <p className="text-gray-700">To create a global community of traders and investors who collaborate, share knowledge, and drive financial empowerment for all.</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Brand Values</h3>
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Collaboration:</strong> Fostering a supportive community where traders can collaborate, learn from each other, and grow together.</p>
+              <p><strong>Transparency:</strong> Providing open and transparent information to empower users to make informed decisions and build trust within the community.</p>
+              <p><strong>Innovation:</strong> Constantly evolving and introducing innovative features to enhance the trading experience and provide cutting-edge tools for users.</p>
+              <p><strong>Empowerment:</strong> Empowering individuals to take control of their financial futures through education, access to markets, and social engagement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const StartupNamingTab = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-5 gap-4">
+        {startupNames.map((name, index) => (
+          <button
+            key={index}
+            onClick={() => setSelectedName(name)}
+            className={`p-4 border rounded-lg text-center transition-all duration-200 ${
+              selectedName === name 
+                ? 'border-teal-500 bg-teal-50 text-teal-700' 
+                : 'border-gray-200 hover:border-gray-300 text-gray-700'
+            }`}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+      
+      <div className="flex items-center justify-center py-8">
+        <div className="flex items-center space-x-3">
+          <span className="text-gray-600">Selected Name:</span>
+          <span className="text-xl font-semibold text-gray-900">{selectedName}</span>
+          <button className="text-teal-600 hover:text-teal-700">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div className="flex justify-center">
+        <div className="w-96 h-2 bg-gray-200 rounded-full">
+          <div className="w-full h-2 bg-teal-500 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ElevatorPitchTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 rounded-lg p-6">
+        <p className="text-sm text-gray-600 italic mb-4">Certainly! Here's your elevator pitch crafted in Markdown format:</p>
+        
+        <div className="prose max-w-none text-gray-700 leading-relaxed">
+          <p className="mb-4">
+            <em>Did you know that traders and investors struggle to find a collaborative community to share knowledge and insights? This is a multi-billion dollar opportunity in the financial market industry in every corner of the world.</em>
+          </p>
+          
+          <p className="mb-4">
+            TradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge. Unlike other alternatives, TradeHive focuses on building a strong community-driven platform where users can interact, share tips, and empower each other in the world of trading and investing.
+          </p>
+          
+          <p className="mb-4">
+            Our team comprises experienced entrepreneurs and finance experts, and we generate revenue through subscription services and premium features. In essence, we are the "LinkedIn for traders," revolutionizing the way people engage in financial markets. Our vision
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -655,68 +753,68 @@ const StorytellingSection = () => {
         <p className="text-gray-600">Craft a compelling narrative for your brand, select your startup's name, and captivate audiences with an unforgettable pitch.</p>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-8">
-          <button className="py-2 px-1 border-b-2 border-teal-500 text-teal-600 font-medium">
-            01 Brand Wheel
-          </button>
-          <button className="py-2 px-1 text-gray-500 hover:text-gray-700">
-            02 Startup Naming
-          </button>
-          <button className="py-2 px-1 text-gray-500 hover:text-gray-700">
-            03 Elevator Pitch
-          </button>
-        </nav>
-      </div>
-
-      {/* Brand Wheel Section */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium">01</div>
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">Brand Wheel</h2>
+      {/* Tab Navigation */}
+      <div className="grid grid-cols-3 gap-4">
+        <button
+          onClick={() => setActiveTab('brand-wheel')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'brand-wheel' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'brand-wheel' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>01</div>
             <GeneratedBadge />
           </div>
-        </div>
-        <p className="text-gray-600 mb-6">Define your brand positioning.</p>
+          <h3 className="font-semibold text-gray-900">Brand Wheel</h3>
+          <p className="text-sm text-gray-600">Define your brand positioning.</p>
+        </button>
 
-        {/* Brand Information */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Mission</h3>
-              <p className="text-gray-700">Empower individuals to trade, connect, and learn from each other through a social trading platform, revolutionizing the way people engage in financial markets and investing.</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Vision</h3>
-              <p className="text-gray-700">To create a global community of traders and investors who collaborate, share knowledge, and drive financial empowerment for all.</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Brand Values</h3>
-              <div className="space-y-2 text-gray-700">
-                <p><strong>Collaboration:</strong> Fostering a supportive community where traders can collaborate, learn from each other, and grow together.</p>
-                <p><strong>Transparency:</strong> Providing open and transparent information to empower users to make informed decisions and build trust within the community.</p>
-                <p><strong>Innovation:</strong> Constantly evolving and introducing innovative features to enhance the trading experience and provide cutting-edge tools for users.</p>
-                <p><strong>Empowerment:</strong> Empowering individuals to take control of their financial futures through education, access to markets, and social engagement.</p>
-              </div>
-            </div>
+        <button
+          onClick={() => setActiveTab('startup-naming')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'startup-naming' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'startup-naming' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>02</div>
+            <GeneratedBadge />
           </div>
+          <h3 className="font-semibold text-gray-900">Startup Naming</h3>
+          <p className="text-sm text-gray-600">Find a compelling name.</p>
+        </button>
 
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Startup Naming</h3>
-              <p className="text-gray-700">Find a compelling name.</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Elevator Pitch</h3>
-              <p className="text-gray-700">Craft your story.</p>
-            </div>
+        <button
+          onClick={() => setActiveTab('elevator-pitch')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'elevator-pitch' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'elevator-pitch' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>03</div>
+            <GeneratedBadge />
           </div>
-        </div>
+          <h3 className="font-semibold text-gray-900">Elevator Pitch</h3>
+          <p className="text-sm text-gray-600">Craft your story.</p>
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        {activeTab === 'brand-wheel' && <BrandWheelTab />}
+        {activeTab === 'startup-naming' && <StartupNamingTab />}
+        {activeTab === 'elevator-pitch' && <ElevatorPitchTab />}
       </div>
     </div>
   );
