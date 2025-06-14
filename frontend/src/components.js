@@ -181,8 +181,8 @@ const Chart = ({ title, type = 'line' }) => (
   </div>
 );
 
-// Hypothesis Card Component
-const HypothesisCard = ({ hypothesis, status, confidence, lastUpdated }) => {
+// Enhanced Hypothesis Card Component
+const EnhancedHypothesisCard = ({ hypothesis, status, confidence, lastUpdated, category, priority }) => {
   const statusColors = {
     'active': 'bg-blue-100 text-blue-800',
     'validated': 'bg-green-100 text-green-800',
@@ -190,11 +190,24 @@ const HypothesisCard = ({ hypothesis, status, confidence, lastUpdated }) => {
     'pending': 'bg-yellow-100 text-yellow-800'
   };
 
+  const priorityColors = {
+    'critical': 'bg-red-100 text-red-800',
+    'high': 'bg-orange-100 text-orange-800',
+    'medium': 'bg-yellow-100 text-yellow-800',
+    'low': 'bg-gray-100 text-gray-800'
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h4 className="text-lg font-semibold text-gray-900 mb-2">{hypothesis}</h4>
+          <div className="flex items-center space-x-2 mb-2">
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[priority]}`}>
+              {priority.charAt(0).toUpperCase() + priority.slice(1)}
+            </span>
+            <span className="text-xs text-gray-500">{category}</span>
+          </div>
+          <h4 className="text-lg font-semibold text-gray-900 mb-3">{hypothesis}</h4>
           <div className="flex items-center space-x-4">
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[status]}`}>
               {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -213,6 +226,9 @@ const HypothesisCard = ({ hypothesis, status, confidence, lastUpdated }) => {
         <div className="flex space-x-2">
           <button className="px-3 py-1 text-sm text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors duration-200">
             View Details
+          </button>
+          <button className="px-3 py-1 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            Run Test
           </button>
           <button className="px-3 py-1 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
             Edit
