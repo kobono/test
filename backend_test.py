@@ -60,25 +60,31 @@ class ZigZagBackendTester:
         print("\n----- Testing AI Content Generation -----")
         
         test_descriptions = [
-            "AI-powered fitness app for personalized workouts",
+            "AI-powered personal finance app for Gen Z users",
+            "sustainable packaging solution for e-commerce",
+            "virtual reality training platform for healthcare workers",
             "social trading platform for retail investors",
-            "sustainable food delivery service",
             "EdTech platform for coding bootcamps"
         ]
         
         for description in test_descriptions:
             print(f"\nTesting AI generation with: '{description}'")
+            start_time = time.time()
             try:
                 response = requests.post(
                     f"{API_BASE_URL}/generate-startup-content",
                     json={"description": description}
                 )
                 
+                end_time = time.time()
+                duration = end_time - start_time
+                
                 assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
                 
                 data = response.json()
                 self._validate_generated_content(data, description)
                 print(f"✅ AI generation test passed for: '{description}'")
+                print(f"   Response time: {duration:.2f} seconds")
             except Exception as e:
                 print(f"❌ AI generation test failed for '{description}': {str(e)}")
     
