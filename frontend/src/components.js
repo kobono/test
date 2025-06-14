@@ -1198,47 +1198,160 @@ const StorytellingSection = ({ currentIdea }) => {
   );
 };
 
-// Connect Dashboard Section
+// Connect Dashboard Section - Matching screenshots exactly
 const ConnectDashboardSection = () => {
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
-        <p className="text-gray-600">Connect with mentors, investors, and access exclusive startup perks.</p>
+        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners tailored to your startup idea.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center mb-4">
-            <h3 className="text-lg font-semibold">Mentors</h3>
-            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
-          </div>
-          <p className="text-sm text-gray-600 mb-4">Connect with experienced entrepreneurs and industry experts.</p>
-          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
-            🔒 Unlock Mentorship
-          </button>
+      {/* Connect with Relevant Mentors */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Mentors</h2>
+          <span className="ml-3 px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">🔒 Coming Soon</span>
+        </div>
+        <p className="text-gray-600 mb-8">Harness industry wisdom for strategic navigation.</p>
+
+        {/* Mentor Profiles */}
+        <div className="grid grid-cols-5 gap-6">
+          {[
+            {
+              name: 'Jenny Lawton',
+              role: 'Executive VP @',
+              company: 'Roister',
+              category: 'Business Leadership',
+              avatar: '👩‍💼'
+            },
+            {
+              name: 'Khaled Nasr',
+              role: 'GP @ Interwest',
+              company: 'Partners',
+              category: 'Investment',
+              avatar: '👨‍💼'
+            },
+            {
+              name: 'Georges Khoury',
+              role: 'Software Engineer',
+              company: '(Ex: Uber)',
+              category: 'Product Management',
+              avatar: '👨‍💻'
+            },
+            {
+              name: 'Mira Murali',
+              role: 'CTO @ OpenAI',
+              company: '',
+              category: 'AI',
+              avatar: '👩‍💻'
+            },
+            {
+              name: 'Scott Ford',
+              role: 'Partner @ Zigzag',
+              company: '',
+              category: 'Operations',
+              avatar: '👨‍💼'
+            }
+          ].map((mentor, index) => (
+            <div key={index} className="text-center">
+              <div className="w-20 h-20 bg-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center text-2xl">
+                {mentor.avatar}
+              </div>
+              <h3 className="font-medium text-gray-900 text-sm">{mentor.name}</h3>
+              <p className="text-xs text-gray-600 mb-1">{mentor.role}</p>
+              <p className="text-xs text-gray-600 mb-2">{mentor.company}</p>
+              <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                {mentor.category}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Connect with Relevant Investors & Accelerators */}
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="flex items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Investors & Accelerators</h2>
+          <span className="ml-3 px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">🔒 Coming Soon</span>
+        </div>
+        <p className="text-gray-600 mb-8">Secure funding, networks, and growth catalysts.</p>
+
+        {/* Investor Logos */}
+        <div className="grid grid-cols-5 gap-8 mb-12">
+          {[
+            { name: 'Techstars', type: 'Accelerator', logo: '⭐' },
+            { name: 'Berkeley SkyDeck', type: 'Accelerator', logo: '🏛️' },
+            { name: 'SparkLabs', type: 'Accelerator', logo: '⚡' },
+            { name: 'Band of Angels', type: 'Angel Network', logo: '👼' },
+            { name: 'Y Combinator', type: 'Accelerator', logo: '🅱️' }
+          ].map((investor, index) => (
+            <div key={index} className="text-center">
+              <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-3 flex items-center justify-center text-2xl">
+                {investor.logo}
+              </div>
+              <h3 className="font-medium text-gray-900 text-sm mb-1">{investor.name}</h3>
+              <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                {investor.type}
+              </span>
+            </div>
+          ))}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center mb-4">
-            <h3 className="text-lg font-semibold">Investors & Accelerators</h3>
-            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Coming Soon</span>
-          </div>
-          <p className="text-sm text-gray-600 mb-4">Get discovered by investors and accelerator programs.</p>
-          <button disabled className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
-            🔒 Access Funding
-          </button>
-        </div>
+        {/* Access Relevant Perks */}
+        <div className="border-t border-gray-200 pt-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Relevant Perks</h2>
+          <p className="text-gray-600 mb-8">Capitalize on cost-saving opportunities and benefits.</p>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center mb-4">
-            <h3 className="text-lg font-semibold">Startup Perks</h3>
-            <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Available</span>
+          {/* Perks Grid */}
+          <div className="grid grid-cols-4 gap-8">
+            {[
+              {
+                name: 'Carta',
+                service: 'Equity Management',
+                offer: 'Start for Free',
+                logo: '📊'
+              },
+              {
+                name: 'Dropbox',
+                service: 'Cloud Storage',
+                offer: 'Up to 50% Discount',
+                logo: '📦'
+              },
+              {
+                name: 'Google for Startups',
+                service: 'Cloud Services',
+                offer: 'Up to $200,000',
+                logo: '🌐'
+              },
+              {
+                name: 'Notion',
+                service: 'Knowledge Management',
+                offer: '6 Months Free',
+                logo: '📝'
+              }
+            ].map((perk, index) => (
+              <div key={index} className="text-center border border-gray-200 rounded-lg p-6">
+                <div className="w-12 h-12 bg-gray-100 rounded mx-auto mb-4 flex items-center justify-center text-xl">
+                  {perk.logo}
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">{perk.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{perk.service}</p>
+                <div className="text-sm font-medium text-teal-600">{perk.offer}</div>
+              </div>
+            ))}
           </div>
-          <p className="text-sm text-gray-600 mb-4">Access exclusive deals and credits for startup tools.</p>
-          <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
-            🎁 View Perks
-          </button>
+
+          {/* Click Here for More */}
+          <div className="text-center mt-8">
+            <div className="inline-flex items-center">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-4"></div>
+              <button className="text-blue-600 hover:text-blue-700 font-medium">
+                Click Here for More
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
