@@ -858,6 +858,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
     'customer-segments': {
       title: 'Customer Segments',
       subtitle: 'Identifies the specific market segment or audience who will most benefit from your product or service using the Jobs To Be Done framework.',
+      guidance: 'Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.',
       content: (
         <div className="space-y-8">
           {customerPersonas.map((persona, index) => (
@@ -900,10 +901,268 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               </div>
             </div>
           ))}
+        </div>
+      )
+    },
+    'problem': {
+      title: 'Problem',
+      subtitle: 'Highlights the issue, challenge, or pain point your target customers experience.',
+      guidance: 'Validate the problem through direct conversations with potential customers to ensure it\'s real, painful, and prevalent.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {canvas.problems.map((problem, index) => (
+              <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                <span className="text-blue-600 font-semibold">•</span>
+                <span className="text-gray-700">{problem}</span>
+                <button className="text-teal-600 hover:text-teal-700 text-sm ml-auto">Edit</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    },
+    'existing-alternatives': {
+      title: 'Existing Alternatives',
+      subtitle: 'Describes the current solutions your target customers use to solve their problem.',
+      guidance: 'Identify existing competitors that address the same problem; understanding how they work will help differentiate your product.',
+      content: (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Direct Competitors</h3>
+              <div className="space-y-2">
+                {canvas.competitors.slice(0, 6).map((competitor, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span className="text-gray-700 text-sm">• {competitor}</span>
+                    <button className="text-teal-600 hover:text-teal-700 text-xs">Edit</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Indirect Competitors</h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div>• Traditional brokerage firms like Fidelity and Charles Schwab</div>
+                <div>• Forex trading platforms like MetaTrader</div>
+                <div>• Online investment courses and webinars</div>
+                <div>• Financial news and analysis websites like Investing.com</div>
+                <div>• Stock market simulators</div>
+                <div>• Independent financial advisors and consultants</div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Alternative Solutions</h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div>• Social media investment groups</div>
+                <div>• Offline investment clubs</div>
+                <div>• Personal network consultations</div>
+                <div>• Do-it-yourself (DIY) investing using books and online resources</div>
+                <div>• Investment podcasts and YouTube channels</div>
+                <div>• Public forums like Reddit's r/investing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'solution': {
+      title: 'Solution',
+      subtitle: 'Presents your product or service that addresses the identified problem.',
+      guidance: 'Aim for a solution that\'s 10x better than existing alternatives to make it worth the switch for your customers.',
+      content: (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Features</h3>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Real-time social feed for trading insights</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Copy-trading feature that replicates top traders' actions</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Community-driven content and educational resources</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Performance analytics for self-improvement</span>
+              </div>
+            </div>
+          </div>
           
-          <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              <strong>Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.</strong>
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Potential Ways-to-Play</h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Influencer-driven engagement</h4>
+                <p className="text-sm text-gray-600">Leveraging financial influencers to drive platform engagement and credibility.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Tailored Educational Content</h4>
+                <p className="text-sm text-gray-600">Providing customized educational content that helps users make more informed trading decisions.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Integration of Crypto Assets</h4>
+                <p className="text-sm text-gray-600">Expanding the asset classes to include cryptocurrencies and tokens, catering to the interest in digital assets.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Behavioral Analytics for Matching</h4>
+                <p className="text-sm text-gray-600">Using behavioral analytics to better match users with top-performing traders, improving the social aspect of trading.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Micro-investing Options</h4>
+                <p className="text-sm text-gray-600">Offering micro-investing capabilities that allow users to mimic trades with smaller, incremental investments.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Robust Risk Management Tools</h4>
+                <p className="text-sm text-gray-600">Building in advanced risk management features for users to apply when engaging in social trading.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'unique-value-proposition': {
+      title: 'Unique Value Proposition',
+      subtitle: 'A single, clear compelling message that states why you are different and worth buying.',
+      guidance: 'Craft a compelling UVP that can be instantly understood; make sure it resonates emotionally with your target customers.',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center py-8">
+            <p className="text-xl font-semibold text-gray-900 leading-relaxed">
+              Trade smarter together. Access real-time insights and follow top traders' moves on a collaborative platform.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    'channels': {
+      title: 'Channels',
+      subtitle: 'Specifies the methods you use to reach your target customers and deliver your value proposition.',
+      guidance: 'Focus on those channels where you can reach the largest segment of your target customers at the lowest cost.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Mobile and desktop applications</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Social media</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Trading forums and communities</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Financial blogs and influencers</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'revenue-streams': {
+      title: 'Revenue Streams',
+      subtitle: 'Delineates the different ways your business generates income from delivering value to your customers.',
+      guidance: 'Explore and validate how your business can generate income, such as sales, subscriptions, or partnerships.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Subscription fees for premium features</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Commissions on trades executed through the platform</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Advertisement revenue from financial services</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'cost-structure': {
+      title: 'Cost Structure',
+      subtitle: 'Enumerates all the costs incurred to deliver your value proposition and run the business.',
+      guidance: 'Identify your main cost buckets, such as development and marketing costs; knowing these will assist you in budget planning.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Development and maintenance of the platform</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Marketing and user acquisition costs</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Community management and customer support</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Data security and legal compliance</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Server and infrastructure costs</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'key-metrics': {
+      title: 'Key Metrics',
+      subtitle: 'Defines the essential indicators that measure the performance and progress of your business.',
+      guidance: 'Identify and focus on a single key metric relevant to your startup stage whether that\'s user acquisition, retention or revenue.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Number of active users</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Volume of trades executed</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">User retention rates</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Social engagement metrics (likes, comments, shares)</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Revenue growth</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'unfair-advantage': {
+      title: 'Unfair Advantage',
+      subtitle: 'Demonstrates something unique to your business that cannot be easily replicated or acquired by competitors.',
+      guidance: 'Identify any proprietary tech or expertise your startup possesses. That being said, it\'s fine not to have one in the earliest stages.',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center py-8">
+            <p className="text-lg font-medium text-gray-900">
+              Proprietary algorithm that surfaces trending trades and insights
             </p>
           </div>
         </div>
