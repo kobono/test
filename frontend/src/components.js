@@ -677,16 +677,18 @@ const ValidationSection = ({ currentIdea }) => {
   );
 };
 
-const StorytellingSection = () => {
+const StorytellingSection = ({ currentIdea }) => {
   const [activeTab, setActiveTab] = useState('brand-wheel');
+  
+  const storytelling = currentIdea?.storytelling || {
+    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub'],
+    mission: 'To solve important problems and create value for our customers through innovative solutions.',
+    vision: 'To become a leading company that transforms how people interact with technology.',
+    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference'],
+    elevatorPitch: 'Our startup addresses key market needs through innovative technology solutions that create value for customers and drive business growth.'
+  };
 
-  const startupNames = [
-    'TradeHive', 'EmpowerTrade', 'CollabFX', 'CommuniTrade', 'AscendTrades',
-    'UnityBucks', 'TradePulse', 'Empowave', 'TradeSphere', 'CollaboraTrade',
-    'CommunifyTrade', 'InnoTradix', 'TradeSynergy', 'EmpowerNet', 'TraderConnect'
-  ];
-
-  const [selectedName, setSelectedName] = useState('TradeHive');
+  const [selectedName, setSelectedName] = useState(storytelling.names[0]);
 
   const BrandWheelTab = () => (
     <div className="space-y-6">
@@ -694,21 +696,20 @@ const StorytellingSection = () => {
         <div className="space-y-6">
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Mission</h3>
-            <p className="text-gray-700">Empower individuals to trade, connect, and learn from each other through a social trading platform, revolutionizing the way people engage in financial markets and investing.</p>
+            <p className="text-gray-700">{storytelling.mission}</p>
           </div>
 
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Vision</h3>
-            <p className="text-gray-700">To create a global community of traders and investors who collaborate, share knowledge, and drive financial empowerment for all.</p>
+            <p className="text-gray-700">{storytelling.vision}</p>
           </div>
 
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Brand Values</h3>
             <div className="space-y-2 text-gray-700">
-              <p><strong>Collaboration:</strong> Fostering a supportive community where traders can collaborate, learn from each other, and grow together.</p>
-              <p><strong>Transparency:</strong> Providing open and transparent information to empower users to make informed decisions and build trust within the community.</p>
-              <p><strong>Innovation:</strong> Constantly evolving and introducing innovative features to enhance the trading experience and provide cutting-edge tools for users.</p>
-              <p><strong>Empowerment:</strong> Empowering individuals to take control of their financial futures through education, access to markets, and social engagement.</p>
+              {storytelling.values.map((value, index) => (
+                <p key={index}><strong>{value.split(':')[0]}:</strong>{value.split(':')[1]}</p>
+              ))}
             </div>
           </div>
         </div>
@@ -719,7 +720,7 @@ const StorytellingSection = () => {
   const StartupNamingTab = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-5 gap-4">
-        {startupNames.map((name, index) => (
+        {storytelling.names.map((name, index) => (
           <button
             key={index}
             onClick={() => setSelectedName(name)}
@@ -757,20 +758,10 @@ const StorytellingSection = () => {
   const ElevatorPitchTab = () => (
     <div className="space-y-6">
       <div className="bg-gray-50 rounded-lg p-6">
-        <p className="text-sm text-gray-600 italic mb-4">Certainly! Here's your elevator pitch crafted in Markdown format:</p>
+        <p className="text-sm text-gray-600 italic mb-4">Here's your personalized elevator pitch:</p>
         
-        <div className="prose max-w-none text-gray-700 leading-relaxed">
-          <p className="mb-4">
-            <em>Did you know that traders and investors struggle to find a collaborative community to share knowledge and insights? This is a multi-billion dollar opportunity in the financial market industry in every corner of the world.</em>
-          </p>
-          
-          <p className="mb-4">
-            TradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge. Unlike other alternatives, TradeHive focuses on building a strong community-driven platform where users can interact, share tips, and empower each other in the world of trading and investing.
-          </p>
-          
-          <p className="mb-4">
-            Our team comprises experienced entrepreneurs and finance experts, and we generate revenue through subscription services and premium features. In essence, we are the "LinkedIn for traders," revolutionizing the way people engage in financial markets. Our vision
-          </p>
+        <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+          {storytelling.elevatorPitch}
         </div>
       </div>
     </div>
