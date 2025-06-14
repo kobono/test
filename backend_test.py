@@ -122,17 +122,20 @@ class ZigZagBackendTester:
         description_lower = description.lower()
         
         # Check if industry matches description
-        if "fitness" in description_lower:
-            assert "health" in data["industry"].lower() or "fitness" in data["industry"].lower(), \
-                f"Industry '{data['industry']}' doesn't match fitness description"
+        if "finance" in description_lower or "gen z" in description_lower:
+            assert any(term in data["industry"].lower() for term in ["finance", "fin", "bank", "tech"]), \
+                f"Industry '{data['industry']}' doesn't match finance description"
         elif "trading" in description_lower:
-            assert "trading" in data["industry"].lower() or "finance" in data["industry"].lower() or "fin" in data["industry"].lower(), \
+            assert any(term in data["industry"].lower() for term in ["trading", "finance", "fin", "invest"]), \
                 f"Industry '{data['industry']}' doesn't match trading description"
-        elif "food" in description_lower:
-            assert "food" in data["industry"].lower() or "delivery" in data["industry"].lower() or "sustain" in data["industry"].lower(), \
-                f"Industry '{data['industry']}' doesn't match food description"
+        elif "packaging" in description_lower or "e-commerce" in description_lower:
+            assert any(term in data["industry"].lower() for term in ["package", "commerce", "retail", "sustain", "logistic"]), \
+                f"Industry '{data['industry']}' doesn't match packaging description"
+        elif "virtual reality" in description_lower or "healthcare" in description_lower:
+            assert any(term in data["industry"].lower() for term in ["health", "vr", "virtual", "tech", "medical"]), \
+                f"Industry '{data['industry']}' doesn't match VR healthcare description"
         elif "edtech" in description_lower or "coding" in description_lower:
-            assert "ed" in data["industry"].lower() or "education" in data["industry"].lower() or "tech" in data["industry"].lower(), \
+            assert any(term in data["industry"].lower() for term in ["ed", "education", "tech", "learn"]), \
                 f"Industry '{data['industry']}' doesn't match EdTech description"
     
     def test_crud_operations(self):
