@@ -397,19 +397,90 @@ class ZigZagBackendTester:
         except Exception as e:
             print(f"❌ End-to-end flow test failed: {str(e)}")
     
-    def cleanup(self):
-        """Clean up any resources created during testing"""
-        print("\n----- Cleaning Up Test Resources -----")
+    def test_api_performance(self):
+        """Test API performance and response times"""
+        print("\n----- Testing API Performance -----")
         
-        for idea_id in self.created_ideas:
+        # Test endpoints to check
+        endpoints = [
+            {"method": "GET", "url": f"{API_BASE_URL}/", "name": "Root endpoint"},
+            {"method": "GET", "url": f"{API_BASE_URL}/startup-ideas", "name": "Get all ideas"},
+            {"method": "POST", "url": f"{API_BASE_URL}/generate-startup-content", 
+             "json": {"description": "Quick test for API performance"}, "name": "AI generation"}
+        ]
+        
+        for endpoint in endpoints:
+            method = endpoint["method"]
+            url = endpoint["url"]
+            name = endpoint["name"]
+            
+            print(f"\nTesting performance of: {name} ({method} {url})")
+            
             try:
-                requests.delete(f"{API_BASE_URL}/startup-ideas/{idea_id}")
-                print(f"Deleted test idea with ID: {idea_id}")
+                start_time = time.time()
+                
+                if method == "GET":
+                    response = requests.get(url)
+                elif method == "POST":
+                    response = requests.post(url, json=endpoint.get("json", {}))
+                
+                end_time = time.time()
+                duration = end_time - start_time
+                
+                assert response.status_code in [200, 201], f"Expected status code 200/201, got {response.status_code}"
+                
+                # Evaluate performance
+                if name == "AI generation":
+                    # AI generation is expected to take longer
+                    performance_rating = "Good" if duration < 10 else "Acceptable" if duration < 20 else "Slow"
+                else:
+                    # Other API endpoints should be faster
+                    performance_rating = "Good" if duration < 1 else "Acceptable" if duration < 3 else "Slow"
+                
+                print(f"✅ {name} test passed. Response time: {duration:.2f} seconds ({performance_rating})")
             except Exception as e:
-                print(f"Failed to delete test idea with ID {idea_id}: {str(e)}")
+                print(f"❌ {name} test failed: {str(e)}")
+                
+    def test_concurrent_requests(self):
+        """Test handling of concurrent requests"""
+        print("\n----- Testing Concurrent Requests Handling -----")
         
-        self.created_ideas = []
-        print("Cleanup complete")
+        try:
+            import concurrent.futures
+            
+            # Create a simple test function for concurrent execution
+            def test_get_ideas():
+                try:
+                    response = requests.get(f"{API_BASE_URL}/startup-ideas")
+                    return response.status_code == 200
+                except:
+                    return False
+            
+            # Number of concurrent requests
+            num_requests = 5
+            print(f"Sending {num_requests} concurrent requests...")
+            
+            start_time = time.time()
+            
+            # Use ThreadPoolExecutor to send concurrent requests
+            with concurrent.futures.ThreadPoolExecutor(max_workers=num_requests) as executor:
+                futures = [executor.submit(test_get_ideas) for _ in range(num_requests)]
+                results = [future.result() for future in concurrent.futures.as_completed(futures)]
+            
+            end_time = time.time()
+            duration = end_time - start_time
+            
+            success_count = sum(results)
+            success_rate = (success_count / num_requests) * 100
+            
+            print(f"Concurrent requests test completed in {duration:.2f} seconds")
+            print(f"Success rate: {success_rate:.1f}% ({success_count}/{num_requests} requests successful)")
+            
+            assert success_rate >= 80, f"Expected success rate >= 80%, got {success_rate:.1f}%"
+            
+            print("✅ Concurrent requests test passed")
+        except Exception as e:
+            print(f"❌ Concurrent requests test failed: {str(e)}")
 
 
 if __name__ == "__main__":
