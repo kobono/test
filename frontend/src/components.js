@@ -1171,6 +1171,8 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
     </div>
   );
 };
+
+const ConnectDashboardSection = () => {
   const mentors = [
     {
       name: 'Jenny Lawton',
