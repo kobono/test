@@ -430,21 +430,54 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
     setIsGenerating(true);
     setGenerationStep(0);
     
-    // Simulate AI processing with step-by-step updates
-    const interval = setInterval(() => {
-      setGenerationStep(prev => {
-        if (prev < generationSteps.length - 1) {
-          return prev + 1;
-        } else {
-          clearInterval(interval);
-          // Generate comprehensive startup data
-          const newIdea = generateStartupContent(ideaText);
-          onIdeaCreated(newIdea);
-          setIsGenerating(false);
-          return prev;
-        }
-      });
-    }, 500);
+    try {
+      // Simulate AI processing with step-by-step updates
+      const interval = setInterval(async () => {
+        setGenerationStep(prev => {
+          if (prev < generationSteps.length - 1) {
+            return prev + 1;
+          } else {
+            clearInterval(interval);
+            // Use backend API to generate comprehensive startup data
+            generateIdeaFromBackend();
+            return prev;
+          }
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error generating idea:', error);
+      setIsGenerating(false);
+      // Fallback to local generation
+      const newIdea = generateStartupContent(ideaText);
+      onIdeaCreated(newIdea);
+    }
+  };
+
+  const generateIdeaFromBackend = async () => {
+    try {
+      // Call backend API to generate startup content
+      const generatedContent = await apiService.generateStartupContent(ideaText);
+      
+      // Create the new idea object
+      const newIdea = {
+        name: generatedContent.name,
+        description: ideaText,
+        industry: generatedContent.industry,
+        leanCanvas: generatedContent.leanCanvas,
+        hypotheses: generatedContent.hypotheses,
+        storytelling: generatedContent.storytelling,
+        created: new Date().toISOString()
+      };
+      
+      onIdeaCreated(newIdea);
+    } catch (error) {
+      console.error('Backend generation failed, using local fallback:', error);
+      // Fallback to local generation
+      const newIdea = generateStartupContent(ideaText);
+      onIdeaCreated(newIdea);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
