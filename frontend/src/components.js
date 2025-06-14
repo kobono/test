@@ -1689,6 +1689,8 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         return <StartupIdeaSection onNavigate={handleSectionChange} currentIdea={currentIdea} />;
       case 'business-prototype':
         return <BusinessPrototypeSection currentIdea={currentIdea} />;
+      case 'lean-canvas-details':
+        return <LeanCanvasDetailsSection currentIdea={currentIdea} />;
       case 'validation':
         return <ValidationSection currentIdea={currentIdea} />;
       case 'storytelling':
