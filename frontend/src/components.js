@@ -231,6 +231,148 @@ const Button = ({
   );
 };
 
+// Enhanced Loading Components
+const LoadingSpinner = ({ size = 'medium', color = 'teal' }) => {
+  const sizeClasses = {
+    small: 'w-4 h-4',
+    medium: 'w-8 h-8', 
+    large: 'w-12 h-12'
+  };
+  
+  const colorClasses = {
+    teal: 'border-teal-500',
+    blue: 'border-blue-500',
+    purple: 'border-purple-500'
+  };
+  
+  return (
+    <div className={`${sizeClasses[size]} ${colorClasses[color]} border-2 border-t-transparent rounded-full animate-spin`}></div>
+  );
+};
+
+const SkeletonLoader = ({ lines = 3, className = '' }) => (
+  <div className={`animate-pulse ${className}`}>
+    {Array.from({ length: lines }).map((_, i) => (
+      <div 
+        key={i}
+        className={`h-4 bg-gray-200 rounded mb-3 ${i === lines - 1 ? 'w-3/4' : 'w-full'}`}
+      ></div>
+    ))}
+  </div>
+);
+
+const ProgressBar = ({ progress, label, color = 'teal' }) => {
+  const colorClasses = {
+    teal: 'bg-teal-600',
+    blue: 'bg-blue-600',
+    green: 'bg-green-600',
+    purple: 'bg-purple-600'
+  };
+  
+  return (
+    <div className="w-full">
+      {label && (
+        <div className="flex justify-between text-sm font-medium text-gray-700 mb-1">
+          <span>{label}</span>
+          <span>{progress}%</span>
+        </div>
+      )}
+      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+        <div 
+          className={`${colorClasses[color]} h-2 rounded-full transition-all duration-500 ease-out`}
+          style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
+        ></div>
+      </div>
+    </div>
+  );
+};
+
+const Toast = ({ message, type = 'success', onClose }) => {
+  const typeClasses = {
+    success: 'bg-green-500 text-white',
+    error: 'bg-red-500 text-white',
+    warning: 'bg-yellow-500 text-black',
+    info: 'bg-blue-500 text-white'
+  };
+  
+  const icons = {
+    success: '✅',
+    error: '❌', 
+    warning: '⚠️',
+    info: 'ℹ️'
+  };
+  
+  return (
+    <div className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${typeClasses[type]} animate-fadeIn`}>
+      <div className="flex items-center space-x-3">
+        <span className="text-lg">{icons[type]}</span>
+        <span className="font-medium">{message}</span>
+        <button onClick={onClose} className="ml-4 hover:opacity-75">
+          ✕
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Card Component with hover effects
+const Card = ({ children, className = '', hover = true, onClick = null }) => (
+  <div 
+    className={`
+      bg-white rounded-lg border border-gray-200 shadow-sm 
+      ${hover ? 'hover:shadow-md hover:-translate-y-1 transition-all duration-200' : ''}
+      ${onClick ? 'cursor-pointer' : ''}
+      ${className}
+    `}
+    onClick={onClick}
+  >
+    {children}
+  </div>
+);
+
+// Enhanced Button Component
+const Button = ({ 
+  children, 
+  variant = 'primary', 
+  size = 'medium', 
+  loading = false, 
+  disabled = false,
+  onClick,
+  className = '',
+  ...props 
+}) => {
+  const baseClasses = 'font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  
+  const variants = {
+    primary: 'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 disabled:bg-gray-300',
+    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
+    outline: 'border-2 border-teal-600 text-teal-600 hover:bg-teal-50 focus:ring-teal-500',
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
+  };
+  
+  const sizes = {
+    small: 'px-3 py-1.5 text-sm',
+    medium: 'px-4 py-2 text-sm',
+    large: 'px-6 py-3 text-base'
+  };
+  
+  return (
+    <button
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
+      disabled={disabled || loading}
+      onClick={onClick}
+      {...props}
+    >
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <LoadingSpinner size="small" color="white" />
+          <span className="ml-2">Loading...</span>
+        </div>
+      ) : children}
+    </button>
+  );
+};
+
 // Login Page Component
 export const LoginPage = ({ onLogin }) => {
   return (
