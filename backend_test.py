@@ -20,12 +20,32 @@ class ZigZagBackendTester:
     def __init__(self):
         self.created_ideas = []
         
+    def cleanup(self):
+        """Clean up any resources created during testing"""
+        print("\n----- Cleaning Up Test Resources -----")
+        
+        for idea_id in self.created_ideas:
+            try:
+                requests.delete(f"{API_BASE_URL}/startup-ideas/{idea_id}")
+                print(f"Deleted test idea with ID: {idea_id}")
+            except Exception as e:
+                print(f"Failed to delete test idea with ID {idea_id}: {str(e)}")
+        
+        self.created_ideas = []
+        print("Cleanup complete")
+        
     def run_all_tests(self):
         """Run all backend tests and report results"""
         print("\n===== ZIGZAG PLATFORM BACKEND TESTING =====\n")
         
         # Test basic API connectivity
         self.test_api_connectivity()
+        
+        # Test API performance
+        self.test_api_performance()
+        
+        # Test concurrent requests handling
+        self.test_concurrent_requests()
         
         # Test AI Content Generation
         self.test_ai_content_generation()
