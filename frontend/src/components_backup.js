@@ -1,5 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from 'chart.js';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar
+} from 'recharts';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from 'chart.js';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar
+} from 'recharts';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
+
+// API Configuration
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+const api = axios.create({
+  baseURL: `${API_BASE_URL}/api`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// API Functions
+const apiService = {
+  // Startup Ideas API
+  createStartupIdea: async (ideaData) => {
+    const response = await api.post('/startup-ideas', ideaData);
+    return response.data;
+  },
+  
+  getStartupIdeas: async (userId = null) => {
+    const params = userId ? { userId } : {};
+    const response = await api.get('/startup-ideas', { params });
+    return response.data;
+  },
+  
+  getStartupIdea: async (ideaId) => {
+    const response = await api.get(`/startup-ideas/${ideaId}`);
+    return response.data;
+  },
+  
+  updateStartupIdea: async (ideaId, updateData) => {
+    const response = await api.put(`/startup-ideas/${ideaId}`, updateData);
+    return response.data;
+  },
+  
+  deleteStartupIdea: async (ideaId) => {
+    const response = await api.delete(`/startup-ideas/${ideaId}`);
+    return response.data;
+  },
+  
+  generateStartupContent: async (description) => {
+    const response = await api.post('/generate-startup-content', { description });
+    return response.data;
+  }
+};
 
 // Login Page Component
 export const LoginPage = ({ onLogin }) => {
@@ -68,8 +199,117 @@ export const LoginPage = ({ onLogin }) => {
   );
 };
 
+// Generated Badge Component
+const GeneratedBadge = () => (
+  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+    Generated
+  </span>
+);
+
+// AI Research Agent - Generates content based on startup idea
+const generateStartupContent = (ideaText) => {
+  const idea = ideaText.toLowerCase();
+  
+  // Extract key industry/domain from the idea
+  const getIndustry = () => {
+    if (idea.includes('food') || idea.includes('restaurant') || idea.includes('delivery')) return 'food_tech';
+    if (idea.includes('fitness') || idea.includes('health') || idea.includes('wellness')) return 'health_tech';
+    if (idea.includes('education') || idea.includes('learning') || idea.includes('course')) return 'ed_tech';
+    if (idea.includes('finance') || idea.includes('payment') || idea.includes('banking')) return 'fin_tech';
+    if (idea.includes('trade') || idea.includes('trading') || idea.includes('investment')) return 'trading';
+    if (idea.includes('ai') || idea.includes('artificial intelligence') || idea.includes('machine learning')) return 'ai_tech';
+    if (idea.includes('social') || idea.includes('community') || idea.includes('network')) return 'social_tech';
+    if (idea.includes('ecommerce') || idea.includes('marketplace') || idea.includes('shopping')) return 'ecommerce';
+    if (idea.includes('travel') || idea.includes('booking') || idea.includes('tourism')) return 'travel_tech';
+    if (idea.includes('real estate') || idea.includes('property') || idea.includes('housing')) return 'prop_tech';
+    return 'general_tech';
+  };
+
+  const industry = getIndustry();
+  
+  const industryData = {
+    trading: {
+      names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow', 'TradePro', 'InvestLink', 'MarketMind', 'TradeSphere', 'CapitalConnect'],
+      problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets', 'High barriers to entry for new investors'],
+      solutions: ['Social trading platform', 'Real-time market insights', 'Copy-trading features'],
+      customers: ['Millennial investors', 'Retirement planners', 'Day traders', 'Financial enthusiast students'],
+      competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers', 'TD Ameritrade', 'ZuluTrade', 'CopyMe', 'NAGA'],
+      valueProposition: 'Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.',
+      channels: ['Mobile app', 'Financial blogs', 'Social media', 'Trading forums and communities'],
+      revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees', 'Advertisement revenue from financial services'],
+      keyMetrics: ['Active traders', 'Trading volume', 'Platform assets', 'User retention rates', 'Social engagement'],
+      hypotheses: [
+        { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
+        { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
+        { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
+      ],
+      mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
+      vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
+      values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships'],
+      elevatorPitch: `Did you know that traders and investors struggle to find a collaborative community to share knowledge and insights? This represents a significant opportunity in the financial markets industry.\n\nTradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge. Unlike other alternatives, we focus on building a strong community-driven platform where users can interact, share tips, and empower each other.\n\nOur team comprises experienced entrepreneurs and finance experts, and we generate revenue through subscription services and premium features. In essence, we are the "LinkedIn for traders," revolutionizing the way people engage in financial markets.`
+    }
+  };
+
+  const defaultData = {
+    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub'],
+    problems: ['Market inefficiencies', 'Customer pain points', 'Technology gaps'],
+    solutions: ['Innovative platform', 'Technology solution', 'Service optimization'],
+    customers: ['Target demographic', 'Business users', 'End consumers'],
+    competitors: ['Industry leader 1', 'Industry leader 2', 'Emerging competitor'],
+    valueProposition: 'Innovative solution that solves key market problems efficiently',
+    channels: ['Digital marketing', 'Direct sales', 'Partnerships'],
+    revenue: ['Subscription fees', 'Transaction fees', 'Premium services'],
+    keyMetrics: ['User acquisition', 'Revenue growth', 'Customer satisfaction'],
+    hypotheses: [
+      { type: 'Desirability', text: 'Target customers have the problem we are solving', criticality: 'High', method: 'Customer interviews' },
+      { type: 'Viability', text: 'Business model generates sustainable revenue', criticality: 'High', method: 'Financial modeling' },
+      { type: 'Feasibility', text: 'Solution can be built with available technology', criticality: 'Medium', method: 'Technical validation' }
+    ],
+    mission: 'To solve important problems and create value for our customers through innovative solutions.',
+    vision: 'To become a leading company that transforms how people interact with technology.',
+    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference'],
+    elevatorPitch: 'Our startup addresses key market needs through innovative technology solutions that create value for customers and drive business growth.'
+  };
+
+  const data = industryData[industry] || defaultData;
+  
+  return {
+    name: data.names[0],
+    description: ideaText,
+    industry: industry,
+    leanCanvas: {
+      problems: data.problems,
+      solutions: data.solutions,
+      customers: data.customers,
+      competitors: data.competitors,
+      valueProposition: data.valueProposition,
+      channels: data.channels,
+      revenue: data.revenue,
+      keyMetrics: data.keyMetrics
+    },
+    hypotheses: data.hypotheses,
+    storytelling: {
+      names: data.names,
+      mission: data.mission,
+      vision: data.vision,
+      values: data.values,
+      elevatorPitch: data.elevatorPitch
+    },
+    created: new Date().toISOString()
+  };
+};
+
 // Left Sidebar Component
-const LeftSidebar = ({ currentSection, onSectionChange, onLogout, currentIdea, onNewIdea }) => {
+const LeftSidebar = ({ 
+  currentSection, 
+  onSectionChange, 
+  onLogout, 
+  currentIdea, 
+  onNewIdea, 
+  userIdeas = [], 
+  onIdeaSelect, 
+  onIdeaDelete 
+}) => {
   return (
     <div className="w-64 bg-blue-900 text-white min-h-screen flex flex-col">
       {/* Logo */}
@@ -110,24 +350,76 @@ const LeftSidebar = ({ currentSection, onSectionChange, onLogout, currentIdea, o
       </div>
 
       {/* Your Ideas Section */}
-      <div className="px-4">
-        <h3 className="text-sm font-medium text-blue-300 mb-3">Your Ideas</h3>
-        <button
-          onClick={() => onSectionChange('startup-idea')}
-          className={`w-full flex items-center px-4 py-3 rounded-lg transition-colors duration-200 mb-2 ${
-            currentSection === 'startup-idea' ? 'bg-blue-800' : 'hover:bg-blue-800'
-          }`}
-        >
-          <span className="mr-3">🌐</span>
-          <div className="text-left flex-1">
-            <div className="font-medium">{currentIdea.name}</div>
-            <div className="text-xs text-blue-300">{currentIdea.description}</div>
+      <div className="px-4 flex-1 overflow-y-auto">
+        <h3 className="text-sm font-medium text-blue-300 mb-3">Your Ideas ({userIdeas.length})</h3>
+        
+        {userIdeas.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="text-blue-400 text-2xl mb-2">💭</div>
+            <p className="text-blue-300 text-sm">No ideas yet</p>
+            <p className="text-blue-400 text-xs">Create your first startup idea!</p>
           </div>
-          <div className="ml-auto flex space-x-1">
-            <button className="text-blue-300 hover:text-white">✏️</button>
-            <button className="text-blue-300 hover:text-white">🗑️</button>
+        ) : (
+          <div className="space-y-2">
+            {userIdeas.map((idea) => (
+              <div
+                key={idea.id}
+                className={`flex items-center px-4 py-3 rounded-lg transition-colors duration-200 cursor-pointer ${
+                  currentIdea && currentIdea.id === idea.id ? 'bg-blue-800' : 'hover:bg-blue-800'
+                }`}
+                onClick={() => onIdeaSelect && onIdeaSelect(idea.id)}
+              >
+                <span className="mr-3">🌐</span>
+                <div className="text-left flex-1 min-w-0">
+                  <div className="font-medium truncate">{idea.name}</div>
+                  <div className="text-xs text-blue-300 truncate">{idea.description}</div>
+                  <div className="text-xs text-blue-400 mt-1">
+                    {new Date(idea.created).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="ml-auto flex space-x-1">
+                  <button 
+                    className="text-blue-300 hover:text-white p-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // TODO: Implement edit functionality
+                      console.log('Edit idea:', idea.id);
+                    }}
+                    title="Edit idea"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="text-blue-300 hover:text-red-300 p-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm('Are you sure you want to delete this idea?')) {
+                        onIdeaDelete && onIdeaDelete(idea.id);
+                      }
+                    }}
+                    title="Delete idea"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </button>
+        )}
+        
+        {/* Show current idea if it's the default one */}
+        {currentIdea && currentIdea.id === 'default' && (
+          <div className="mt-4 p-3 bg-blue-800 rounded-lg">
+            <div className="flex items-center mb-2">
+              <span className="mr-2">🌐</span>
+              <div className="text-left flex-1">
+                <div className="font-medium">{currentIdea.name}</div>
+                <div className="text-xs text-blue-300">{currentIdea.description}</div>
+              </div>
+            </div>
+            <div className="text-xs text-blue-400">Example startup idea</div>
+          </div>
+        )}
       </div>
 
       {/* More Section */}
@@ -238,6 +530,10 @@ const RightSidebar = ({ currentSection }) => {
     }
   };
 
+  if (currentSection === 'lean-canvas-details') {
+    return null; // No right sidebar for lean canvas details
+  }
+
   const navigationItems = getNavigationItems();
 
   return (
@@ -258,12 +554,148 @@ const RightSidebar = ({ currentSection }) => {
   );
 };
 
-// Generated Badge Component
-const GeneratedBadge = () => (
-  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-    Generated
-  </span>
-);
+// New Idea Form Component
+const NewIdeaSection = ({ onIdeaCreated }) => {
+  const [ideaText, setIdeaText] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0);
+
+  const generationSteps = [
+    'Analyzing market opportunity...',
+    'Identifying target customers...',
+    'Researching competitors...',
+    'Creating business model...',
+    'Generating critical hypotheses...',
+    'Developing brand strategy...',
+    'Finalizing validation plan...'
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!ideaText.trim()) return;
+
+    setIsGenerating(true);
+    setGenerationStep(0);
+    
+    try {
+      // Simulate AI processing with step-by-step updates
+      const interval = setInterval(async () => {
+        setGenerationStep(prev => {
+          if (prev < generationSteps.length - 1) {
+            return prev + 1;
+          } else {
+            clearInterval(interval);
+            // Use backend API to generate comprehensive startup data
+            generateIdeaFromBackend();
+            return prev;
+          }
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error generating idea:', error);
+      setIsGenerating(false);
+      // Fallback to local generation
+      const newIdea = generateStartupContent(ideaText);
+      onIdeaCreated(newIdea);
+    }
+  };
+
+  const generateIdeaFromBackend = async () => {
+    try {
+      // Call backend API to generate startup content
+      const generatedContent = await apiService.generateStartupContent(ideaText);
+      
+      // Create the new idea object
+      const newIdea = {
+        name: generatedContent.name,
+        description: ideaText,
+        industry: generatedContent.industry,
+        leanCanvas: generatedContent.leanCanvas,
+        hypotheses: generatedContent.hypotheses,
+        storytelling: generatedContent.storytelling,
+        created: new Date().toISOString()
+      };
+      
+      onIdeaCreated(newIdea);
+    } catch (error) {
+      console.error('Backend generation failed, using local fallback:', error);
+      // Fallback to local generation
+      const newIdea = generateStartupContent(ideaText);
+      onIdeaCreated(newIdea);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Startup Idea</h1>
+        <p className="text-gray-600">Describe your startup idea and let our AI Entrepreneur in Residence help you validate it.</p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="idea" className="block text-sm font-medium text-gray-700 mb-2">
+              What's your startup idea?
+            </label>
+            <textarea
+              id="idea"
+              value={ideaText}
+              onChange={(e) => setIdeaText(e.target.value)}
+              placeholder="e.g., AI-powered fitness app that creates personalized workout plans"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+              rows={4}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isGenerating || !ideaText.trim()}
+            className={`w-full px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
+              isGenerating || !ideaText.trim()
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-teal-600 text-white hover:bg-teal-700'
+            }`}
+          >
+            {isGenerating ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                Generating your comprehensive startup plan...
+              </div>
+            ) : (
+              '🚀 Generate Complete Startup Plan'
+            )}
+          </button>
+        </form>
+
+        {isGenerating && (
+          <div className="mt-8 p-6 bg-blue-50 rounded-lg">
+            <h3 className="font-semibold text-blue-900 mb-4">AI Research Agent is analyzing your idea...</h3>
+            <div className="space-y-3">
+              {generationSteps.map((step, index) => (
+                <div key={index} className={`flex items-center text-sm ${
+                  index <= generationStep ? 'text-blue-800' : 'text-blue-400'
+                }`}>
+                  {index < generationStep ? (
+                    <span className="text-green-500 mr-2">✓</span>
+                  ) : index === generationStep ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full mr-2"></div>
+                  ) : (
+                    <span className="text-gray-400 mr-2">○</span>
+                  )}
+                  {step}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 // Main Content Components
 const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
@@ -397,19 +829,21 @@ const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
 
 const BusinessPrototypeSection = ({ currentIdea }) => {
   const canvas = currentIdea?.leanCanvas || {
-    problems: ['Problem identification needed', 'Market research required'],
-    solutions: ['Solution development needed', 'Technical implementation required'],
-    customers: ['Target customer analysis needed'],
-    competitors: ['Competitive analysis required'],
-    valueProposition: 'Value proposition to be defined',
-    channels: ['Distribution channels to be identified'],
-    revenue: ['Revenue model to be developed'],
-    keyMetrics: ['Key metrics to be defined']
+    problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets'],
+    solutions: ['Social trading platform', 'Real-time market insights'],
+    customers: ['Millennial investors', 'Retirement planners', 'Day traders', 'Financial enthusiast students'],
+    competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers', 'ZuluTrade', 'CopyMe', 'NAGA'],
+    valueProposition: 'Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.',
+    channels: ['Mobile app', 'Financial blogs', 'Social media', 'Trading forums'],
+    revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
+    keyMetrics: ['Active traders', 'Trading volume', 'Platform assets', 'User retention rates']
   };
 
   const navigate = (section) => {
-    // This will be handled by the parent component
-    window.location.hash = section;
+    // Navigate to the lean canvas details section
+    if (typeof onNavigate === 'function') {
+      onNavigate(section);
+    }
   };
 
   return (
@@ -438,7 +872,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           </button>
         </div>
 
-        {/* Lean Canvas Grid - Compact Overview */}
+        {/* Lean Canvas Grid - Matching Screen 10 Layout */}
         <div className="grid grid-cols-5 gap-4 h-80">
           {/* Customer Segments */}
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
@@ -447,10 +881,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-orange-900 text-sm">Customer Segments</h3>
             </div>
             <div className="text-xs text-orange-800 space-y-1">
-              {canvas.customers.slice(0, 2).map((customer, index) => (
+              {canvas.customers.slice(0, 4).map((customer, index) => (
                 <div key={index}>• {customer}</div>
               ))}
-              {canvas.customers.length > 2 && <div className="text-orange-600">+{canvas.customers.length - 2} more</div>}
             </div>
           </div>
 
@@ -461,10 +894,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-blue-900 text-sm">Problem</h3>
             </div>
             <div className="text-xs text-blue-800 space-y-1">
-              {canvas.problems.slice(0, 2).map((problem, index) => (
+              {canvas.problems.map((problem, index) => (
                 <div key={index}>• {problem}</div>
               ))}
-              {canvas.problems.length > 2 && <div className="text-blue-600">+{canvas.problems.length - 2} more</div>}
             </div>
           </div>
 
@@ -475,10 +907,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-green-900 text-sm">Solution</h3>
             </div>
             <div className="text-xs text-green-800 space-y-1">
-              {canvas.solutions.slice(0, 2).map((solution, index) => (
+              {canvas.solutions.map((solution, index) => (
                 <div key={index}>• {solution}</div>
               ))}
-              {canvas.solutions.length > 2 && <div className="text-green-600">+{canvas.solutions.length - 2} more</div>}
             </div>
           </div>
 
@@ -486,13 +917,10 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
             <div className="flex items-center mb-2">
               <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">E</div>
-              <h3 className="font-semibold text-yellow-900 text-sm">Unique Value Prop...</h3>
+              <h3 className="font-semibold text-yellow-900 text-sm">Unique Value Proposition</h3>
             </div>
             <div className="text-xs text-yellow-800">
-              {canvas.valueProposition.length > 60 ? 
-                `${canvas.valueProposition.substring(0, 60)}...` : 
-                canvas.valueProposition
-              }
+              {canvas.valueProposition}
             </div>
           </div>
 
@@ -503,7 +931,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-purple-900 text-sm">Unfair Advantage</h3>
             </div>
             <div className="text-xs text-purple-800">
-              Proprietary technology and first-mover advantage
+              Proprietary algorithm that surfaces trending trades and insights
             </div>
           </div>
 
@@ -514,10 +942,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-gray-900 text-sm">Existing Alternatives</h3>
             </div>
             <div className="text-xs text-gray-700 space-y-1">
-              {canvas.competitors.slice(0, 3).map((competitor, index) => (
+              {canvas.competitors.slice(0, 7).map((competitor, index) => (
                 <div key={index}>• {competitor}</div>
               ))}
-              {canvas.competitors.length > 3 && <div className="text-gray-600">+{canvas.competitors.length - 3} more</div>}
             </div>
           </div>
 
@@ -528,10 +955,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-indigo-900 text-sm">Key Metrics</h3>
             </div>
             <div className="text-xs text-indigo-800 space-y-1">
-              {canvas.keyMetrics.slice(0, 2).map((metric, index) => (
+              {canvas.keyMetrics.map((metric, index) => (
                 <div key={index}>• {metric}</div>
               ))}
-              {canvas.keyMetrics.length > 2 && <div className="text-indigo-600">+{canvas.keyMetrics.length - 2} more</div>}
             </div>
           </div>
 
@@ -542,31 +968,26 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-pink-900 text-sm">Channels</h3>
             </div>
             <div className="text-xs text-pink-800 space-y-1">
-              {canvas.channels.slice(0, 2).map((channel, index) => (
+              {canvas.channels.map((channel, index) => (
                 <div key={index}>• {channel}</div>
               ))}
-              {canvas.channels.length > 2 && <div className="text-pink-600">+{canvas.channels.length - 2} more</div>}
-            </div>
-          </div>
-
-          {/* High Level Concept */}
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <div className="flex items-center mb-2">
-              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">H</div>
-              <h3 className="font-semibold text-red-900 text-sm">High Level Concept</h3>
-            </div>
-            <div className="text-xs text-red-800">
-              {currentIdea?.description || 'Innovative solution for market needs'}
             </div>
           </div>
 
           {/* Early Adopters */}
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-3">
-            <div className="flex items-center mb-2">
-              <h3 className="font-semibold text-teal-900 text-sm">Early Adopters</h3>
-            </div>
+            <h3 className="font-semibold text-teal-900 text-sm mb-2">Early Adopters</h3>
             <div className="text-xs text-teal-800">
-              {canvas.customers[0]} who are actively seeking solutions
+              • Young traders savvy with social media
+              • Investors seeking community
+            </div>
+          </div>
+
+          {/* High Level Concept */}
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <h3 className="font-semibold text-red-900 text-sm mb-2">High Level Concept</h3>
+            <div className="text-xs text-red-800">
+              Social network meets trading floor
             </div>
           </div>
 
@@ -576,10 +997,12 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">H</div>
               <h3 className="font-semibold text-gray-900 text-sm">Cost Structure</h3>
             </div>
-            <div className="text-xs text-gray-700">
-              • Technology development and maintenance
-              • Customer acquisition costs
-              • Operational expenses
+            <div className="text-xs text-gray-700 space-y-1">
+              <div>• Development and maintenance of the platform</div>
+              <div>• Marketing and user acquisition costs</div>
+              <div>• Community management and customer support</div>
+              <div>• Data security and legal compliance</div>
+              <div>• Server and infrastructure costs</div>
             </div>
           </div>
 
@@ -590,305 +1013,12 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
               <h3 className="font-semibold text-green-900 text-sm">Revenue Streams</h3>
             </div>
             <div className="text-xs text-green-800 space-y-1">
-              {canvas.revenue.map((revenue, index) => (
-                <span key={index}>• {revenue} </span>
-              ))}
+              <div>• Subscription fees for premium features</div>
+              <div>• Commissions on trades executed through the platform</div>
+              <div>• Advertisement revenue from financial services</div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const ValidationSection = ({ currentIdea }) => {
-  const hypotheses = currentIdea?.hypotheses || [
-    { type: 'Desirability', text: 'Target customers need this solution', criticality: 'High', method: 'Customer interviews' },
-    { type: 'Viability', text: 'Business model is financially sustainable', criticality: 'High', method: 'Financial analysis' },
-    { type: 'Feasibility', text: 'Solution is technically achievable', criticality: 'Medium', method: 'Technical validation' }
-  ];
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Validation</h1>
-        <p className="text-gray-600">Navigate your startup's viability by identifying critical hypotheses and conducting experiments, ensuring you meet market needs.</p>
-      </div>
-
-      {/* Critical Hypotheses */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Critical Hypotheses</h2>
-              <GeneratedBadge />
-            </div>
-            <p className="text-gray-600">Identify and prioritize the fundamental assumptions underpinning your business, setting the stage for essential validation tests.</p>
-          </div>
-          <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
-            New
-          </button>
-        </div>
-
-        {/* Hypotheses Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Hypothesis</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Criticality</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Testing Method</th>
-                <th className="w-16"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {hypotheses.map((hypothesis, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="py-4 px-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">
-                        {String(index + 1).padStart(2, '0')}
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-1">{hypothesis.type}</h4>
-                        <p className="text-sm text-gray-600">{hypothesis.text}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-                      hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
-                      hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {hypothesis.criticality}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span className="text-sm text-gray-600">{hypothesis.method}</span>
-                  </td>
-                  <td className="py-4 px-4">
-                    <button className="text-gray-400 hover:text-gray-600">Edit</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Validation Experiments */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Validation Experiments</h2>
-          <p className="text-gray-600">Design and execute strategic tests to validate or refute your startup's hypotheses, ensuring data-driven decisions in your entrepreneurial journey.</p>
-        </div>
-
-        {/* Experiment Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Customer Interview */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <span className="text-2xl">🎤</span>
-              <div>
-                <h3 className="font-semibold text-gray-900">Customer Interview</h3>
-                <GeneratedBadge />
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">Create a tailored questionnaire for customer discovery and problem exploration specific to {currentIdea?.description || 'your startup idea'}.</p>
-            <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
-              👁️ Details
-            </button>
-          </div>
-
-          {/* Landing Page */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <span className="text-2xl">🌐</span>
-              <div>
-                <h3 className="font-semibold text-gray-900">Landing Page</h3>
-                <GeneratedBadge />
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">Develop a simple webpage to test market demand and collect early user interest for your concept.</p>
-            <button className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
-              ✏️ Details
-            </button>
-          </div>
-
-          {/* Create New Experiment */}
-          <div className="border border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-            <span className="text-4xl text-gray-400 mb-4">📋</span>
-            <h3 className="font-medium text-gray-700 mb-2">Create a new Experiment</h3>
-            <p className="text-sm text-gray-500">(Coming soon)</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const StorytellingSection = ({ currentIdea }) => {
-  const [activeTab, setActiveTab] = useState('brand-wheel');
-  
-  const storytelling = currentIdea?.storytelling || {
-    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub'],
-    mission: 'To solve important problems and create value for our customers through innovative solutions.',
-    vision: 'To become a leading company that transforms how people interact with technology.',
-    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference'],
-    elevatorPitch: 'Our startup addresses key market needs through innovative technology solutions that create value for customers and drive business growth.'
-  };
-
-  const [selectedName, setSelectedName] = useState(storytelling.names[0]);
-
-  const BrandWheelTab = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Mission</h3>
-            <p className="text-gray-700">{storytelling.mission}</p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Vision</h3>
-            <p className="text-gray-700">{storytelling.vision}</p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Brand Values</h3>
-            <div className="space-y-2 text-gray-700">
-              {storytelling.values.map((value, index) => (
-                <p key={index}><strong>{value.split(':')[0]}:</strong>{value.split(':')[1]}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const StartupNamingTab = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-5 gap-4">
-        {storytelling.names.map((name, index) => (
-          <button
-            key={index}
-            onClick={() => setSelectedName(name)}
-            className={`p-4 border rounded-lg text-center transition-all duration-200 ${
-              selectedName === name 
-                ? 'border-teal-500 bg-teal-50 text-teal-700' 
-                : 'border-gray-200 hover:border-gray-300 text-gray-700'
-            }`}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
-      
-      <div className="flex items-center justify-center py-8">
-        <div className="flex items-center space-x-3">
-          <span className="text-gray-600">Selected Name:</span>
-          <span className="text-xl font-semibold text-gray-900">{selectedName}</span>
-          <button className="text-teal-600 hover:text-teal-700">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      
-      <div className="flex justify-center">
-        <div className="w-96 h-2 bg-gray-200 rounded-full">
-          <div className="w-full h-2 bg-teal-500 rounded-full"></div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const ElevatorPitchTab = () => (
-    <div className="space-y-6">
-      <div className="bg-gray-50 rounded-lg p-6">
-        <p className="text-sm text-gray-600 italic mb-4">Here's your personalized elevator pitch:</p>
-        
-        <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
-          {storytelling.elevatorPitch}
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Storytelling Central</h1>
-        <p className="text-gray-600">Craft a compelling narrative for your brand, select your startup's name, and captivate audiences with an unforgettable pitch.</p>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="grid grid-cols-3 gap-4">
-        <button
-          onClick={() => setActiveTab('brand-wheel')}
-          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
-            activeTab === 'brand-wheel' 
-              ? 'border-teal-500 bg-teal-50' 
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
-        >
-          <div className="flex items-center space-x-3 mb-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              activeTab === 'brand-wheel' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
-            }`}>01</div>
-            <GeneratedBadge />
-          </div>
-          <h3 className="font-semibold text-gray-900">Brand Wheel</h3>
-          <p className="text-sm text-gray-600">Define your brand positioning.</p>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('startup-naming')}
-          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
-            activeTab === 'startup-naming' 
-              ? 'border-teal-500 bg-teal-50' 
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
-        >
-          <div className="flex items-center space-x-3 mb-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              activeTab === 'startup-naming' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
-            }`}>02</div>
-            <GeneratedBadge />
-          </div>
-          <h3 className="font-semibold text-gray-900">Startup Naming</h3>
-          <p className="text-sm text-gray-600">Find a compelling name.</p>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('elevator-pitch')}
-          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
-            activeTab === 'elevator-pitch' 
-              ? 'border-teal-500 bg-teal-50' 
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
-        >
-          <div className="flex items-center space-x-3 mb-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              activeTab === 'elevator-pitch' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
-            }`}>03</div>
-            <GeneratedBadge />
-          </div>
-          <h3 className="font-semibold text-gray-900">Elevator Pitch</h3>
-          <p className="text-sm text-gray-600">Craft your story.</p>
-        </button>
-      </div>
-
-      {/* Tab Content */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        {activeTab === 'brand-wheel' && <BrandWheelTab />}
-        {activeTab === 'startup-naming' && <StartupNamingTab />}
-        {activeTab === 'elevator-pitch' && <ElevatorPitchTab />}
       </div>
     </div>
   );
@@ -956,6 +1086,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
     'customer-segments': {
       title: 'Customer Segments',
       subtitle: 'Identifies the specific market segment or audience who will most benefit from your product or service using the Jobs To Be Done framework.',
+      guidance: 'Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.',
       content: (
         <div className="space-y-8">
           {customerPersonas.map((persona, index) => (
@@ -998,18 +1129,13 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               </div>
             </div>
           ))}
-          
-          <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              <strong>Drill down to the core group of users who have the highest need for your solution and will get the most value out of it.</strong>
-            </p>
-          </div>
         </div>
       )
     },
     'problem': {
       title: 'Problem',
       subtitle: 'Highlights the issue, challenge, or pain point your target customers experience.',
+      guidance: 'Validate the problem through direct conversations with potential customers to ensure it\'s real, painful, and prevalent.',
       content: (
         <div className="space-y-6">
           <div className="space-y-4">
@@ -1021,18 +1147,13 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               </div>
             ))}
           </div>
-          
-          <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              <strong>Validate the problem through direct conversations with potential customers to ensure it's real, painful, and prevalent.</strong>
-            </p>
-          </div>
         </div>
       )
     },
     'existing-alternatives': {
       title: 'Existing Alternatives',
       subtitle: 'Describes the current solutions your target customers use to solve their problem.',
+      guidance: 'Identify existing competitors that address the same problem; understanding how they work will help differentiate your product.',
       content: (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1072,10 +1193,204 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               </div>
             </div>
           </div>
+        </div>
+      )
+    },
+    'solution': {
+      title: 'Solution',
+      subtitle: 'Presents your product or service that addresses the identified problem.',
+      guidance: 'Aim for a solution that\'s 10x better than existing alternatives to make it worth the switch for your customers.',
+      content: (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Features</h3>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Real-time social feed for trading insights</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Copy-trading feature that replicates top traders' actions</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Community-driven content and educational resources</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <span className="text-teal-600 font-semibold mt-1">•</span>
+                <span className="text-gray-700">Performance analytics for self-improvement</span>
+              </div>
+            </div>
+          </div>
           
-          <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              <strong>Identify existing competitors that address the same problem; understanding how they work will help differentiate your product.</strong>
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Potential Ways-to-Play</h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Influencer-driven engagement</h4>
+                <p className="text-sm text-gray-600">Leveraging financial influencers to drive platform engagement and credibility.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Tailored Educational Content</h4>
+                <p className="text-sm text-gray-600">Providing customized educational content that helps users make more informed trading decisions.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Integration of Crypto Assets</h4>
+                <p className="text-sm text-gray-600">Expanding the asset classes to include cryptocurrencies and tokens, catering to the interest in digital assets.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Behavioral Analytics for Matching</h4>
+                <p className="text-sm text-gray-600">Using behavioral analytics to better match users with top-performing traders, improving the social aspect of trading.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Micro-investing Options</h4>
+                <p className="text-sm text-gray-600">Offering micro-investing capabilities that allow users to mimic trades with smaller, incremental investments.</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Robust Risk Management Tools</h4>
+                <p className="text-sm text-gray-600">Building in advanced risk management features for users to apply when engaging in social trading.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'unique-value-proposition': {
+      title: 'Unique Value Proposition',
+      subtitle: 'A single, clear compelling message that states why you are different and worth buying.',
+      guidance: 'Craft a compelling UVP that can be instantly understood; make sure it resonates emotionally with your target customers.',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center py-8">
+            <p className="text-xl font-semibold text-gray-900 leading-relaxed">
+              Trade smarter together. Access real-time insights and follow top traders' moves on a collaborative platform.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    'channels': {
+      title: 'Channels',
+      subtitle: 'Specifies the methods you use to reach your target customers and deliver your value proposition.',
+      guidance: 'Focus on those channels where you can reach the largest segment of your target customers at the lowest cost.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Mobile and desktop applications</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Social media</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Trading forums and communities</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Financial blogs and influencers</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'revenue-streams': {
+      title: 'Revenue Streams',
+      subtitle: 'Delineates the different ways your business generates income from delivering value to your customers.',
+      guidance: 'Explore and validate how your business can generate income, such as sales, subscriptions, or partnerships.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Subscription fees for premium features</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Commissions on trades executed through the platform</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Advertisement revenue from financial services</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'cost-structure': {
+      title: 'Cost Structure',
+      subtitle: 'Enumerates all the costs incurred to deliver your value proposition and run the business.',
+      guidance: 'Identify your main cost buckets, such as development and marketing costs; knowing these will assist you in budget planning.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Development and maintenance of the platform</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Marketing and user acquisition costs</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Community management and customer support</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Data security and legal compliance</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Server and infrastructure costs</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'key-metrics': {
+      title: 'Key Metrics',
+      subtitle: 'Defines the essential indicators that measure the performance and progress of your business.',
+      guidance: 'Identify and focus on a single key metric relevant to your startup stage whether that\'s user acquisition, retention or revenue.',
+      content: (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Number of active users</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Volume of trades executed</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">User retention rates</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Social engagement metrics (likes, comments, shares)</span>
+            </div>
+            <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <span className="text-teal-600 font-semibold mt-1">•</span>
+              <span className="text-gray-700">Revenue growth</span>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    'unfair-advantage': {
+      title: 'Unfair Advantage',
+      subtitle: 'Demonstrates something unique to your business that cannot be easily replicated or acquired by competitors.',
+      guidance: 'Identify any proprietary tech or expertise your startup possesses. That being said, it\'s fine not to have one in the earliest stages.',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center py-8">
+            <p className="text-lg font-medium text-gray-900">
+              Proprietary algorithm that surfaces trending trades and insights
             </p>
           </div>
         </div>
@@ -1125,8 +1440,29 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 bg-${sectionContent[activeSection]?.color || 'blue'}-500 rounded-full flex items-center justify-center text-white font-bold text-lg`}>
-                    A
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+                    activeSection === 'customer-segments' ? 'bg-orange-500' :
+                    activeSection === 'problem' ? 'bg-blue-500' :
+                    activeSection === 'existing-alternatives' ? 'bg-gray-500' :
+                    activeSection === 'solution' ? 'bg-green-500' :
+                    activeSection === 'unique-value-proposition' ? 'bg-yellow-500' :
+                    activeSection === 'channels' ? 'bg-pink-500' :
+                    activeSection === 'revenue-streams' ? 'bg-green-600' :
+                    activeSection === 'cost-structure' ? 'bg-gray-600' :
+                    activeSection === 'key-metrics' ? 'bg-indigo-500' :
+                    activeSection === 'unfair-advantage' ? 'bg-purple-500' :
+                    'bg-blue-500'
+                  }`}>
+                    {activeSection === 'customer-segments' ? 'A' :
+                     activeSection === 'problem' ? 'B' :
+                     activeSection === 'existing-alternatives' ? 'C' :
+                     activeSection === 'solution' ? 'D' :
+                     activeSection === 'unique-value-proposition' ? 'E' :
+                     activeSection === 'channels' ? 'F' :
+                     activeSection === 'revenue-streams' ? 'G' :
+                     activeSection === 'cost-structure' ? 'H' :
+                     activeSection === 'key-metrics' ? 'I' :
+                     activeSection === 'unfair-advantage' ? 'J' : 'A'}
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">{sectionContent[activeSection]?.title}</h2>
@@ -1134,7 +1470,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
                   </div>
                 </div>
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
-                  New
+                  Edit
                 </button>
               </div>
             </div>
@@ -1148,7 +1484,7 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
 
         {/* Right Sidebar Navigation */}
         <div className="w-80 p-8">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-teal-600 font-medium mb-4 text-sm">On this page</h3>
             <nav className="space-y-2">
               {navigationItems.map((item) => (
@@ -1166,494 +1502,230 @@ const LeanCanvasDetailsSection = ({ currentIdea }) => {
               ))}
             </nav>
           </div>
+          
+          {/* Guidance Sidebar */}
+          {sectionContent[activeSection]?.guidance && (
+            <div className="bg-gray-50 rounded-lg p-6">
+              <p className="text-sm text-gray-700 italic leading-relaxed">
+                {sectionContent[activeSection].guidance}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const ConnectDashboardSection = () => {
-  const mentors = [
-    {
-      name: 'Jenny Lawton',
-      title: 'Executive VP @',
-      company: 'Roister',
-      expertise: 'Business Leadership',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Khaled Nasr',
-      title: 'GP @ Interwest',
-      company: 'Partners',
-      expertise: 'Investment',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Georges Khoury',
-      title: 'Software Engineer',
-      company: '(Ex Uber)',
-      expertise: 'Product Management',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Mira Murati',
-      title: 'CTO @ OpenAI',
-      company: '',
-      expertise: 'AI',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Scott Ford',
-      title: 'Partner @ Zigzag',
-      company: '',
-      expertise: 'Operations',
-      image: '/api/placeholder/120/120'
-    }
+// Additional sections simplified for brevity
+const ValidationSection = ({ currentIdea }) => {
+  const hypotheses = currentIdea?.hypotheses || [
+    { type: 'Desirability', text: 'Target customers need this solution', criticality: 'High', method: 'Customer interviews' },
+    { type: 'Viability', text: 'Business model is financially sustainable', criticality: 'High', method: 'Financial analysis' },
+    { type: 'Feasibility', text: 'Solution is technically achievable', criticality: 'Medium', method: 'Technical validation' }
   ];
-
-  const investors = [
-    { name: 'Techstars', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Berkeley Skydeck', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'SparkLabs', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Band of Angels', type: 'Angel Network', logo: '/api/placeholder/120/120' },
-    { name: 'Y Combinator', type: 'Accelerator', logo: '/api/placeholder/120/120' }
-  ];
-
-  const perks = [
-    {
-      name: 'Carta',
-      category: 'Equity Management',
-      benefit: 'Start for Free',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Dropbox',
-      category: 'Cloud Storage',
-      benefit: 'Up to 50% Discount',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Google for Startups',
-      category: 'Cloud Services',
-      benefit: 'Up to $200,000',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Notion',
-      category: 'Knowledge Management',
-      benefit: '6 Months Free',
-      logo: '/api/placeholder/120/60'
-    }
-  ];
-
-  const ComingSoonBadge = () => (
-    <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
-      🔒 Coming Soon
-    </span>
-  );
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
-        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners tailored to your startup idea.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Validation</h1>
+        <p className="text-gray-600">Navigate your startup's viability by identifying critical hypotheses and conducting experiments.</p>
       </div>
 
-      {/* Connect with Relevant Mentors */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Mentors</h2>
-              <ComingSoonBadge />
+              <h2 className="text-xl font-semibold text-gray-900">Critical Hypotheses</h2>
+              <GeneratedBadge />
             </div>
-            <p className="text-gray-600">Harness industry wisdom for strategic navigation.</p>
+            <p className="text-gray-600">Identify and prioritize the fundamental assumptions underpinning your business.</p>
           </div>
+          <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+            New
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {mentors.map((mentor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-3 overflow-hidden">
-                <img 
-                  src={mentor.image} 
-                  alt={mentor.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-xl font-semibold" style={{display: 'none'}}>
-                  {mentor.name.split(' ').map(n => n[0]).join('')}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{mentor.name}</h3>
-              <p className="text-xs text-gray-600">{mentor.title}</p>
-              <p className="text-xs text-gray-600">{mentor.company}</p>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {mentor.expertise}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Connect with Relevant Investors & Accelerators */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Investors & Accelerators</h2>
-              <ComingSoonBadge />
-            </div>
-            <p className="text-gray-600">Secure funding, networks, and growth catalysts.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {investors.map((investor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={investor.logo} 
-                  alt={investor.name}
-                  className="w-full h-full object-contain p-2"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold text-center p-2" style={{display: 'none'}}>
-                  {investor.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{investor.name}</h3>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {investor.type}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Access Relevant Perks */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Relevant Perks</h2>
-          <p className="text-gray-600">Capitalize on cost-saving opportunities and benefits.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {perks.map((perk, index) => (
-            <div key={index} className="text-center border border-gray-200 rounded-lg p-4">
-              <div className="w-20 h-12 bg-white mx-auto mb-3 flex items-center justify-center overflow-hidden border border-gray-100 rounded">
-                <img 
-                  src={perk.logo} 
-                  alt={perk.name}
-                  className="max-w-full max-h-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-600 text-xs font-semibold text-center" style={{display: 'none'}}>
-                  {perk.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-1">{perk.name}</h3>
-              <p className="text-xs text-gray-600 mb-2">{perk.category}</p>
-              <div className="text-xs">
-                {perk.benefit.includes('Free') ? (
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : perk.benefit.includes('Discount') ? (
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : (
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-          
-          {/* Click Here for More */}
-          <div className="text-center border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-              <span className="text-blue-600 text-sm">+</span>
-            </div>
-            <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
-              Click Here for More
-            </button>
-          </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Hypothesis</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Criticality</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Testing Method</th>
+                <th className="w-16"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {hypotheses.map((hypothesis, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="py-4 px-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-medium text-sm">
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 mb-1">{hypothesis.type}</h4>
+                        <p className="text-sm text-gray-600">{hypothesis.text}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                      hypothesis.criticality === 'High' ? 'bg-red-100 text-red-800' :
+                      hypothesis.criticality === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {hypothesis.criticality}
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">
+                    <span className="text-sm text-gray-600">{hypothesis.method}</span>
+                  </td>
+                  <td className="py-4 px-4">
+                    <button className="text-gray-400 hover:text-gray-600">Edit</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
 };
-// AI Research Agent - Generates content based on startup idea
-const generateStartupContent = (ideaText) => {
-  const idea = ideaText.toLowerCase();
-  
-  // Extract key industry/domain from the idea
-  const getIndustry = () => {
-    if (idea.includes('food') || idea.includes('restaurant') || idea.includes('delivery')) return 'food_tech';
-    if (idea.includes('fitness') || idea.includes('health') || idea.includes('wellness')) return 'health_tech';
-    if (idea.includes('education') || idea.includes('learning') || idea.includes('course')) return 'ed_tech';
-    if (idea.includes('finance') || idea.includes('payment') || idea.includes('banking')) return 'fin_tech';
-    if (idea.includes('trade') || idea.includes('trading') || idea.includes('investment')) return 'trading';
-    if (idea.includes('ai') || idea.includes('artificial intelligence') || idea.includes('machine learning')) return 'ai_tech';
-    if (idea.includes('social') || idea.includes('community') || idea.includes('network')) return 'social_tech';
-    if (idea.includes('ecommerce') || idea.includes('marketplace') || idea.includes('shopping')) return 'ecommerce';
-    if (idea.includes('travel') || idea.includes('booking') || idea.includes('tourism')) return 'travel_tech';
-    if (idea.includes('real estate') || idea.includes('property') || idea.includes('housing')) return 'prop_tech';
-    return 'general_tech';
-  };
 
-  const industry = getIndustry();
+const StorytellingSection = ({ currentIdea }) => {
+  const [activeTab, setActiveTab] = useState('brand-wheel');
   
-  const industryData = {
-    food_tech: {
-      names: ['FoodieHub', 'TasteCraft', 'CulinaryConnect', 'FlavorFlow', 'MealMaster', 'DishDash', 'NutriLink', 'FreshDelivery', 'CraveCure', 'KitchenKonnect'],
-      problems: ['High delivery costs and long wait times', 'Limited healthy food options', 'Food waste in restaurants'],
-      solutions: ['AI-powered delivery optimization', 'Personalized nutrition recommendations', 'Smart inventory management'],
-      customers: ['Busy professionals', 'Health-conscious consumers', 'College students'],
-      competitors: ['DoorDash', 'Uber Eats', 'Grubhub', 'HelloFresh', 'Blue Apron'],
-      valueProps: 'Fresh, healthy meals delivered faster and cheaper through AI optimization',
-      channels: ['Mobile app', 'Social media marketing', 'Restaurant partnerships'],
-      revenue: ['Commission from restaurants', 'Delivery fees', 'Premium subscriptions'],
-      keyMetrics: ['Order frequency', 'Customer lifetime value', 'Average order value'],
-      hypotheses: [
-        { type: 'Desirability', text: 'Customers want faster food delivery with healthier options', criticality: 'High', method: 'Customer survey' },
-        { type: 'Viability', text: 'Restaurants will pay 15% commission for optimized delivery', criticality: 'High', method: 'Partner interviews' },
-        { type: 'Feasibility', text: 'AI routing can reduce delivery time by 30%', criticality: 'Medium', method: 'Technical prototype' }
-      ],
-      mission: 'Revolutionize food delivery by making healthy, fresh meals accessible to everyone through intelligent technology.',
-      vision: 'To become the leading platform that connects food lovers with quality restaurants while promoting sustainable eating habits.',
-      values: ['Quality: Ensuring fresh, high-quality food delivery', 'Sustainability: Reducing food waste and environmental impact', 'Innovation: Using AI to optimize the entire food delivery experience']
-    },
-    health_tech: {
-      names: ['HealthSync', 'WellnessWave', 'FitTracker', 'VitalBoost', 'MediConnect', 'HealthHub', 'WellBeing', 'FitnessFusion', 'HealthMate', 'VitalityVault'],
-      problems: ['Lack of personalized health tracking', 'Expensive healthcare consultations', 'Poor medication adherence'],
-      solutions: ['AI-powered health monitoring', 'Telemedicine platform', 'Smart medication reminders'],
-      customers: ['Health-conscious individuals', 'Chronic disease patients', 'Fitness enthusiasts'],
-      competitors: ['MyFitnessPal', 'Fitbit', 'Teladoc', 'Headspace', 'Calm'],
-      valueProps: 'Personalized health insights and affordable healthcare access through technology',
-      channels: ['Health apps', 'Doctor partnerships', 'Fitness centers'],
-      revenue: ['Subscription fees', 'Consultation commissions', 'Premium features'],
-      keyMetrics: ['Daily active users', 'Health improvement scores', 'User retention'],
-      hypotheses: [
-        { type: 'Desirability', text: 'Users want personalized health recommendations based on their data', criticality: 'High', method: 'User interviews' },
-        { type: 'Viability', text: 'People will pay $20/month for AI health coaching', criticality: 'High', method: 'Pricing survey' },
-        { type: 'Feasibility', text: 'Wearable integration can provide accurate health insights', criticality: 'Medium', method: 'Technical validation' }
-      ],
-      mission: 'Empower individuals to take control of their health through personalized, AI-driven insights and accessible healthcare solutions.',
-      vision: 'To create a world where everyone has access to personalized healthcare and wellness guidance.',
-      values: ['Privacy: Protecting sensitive health data', 'Accessibility: Making healthcare affordable for all', 'Innovation: Using technology to improve health outcomes']
-    },
-    trading: {
-      names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow', 'TradePro', 'InvestLink', 'MarketMind', 'TradeSphere', 'CapitalConnect'],
-      problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets', 'High barriers to entry for new investors'],
-      solutions: ['Social trading platform', 'Real-time market insights', 'Copy-trading features'],
-      customers: ['Millennial investors', 'Retirement planners', 'Day traders'],
-      competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers', 'TD Ameritrade'],
-      valueProps: 'Democratic trading through social collaboration and expert insights',
-      channels: ['Mobile app', 'Financial blogs', 'Social media'],
-      revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
-      keyMetrics: ['Active traders', 'Trading volume', 'Platform assets'],
-      hypotheses: [
-        { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
-        { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
-        { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
-      ],
-      mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
-      vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
-      values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships']
-    },
-    ai_tech: {
-      names: ['AI-Boost', 'SmartTech', 'IntelliFlow', 'CogniCorp', 'BrainWave', 'NeuralNet', 'AIVantage', 'SmartCore', 'IntelliSuite', 'AInnova'],
-      problems: ['Complex AI implementation for businesses', 'Lack of AI expertise', 'High costs of AI development'],
-      solutions: ['No-code AI platform', 'AI consulting services', 'Pre-built AI models'],
-      customers: ['Small businesses', 'Enterprise companies', 'Developers'],
-      competitors: ['OpenAI', 'Google AI', 'Microsoft Azure AI', 'Amazon AWS AI', 'IBM Watson'],
-      valueProps: 'Accessible AI solutions that any business can implement without technical expertise',
-      channels: ['Enterprise sales', 'Developer communities', 'Tech conferences'],
-      revenue: ['Software licensing', 'Consulting fees', 'API usage fees'],
-      keyMetrics: ['API calls per month', 'Customer acquisition cost', 'Revenue per user'],
-      hypotheses: [
-        { type: 'Desirability', text: 'Small businesses want easy-to-use AI tools without hiring specialists', criticality: 'High', method: 'Business owner interviews' },
-        { type: 'Viability', text: 'Companies will pay $500/month for no-code AI solutions', criticality: 'High', method: 'Pricing validation' },
-        { type: 'Feasibility', text: 'Pre-built models can solve 80% of common business problems', criticality: 'Medium', method: 'Technical assessment' }
-      ],
-      mission: 'Make artificial intelligence accessible to every business, regardless of technical expertise or budget.',
-      vision: 'To democratize AI and enable every organization to harness the power of intelligent automation.',
-      values: ['Accessibility: Making AI simple for everyone', 'Innovation: Pushing the boundaries of what AI can do', 'Ethics: Responsible AI development and deployment']
-    }
-  };
-
-  const defaultData = {
-    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub', 'ScaleUp', 'VentureX', 'LaunchPad', 'NextGen', 'FutureNow'],
-    problems: ['Market inefficiencies', 'Customer pain points', 'Technology gaps'],
-    solutions: ['Innovative platform', 'Technology solution', 'Service optimization'],
-    customers: ['Target demographic', 'Business users', 'End consumers'],
-    competitors: ['Industry leader 1', 'Industry leader 2', 'Emerging competitor'],
-    valueProps: 'Innovative solution that solves key market problems efficiently',
-    channels: ['Digital marketing', 'Direct sales', 'Partnerships'],
-    revenue: ['Subscription fees', 'Transaction fees', 'Premium services'],
-    keyMetrics: ['User acquisition', 'Revenue growth', 'Customer satisfaction'],
-    hypotheses: [
-      { type: 'Desirability', text: 'Target customers have the problem we are solving', criticality: 'High', method: 'Customer interviews' },
-      { type: 'Viability', text: 'Business model generates sustainable revenue', criticality: 'High', method: 'Financial modeling' },
-      { type: 'Feasibility', text: 'Solution can be built with available technology', criticality: 'Medium', method: 'Technical validation' }
-    ],
+  const storytelling = currentIdea?.storytelling || {
+    names: ['StartupCo', 'InnovateTech', 'BusinessFlow', 'TechSolution', 'GrowthHub'],
     mission: 'To solve important problems and create value for our customers through innovative solutions.',
     vision: 'To become a leading company that transforms how people interact with technology.',
-    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference']
+    values: ['Innovation: Constantly pushing boundaries', 'Quality: Delivering excellent solutions', 'Impact: Making a meaningful difference'],
+    elevatorPitch: 'Our startup addresses key market needs through innovative technology solutions that create value for customers and drive business growth.'
   };
 
-  const data = industryData[industry] || defaultData;
-  
-  return {
-    name: data.names[0],
-    description: ideaText,
-    industry: industry,
-    leanCanvas: {
-      problems: data.problems,
-      solutions: data.solutions,
-      customers: data.customers,
-      competitors: data.competitors,
-      valueProposition: data.valueProps,
-      channels: data.channels,
-      revenue: data.revenue,
-      keyMetrics: data.keyMetrics
-    },
-    hypotheses: data.hypotheses,
-    storytelling: {
-      names: data.names,
-      mission: data.mission,
-      vision: data.vision,
-      values: data.values,
-      elevatorPitch: `Did you know that ${data.problems[0].toLowerCase()}? This represents a significant opportunity in the ${industry.replace('_', ' ')} industry.
-
-${data.names[0]} is ${ideaText} that ${data.solutions[0].toLowerCase()}. Unlike existing alternatives, we focus on ${data.valueProps.toLowerCase()}.
-
-Our team has deep expertise in this space, and we generate revenue through ${data.revenue[0].toLowerCase()}. In essence, we are revolutionizing how ${data.customers[0].toLowerCase()} interact with this market. Our vision is ${data.vision.toLowerCase()}`
-    },
-    created: new Date().toISOString()
-  };
-};
-
-// New Idea Form Component
-const NewIdeaSection = ({ onIdeaCreated }) => {
-  const [ideaText, setIdeaText] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generationStep, setGenerationStep] = useState(0);
-
-  const generationSteps = [
-    'Analyzing market opportunity...',
-    'Identifying target customers...',
-    'Researching competitors...',
-    'Creating business model...',
-    'Generating critical hypotheses...',
-    'Developing brand strategy...',
-    'Finalizing validation plan...'
-  ];
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!ideaText.trim()) return;
-
-    setIsGenerating(true);
-    setGenerationStep(0);
-    
-    // Simulate AI processing with step-by-step updates
-    const interval = setInterval(() => {
-      setGenerationStep(prev => {
-        if (prev < generationSteps.length - 1) {
-          return prev + 1;
-        } else {
-          clearInterval(interval);
-          // Generate comprehensive startup data
-          const newIdea = generateStartupContent(ideaText);
-          onIdeaCreated(newIdea);
-          setIsGenerating(false);
-          return prev;
-        }
-      });
-    }, 500);
-  };
+  const [selectedName, setSelectedName] = useState(storytelling.names[0]);
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Startup Idea</h1>
-        <p className="text-gray-600">Describe your startup idea and let our AI Entrepreneur in Residence help you validate it.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Storytelling Central</h1>
+        <p className="text-gray-600">Craft a compelling narrative for your brand, select your startup's name, and captivate audiences with an unforgettable pitch.</p>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="idea" className="block text-sm font-medium text-gray-700 mb-2">
-              What's your startup idea?
-            </label>
-            <textarea
-              id="idea"
-              value={ideaText}
-              onChange={(e) => setIdeaText(e.target.value)}
-              placeholder="e.g., AI-powered fitness app that creates personalized workout plans"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
-              rows={4}
-              required
-            />
+      <div className="grid grid-cols-3 gap-4">
+        <button
+          onClick={() => setActiveTab('brand-wheel')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'brand-wheel' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'brand-wheel' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>01</div>
+            <GeneratedBadge />
           </div>
+          <h3 className="font-semibold text-gray-900">Brand Wheel</h3>
+          <p className="text-sm text-gray-600">Define your brand positioning.</p>
+        </button>
 
-          <button
-            type="submit"
-            disabled={isGenerating || !ideaText.trim()}
-            className={`w-full px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
-              isGenerating || !ideaText.trim()
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-teal-600 text-white hover:bg-teal-700'
-            }`}
-          >
-            {isGenerating ? (
-              <div className="flex items-center justify-center">
-                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                Generating your comprehensive startup plan...
-              </div>
-            ) : (
-              '🚀 Generate Complete Startup Plan'
-            )}
-          </button>
-        </form>
+        <button
+          onClick={() => setActiveTab('startup-naming')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'startup-naming' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'startup-naming' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>02</div>
+            <GeneratedBadge />
+          </div>
+          <h3 className="font-semibold text-gray-900">Startup Naming</h3>
+          <p className="text-sm text-gray-600">Find a compelling name.</p>
+        </button>
 
-        {isGenerating && (
-          <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-4">AI Research Agent is analyzing your idea...</h3>
-            <div className="space-y-3">
-              {generationSteps.map((step, index) => (
-                <div key={index} className={`flex items-center text-sm ${
-                  index <= generationStep ? 'text-blue-800' : 'text-blue-400'
-                }`}>
-                  {index < generationStep ? (
-                    <span className="text-green-500 mr-2">✓</span>
-                  ) : index === generationStep ? (
-                    <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full mr-2"></div>
-                  ) : (
-                    <span className="text-gray-400 mr-2">○</span>
-                  )}
-                  {step}
+        <button
+          onClick={() => setActiveTab('elevator-pitch')}
+          className={`p-4 rounded-lg border text-left transition-all duration-200 ${
+            activeTab === 'elevator-pitch' 
+              ? 'border-teal-500 bg-teal-50' 
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              activeTab === 'elevator-pitch' ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600'
+            }`}>03</div>
+            <GeneratedBadge />
+          </div>
+          <h3 className="font-semibold text-gray-900">Elevator Pitch</h3>
+          <p className="text-sm text-gray-600">Craft your story.</p>
+        </button>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        {activeTab === 'brand-wheel' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Mission</h3>
+                  <p className="text-gray-700">{storytelling.mission}</p>
                 </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Vision</h3>
+                  <p className="text-gray-700">{storytelling.vision}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Brand Values</h3>
+                  <div className="space-y-2 text-gray-700">
+                    {storytelling.values.map((value, index) => (
+                      <p key={index}><strong>{value.split(':')[0]}:</strong>{value.split(':')[1]}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'startup-naming' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-5 gap-4">
+              {storytelling.names.map((name, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedName(name)}
+                  className={`p-4 border rounded-lg text-center transition-all duration-200 ${
+                    selectedName === name 
+                      ? 'border-teal-500 bg-teal-50 text-teal-700' 
+                      : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                  }`}
+                >
+                  {name}
+                </button>
               ))}
+            </div>
+            <div className="flex items-center justify-center py-8">
+              <div className="flex items-center space-x-3">
+                <span className="text-gray-600">Selected Name:</span>
+                <span className="text-xl font-semibold text-gray-900">{selectedName}</span>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'elevator-pitch' && (
+          <div className="bg-gray-50 rounded-lg p-6">
+            <p className="text-sm text-gray-600 italic mb-4">Here's your personalized elevator pitch:</p>
+            <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+              {storytelling.elevatorPitch}
             </div>
           </div>
         )}
@@ -1662,13 +1734,684 @@ const NewIdeaSection = ({ onIdeaCreated }) => {
   );
 };
 
+const AnalyticsDashboardSection = ({ currentIdea, userIdeas }) => {
+  const [timeRange, setTimeRange] = useState('7d');
+  
+  // Generate analytics data based on user ideas and current idea
+  const generateAnalyticsData = () => {
+    const industries = {};
+    const creationDates = {};
+    const hypothesesTypes = { Desirability: 0, Viability: 0, Feasibility: 0 };
+    
+    userIdeas.forEach(idea => {
+      // Industry distribution
+      industries[idea.industry] = (industries[idea.industry] || 0) + 1;
+      
+      // Creation timeline
+      const date = new Date(idea.created).toLocaleDateString();
+      creationDates[date] = (creationDates[date] || 0) + 1;
+      
+      // Hypotheses analysis
+      if (idea.hypotheses) {
+        idea.hypotheses.forEach(hypothesis => {
+          hypothesesTypes[hypothesis.type] = (hypothesesTypes[hypothesis.type] || 0) + 1;
+        });
+      }
+    });
+    
+    return { industries, creationDates, hypothesesTypes };
+  };
+  
+  const { industries, creationDates, hypothesesTypes } = generateAnalyticsData();
+  
+  // Industry distribution chart data
+  const industryChartData = {
+    labels: Object.keys(industries),
+    datasets: [{
+      label: 'Ideas by Industry',
+      data: Object.values(industries),
+      backgroundColor: [
+        '#14b8a6', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
+        '#06b6d4', '#10b981', '#f97316', '#ec4899', '#6366f1'
+      ],
+      borderWidth: 0,
+    }]
+  };
+  
+  // Timeline chart data
+  const timelineData = Object.entries(creationDates).map(([date, count]) => ({
+    date,
+    ideas: count
+  }));
+  
+  // Hypotheses radar chart data
+  const hypothesesRadarData = [
+    {
+      subject: 'Desirability',
+      A: hypothesesTypes.Desirability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Viability', 
+      A: hypothesesTypes.Viability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Feasibility',
+      A: hypothesesTypes.Feasibility,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    }
+  ];
+  
+  // Progress metrics for current idea
+  const currentIdeaMetrics = currentIdea ? {
+    completeness: Math.round((
+      (currentIdea.leanCanvas?.problems?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.solutions?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.customers?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.valueProposition ? 1 : 0) +
+      (currentIdea.hypotheses?.length > 0 ? 1 : 0) +
+      (currentIdea.storytelling?.elevatorPitch ? 1 : 0)
+    ) / 6 * 100),
+    sections: {
+      'Lean Canvas': currentIdea.leanCanvas ? 90 : 0,
+      'Hypotheses': currentIdea.hypotheses?.length > 0 ? 85 : 0,
+      'Storytelling': currentIdea.storytelling ? 75 : 0,
+      'Validation': 45
+    }
+  } : null;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
+          <p className="text-gray-600">Track your startup development progress and insights</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <select 
+            value={timeRange} 
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+          >
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="90d">Last 90 days</option>
+            <option value="all">All time</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-teal-100 rounded-lg">
+              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Ideas</p>
+              <p className="text-2xl font-bold text-gray-900">{userIdeas.length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h3M9 7h6m-6 4h6m-2 4h2M9 15h1" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Industries</p>
+              <p className="text-2xl font-bold text-gray-900">{Object.keys(industries).length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Avg. Completeness</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {currentIdeaMetrics ? currentIdeaMetrics.completeness : 0}%
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Hypotheses</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {Object.values(hypothesesTypes).reduce((a, b) => a + b, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Industry Distribution */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ideas by Industry</h3>
+          {Object.keys(industries).length > 0 ? (
+            <div className="h-64">
+              <Doughnut 
+                data={industryChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No data available</p>
+                <p className="text-sm">Create some ideas to see analytics</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Idea Creation Timeline */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Idea Creation Timeline</h3>
+          {timelineData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={timelineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <RechartsTooltip />
+                <Area type="monotone" dataKey="ideas" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No timeline data</p>
+                <p className="text-sm">Create ideas over time to see trends</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Current Idea Analysis */}
+      {currentIdea && currentIdeaMetrics && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Completeness Progress */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Current Idea: {currentIdea.name} - Completeness
+            </h3>
+            <div className="space-y-4">
+              {Object.entries(currentIdeaMetrics.sections).map(([section, percentage]) => (
+                <div key={section}>
+                  <div className="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                    <span>{section}</span>
+                    <span>{percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-teal-600 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Hypotheses Distribution */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Hypotheses Distribution</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <RadarChart data={hypothesesRadarData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Radar name="Hypotheses" dataKey="A" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Insights and Recommendations */}
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">📊 Insights & Recommendations</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-medium text-blue-900 mb-2">🎯 Focus Area</h4>
+            <p className="text-sm text-blue-800">
+              {Object.keys(industries).length > 1 
+                ? "You're exploring multiple industries - consider focusing on your strongest domain first."
+                : "Great focus on a single industry domain for deeper expertise."}
+            </p>
+          </div>
+          <div className="p-4 bg-green-50 rounded-lg">
+            <h4 className="font-medium text-green-900 mb-2">✅ Progress</h4>
+            <p className="text-sm text-green-800">
+              {userIdeas.length === 0 
+                ? "Start by creating your first startup idea to begin validation."
+                : `You've created ${userIdeas.length} idea${userIdeas.length > 1 ? 's' : ''}. Keep developing your concepts!`}
+            </p>
+          </div>
+          <div className="p-4 bg-purple-50 rounded-lg">
+            <h4 className="font-medium text-purple-900 mb-2">🚀 Next Steps</h4>
+            <p className="text-sm text-purple-800">
+              {currentIdeaMetrics?.completeness < 50 
+                ? "Complete more sections of your current idea for better validation."
+                : "Your idea is well-developed. Consider starting validation experiments."}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AnalyticsDashboardSection = ({ currentIdea, userIdeas }) => {
+  const [timeRange, setTimeRange] = useState('7d');
+  
+  // Generate analytics data based on user ideas and current idea
+  const generateAnalyticsData = () => {
+    const industries = {};
+    const creationDates = {};
+    const hypothesesTypes = { Desirability: 0, Viability: 0, Feasibility: 0 };
+    
+    userIdeas.forEach(idea => {
+      // Industry distribution
+      industries[idea.industry] = (industries[idea.industry] || 0) + 1;
+      
+      // Creation timeline
+      const date = new Date(idea.created).toLocaleDateString();
+      creationDates[date] = (creationDates[date] || 0) + 1;
+      
+      // Hypotheses analysis
+      if (idea.hypotheses) {
+        idea.hypotheses.forEach(hypothesis => {
+          hypothesesTypes[hypothesis.type] = (hypothesesTypes[hypothesis.type] || 0) + 1;
+        });
+      }
+    });
+    
+    return { industries, creationDates, hypothesesTypes };
+  };
+  
+  const { industries, creationDates, hypothesesTypes } = generateAnalyticsData();
+  
+  // Industry distribution chart data
+  const industryChartData = {
+    labels: Object.keys(industries),
+    datasets: [{
+      label: 'Ideas by Industry',
+      data: Object.values(industries),
+      backgroundColor: [
+        '#14b8a6', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
+        '#06b6d4', '#10b981', '#f97316', '#ec4899', '#6366f1'
+      ],
+      borderWidth: 0,
+    }]
+  };
+  
+  // Timeline chart data
+  const timelineData = Object.entries(creationDates).map(([date, count]) => ({
+    date,
+    ideas: count
+  }));
+  
+  // Hypotheses radar chart data
+  const hypothesesRadarData = [
+    {
+      subject: 'Desirability',
+      A: hypothesesTypes.Desirability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Viability', 
+      A: hypothesesTypes.Viability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Feasibility',
+      A: hypothesesTypes.Feasibility,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    }
+  ];
+  
+  // Progress metrics for current idea
+  const currentIdeaMetrics = currentIdea ? {
+    completeness: Math.round((
+      (currentIdea.leanCanvas?.problems?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.solutions?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.customers?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.valueProposition ? 1 : 0) +
+      (currentIdea.hypotheses?.length > 0 ? 1 : 0) +
+      (currentIdea.storytelling?.elevatorPitch ? 1 : 0)
+    ) / 6 * 100),
+    sections: {
+      'Lean Canvas': currentIdea.leanCanvas ? 90 : 0,
+      'Hypotheses': currentIdea.hypotheses?.length > 0 ? 85 : 0,
+      'Storytelling': currentIdea.storytelling ? 75 : 0,
+      'Validation': 45
+    }
+  } : null;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
+          <p className="text-gray-600">Track your startup development progress and insights</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <select 
+            value={timeRange} 
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+          >
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="90d">Last 90 days</option>
+            <option value="all">All time</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-teal-100 rounded-lg">
+              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Ideas</p>
+              <p className="text-2xl font-bold text-gray-900">{userIdeas.length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h3M9 7h6m-6 4h6m-2 4h2M9 15h1" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Industries</p>
+              <p className="text-2xl font-bold text-gray-900">{Object.keys(industries).length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Avg. Completeness</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {currentIdeaMetrics ? currentIdeaMetrics.completeness : 0}%
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Hypotheses</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {Object.values(hypothesesTypes).reduce((a, b) => a + b, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Industry Distribution */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ideas by Industry</h3>
+          {Object.keys(industries).length > 0 ? (
+            <div className="h-64">
+              <Doughnut 
+                data={industryChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No data available</p>
+                <p className="text-sm">Create some ideas to see analytics</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Idea Creation Timeline */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Idea Creation Timeline</h3>
+          {timelineData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={timelineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <RechartsTooltip />
+                <Area type="monotone" dataKey="ideas" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No timeline data</p>
+                <p className="text-sm">Create ideas over time to see trends</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Current Idea Analysis */}
+      {currentIdea && currentIdeaMetrics && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Completeness Progress */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Current Idea: {currentIdea.name} - Completeness
+            </h3>
+            <div className="space-y-4">
+              {Object.entries(currentIdeaMetrics.sections).map(([section, percentage]) => (
+                <div key={section}>
+                  <div className="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                    <span>{section}</span>
+                    <span>{percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-teal-600 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Hypotheses Distribution */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Hypotheses Distribution</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <RadarChart data={hypothesesRadarData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Radar name="Hypotheses" dataKey="A" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Insights and Recommendations */}
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">📊 Insights & Recommendations</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-medium text-blue-900 mb-2">🎯 Focus Area</h4>
+            <p className="text-sm text-blue-800">
+              {Object.keys(industries).length > 1 
+                ? "You're exploring multiple industries - consider focusing on your strongest domain first."
+                : "Great focus on a single industry domain for deeper expertise."}
+            </p>
+          </div>
+          <div className="p-4 bg-green-50 rounded-lg">
+            <h4 className="font-medium text-green-900 mb-2">✅ Progress</h4>
+            <p className="text-sm text-green-800">
+              {userIdeas.length === 0 
+                ? "Start by creating your first startup idea to begin validation."
+                : `You've created ${userIdeas.length} idea${userIdeas.length > 1 ? 's' : ''}. Keep developing your concepts!`}
+            </p>
+          </div>
+          <div className="p-4 bg-purple-50 rounded-lg">
+            <h4 className="font-medium text-purple-900 mb-2">🚀 Next Steps</h4>
+            <p className="text-sm text-purple-800">
+              {currentIdeaMetrics?.completeness < 50 
+                ? "Complete more sections of your current idea for better validation."
+                : "Your idea is well-developed. Consider starting validation experiments."}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ConnectDashboardSection = () => {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
+        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners.</p>
+      </div>
+      <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
+        <div className="text-6xl mb-4">🤝</div>
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">Connect Dashboard</h3>
+        <p className="text-gray-600">Network with mentors, investors, and partners to accelerate your startup journey.</p>
+      </div>
+    </div>
+  );
+};
+
 // Main Workspace Component
 export const ZigZagWorkspace = ({ onLogout }) => {
   const [currentSection, setCurrentSection] = useState('startup-idea');
-  const [currentIdea, setCurrentIdea] = useState({
-    name: 'TradeHive',
-    description: 'social trading platform'
-  });
+  const [currentIdea, setCurrentIdea] = useState(null);
+  const [userIdeas, setUserIdeas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load user ideas on component mount
+  useEffect(() => {
+    loadUserIdeas();
+  }, []);
+
+  const loadUserIdeas = async () => {
+    try {
+      setLoading(true);
+      const ideas = await apiService.getStartupIdeas();
+      setUserIdeas(ideas);
+      
+      // Set the first idea as current if available, otherwise use default
+      if (ideas.length > 0) {
+        setCurrentIdea(ideas[0]);
+      } else {
+        // Default idea for new users
+        setCurrentIdea({
+          id: 'default',
+          name: 'TradeHive',
+          description: 'social trading platform',
+          industry: 'trading',
+          leanCanvas: {
+            problems: ['Difficulty making informed trading decisions', 'Lack of transparency in financial markets'],
+            solutions: ['Social trading platform', 'Real-time market insights'],
+            customers: ['Millennial investors', 'Retirement planners', 'Day traders', 'Financial enthusiast students'],
+            competitors: ['eToro', 'Robinhood', 'TradingView', 'Interactive Brokers', 'ZuluTrade', 'CopyMe', 'NAGA'],
+            valueProposition: 'Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.',
+            channels: ['Mobile app', 'Financial blogs', 'Social media', 'Trading forums'],
+            revenue: ['Trading commissions', 'Premium subscriptions', 'Copy-trading fees'],
+            keyMetrics: ['Active traders', 'Trading volume', 'Platform assets', 'User retention rates']
+          },
+          hypotheses: [
+            { type: 'Desirability', text: 'Traders want to share and copy successful trading strategies', criticality: 'High', method: 'Trading community survey' },
+            { type: 'Viability', text: 'Users will pay for premium trading insights and tools', criticality: 'High', method: 'Freemium conversion test' },
+            { type: 'Feasibility', text: 'Real-time data feeds can be integrated cost-effectively', criticality: 'High', method: 'Technical feasibility study' }
+          ],
+          storytelling: {
+            names: ['TradeHive', 'InvestorHub', 'TradingEdge', 'MarketMaster', 'FinanceFlow'],
+            mission: 'Democratize trading by creating a collaborative platform where investors can learn, share, and grow together.',
+            vision: 'To build the largest community of transparent, collaborative traders who empower each other to achieve financial success.',
+            values: ['Transparency: Open sharing of trading strategies and results', 'Education: Helping traders learn and improve', 'Community: Building supportive trading relationships'],
+            elevatorPitch: `Did you know that traders and investors struggle to find a collaborative community to share knowledge and insights? This represents a significant opportunity in the financial markets industry.\n\nTradeHive is a social trading platform that connects global traders, enabling them to collaborate, learn from each other, and enhance their financial knowledge. Unlike other alternatives, we focus on building a strong community-driven platform where users can interact, share tips, and empower each other.\n\nOur team comprises experienced entrepreneurs and finance experts, and we generate revenue through subscription services and premium features. In essence, we are the "LinkedIn for traders," revolutionizing the way people engage in financial markets.`
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load user ideas:', err);
+      setError('Failed to load ideas. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSectionChange = (section) => {
     setCurrentSection(section);
@@ -1678,10 +2421,130 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     setCurrentSection('new-idea');
   };
 
-  const handleIdeaCreated = (newIdea) => {
-    setCurrentIdea(newIdea);
-    setCurrentSection('startup-idea');
+  const handleIdeaCreated = async (newIdea) => {
+    try {
+      // Save the new idea to the backend
+      const savedIdea = await apiService.createStartupIdea({
+        name: newIdea.name,
+        description: newIdea.description,
+        industry: newIdea.industry,
+        leanCanvas: newIdea.leanCanvas,
+        hypotheses: newIdea.hypotheses,
+        storytelling: newIdea.storytelling
+      });
+      
+      // Update local state
+      setCurrentIdea(savedIdea);
+      setUserIdeas(prev => [savedIdea, ...prev]);
+      setCurrentSection('startup-idea');
+    } catch (err) {
+      console.error('Failed to save new idea:', err);
+      setError('Failed to save idea. Please try again.');
+      // Still update local state for now
+      setCurrentIdea(newIdea);
+      setCurrentSection('startup-idea');
+    }
   };
+
+  const handleIdeaSelect = async (ideaId) => {
+    try {
+      const idea = await apiService.getStartupIdea(ideaId);
+      setCurrentIdea(idea);
+      setCurrentSection('startup-idea');
+    } catch (err) {
+      console.error('Failed to load idea:', err);
+      setError('Failed to load idea. Please try again.');
+    }
+  };
+
+  const handleIdeaUpdate = async (updateData) => {
+    if (!currentIdea || currentIdea.id === 'default') return;
+    
+    try {
+      const updatedIdea = await apiService.updateStartupIdea(currentIdea.id, updateData);
+      setCurrentIdea(updatedIdea);
+      
+      // Update in user ideas list
+      setUserIdeas(prev => 
+        prev.map(idea => idea.id === updatedIdea.id ? updatedIdea : idea)
+      );
+    } catch (err) {
+      console.error('Failed to update idea:', err);
+      setError('Failed to update idea. Please try again.');
+    }
+  };
+
+  const handleIdeaDelete = async (ideaId) => {
+    try {
+      await apiService.deleteStartupIdea(ideaId);
+      
+      // Remove from local state
+      setUserIdeas(prev => prev.filter(idea => idea.id !== ideaId));
+      
+      // If deleted idea was current, switch to first available idea
+      if (currentIdea && currentIdea.id === ideaId) {
+        const remainingIdeas = userIdeas.filter(idea => idea.id !== ideaId);
+        if (remainingIdeas.length > 0) {
+          setCurrentIdea(remainingIdeas[0]);
+        } else {
+          setCurrentSection('new-idea');
+        }
+      }
+    } catch (err) {
+      console.error('Failed to delete idea:', err);
+      setError('Failed to delete idea. Please try again.');
+    }
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your startup ideas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">⚠️</div>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button 
+            onClick={() => {
+              setError(null);
+              loadUserIdeas();
+            }}
+            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show message if no current idea
+  if (!currentIdea) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-gray-400 text-4xl mb-4">💡</div>
+          <p className="text-gray-600 mb-4">No startup ideas yet. Create your first one!</p>
+          <button 
+            onClick={handleNewIdea}
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            🚀 Create New Idea
+          </button>
+        </div>
+      </div>
+    );
 
   const renderMainContent = () => {
     switch (currentSection) {
@@ -1722,462 +2585,3 @@ export const ZigZagWorkspace = ({ onLogout }) => {
     </div>
   );
 };
-
-const ConnectDashboardSection = () => {
-  const mentors = [
-    {
-      name: 'Jenny Lawton',
-      title: 'Executive VP @',
-      company: 'Roister',
-      expertise: 'Business Leadership',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Khaled Nasr',
-      title: 'GP @ Interwest',
-      company: 'Partners',
-      expertise: 'Investment',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Georges Khoury',
-      title: 'Software Engineer',
-      company: '(Ex Uber)',
-      expertise: 'Product Management',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Mira Murati',
-      title: 'CTO @ OpenAI',
-      company: '',
-      expertise: 'AI',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Scott Ford',
-      title: 'Partner @ Zigzag',
-      company: '',
-      expertise: 'Operations',
-      image: '/api/placeholder/120/120'
-    }
-  ];
-
-  const investors = [
-    { name: 'Techstars', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Berkeley Skydeck', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'SparkLabs', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Band of Angels', type: 'Angel Network', logo: '/api/placeholder/120/120' },
-    { name: 'Y Combinator', type: 'Accelerator', logo: '/api/placeholder/120/120' }
-  ];
-
-  const perks = [
-    {
-      name: 'Carta',
-      category: 'Equity Management',
-      benefit: 'Start for Free',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Dropbox',
-      category: 'Cloud Storage',
-      benefit: 'Up to 50% Discount',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Google for Startups',
-      category: 'Cloud Services',
-      benefit: 'Up to $200,000',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Notion',
-      category: 'Knowledge Management',
-      benefit: '6 Months Free',
-      logo: '/api/placeholder/120/60'
-    }
-  ];
-
-  const ComingSoonBadge = () => (
-    <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
-      🔒 Coming Soon
-    </span>
-  );
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
-        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners tailored to your startup idea.</p>
-      </div>
-
-      {/* Connect with Relevant Mentors */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Mentors</h2>
-              <ComingSoonBadge />
-            </div>
-            <p className="text-gray-600">Harness industry wisdom for strategic navigation.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {mentors.map((mentor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-3 overflow-hidden">
-                <img 
-                  src={mentor.image} 
-                  alt={mentor.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-xl font-semibold" style={{display: 'none'}}>
-                  {mentor.name.split(' ').map(n => n[0]).join('')}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{mentor.name}</h3>
-              <p className="text-xs text-gray-600">{mentor.title}</p>
-              <p className="text-xs text-gray-600">{mentor.company}</p>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {mentor.expertise}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Connect with Relevant Investors & Accelerators */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Investors & Accelerators</h2>
-              <ComingSoonBadge />
-            </div>
-            <p className="text-gray-600">Secure funding, networks, and growth catalysts.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {investors.map((investor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={investor.logo} 
-                  alt={investor.name}
-                  className="w-full h-full object-contain p-2"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold text-center p-2" style={{display: 'none'}}>
-                  {investor.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{investor.name}</h3>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {investor.type}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Access Relevant Perks */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Relevant Perks</h2>
-          <p className="text-gray-600">Capitalize on cost-saving opportunities and benefits.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {perks.map((perk, index) => (
-            <div key={index} className="text-center border border-gray-200 rounded-lg p-4">
-              <div className="w-20 h-12 bg-white mx-auto mb-3 flex items-center justify-center overflow-hidden border border-gray-100 rounded">
-                <img 
-                  src={perk.logo} 
-                  alt={perk.name}
-                  className="max-w-full max-h-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-600 text-xs font-semibold text-center" style={{display: 'none'}}>
-                  {perk.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-1">{perk.name}</h3>
-              <p className="text-xs text-gray-600 mb-2">{perk.category}</p>
-              <div className="text-xs">
-                {perk.benefit.includes('Free') ? (
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : perk.benefit.includes('Discount') ? (
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : (
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-          
-          {/* Click Here for More */}
-          <div className="text-center border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-              <span className="text-blue-600 text-sm">+</span>
-            </div>
-            <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
-              Click Here for More
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ConnectDashboardSection = () => {
-  const mentors = [
-    {
-      name: 'Jenny Lawton',
-      title: 'Executive VP @',
-      company: 'Roister',
-      expertise: 'Business Leadership',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Khaled Nasr',
-      title: 'GP @ Interwest',
-      company: 'Partners',
-      expertise: 'Investment',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Georges Khoury',
-      title: 'Software Engineer',
-      company: '(Ex Uber)',
-      expertise: 'Product Management',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Mira Murati',
-      title: 'CTO @ OpenAI',
-      company: '',
-      expertise: 'AI',
-      image: '/api/placeholder/120/120'
-    },
-    {
-      name: 'Scott Ford',
-      title: 'Partner @ Zigzag',
-      company: '',
-      expertise: 'Operations',
-      image: '/api/placeholder/120/120'
-    }
-  ];
-
-  const investors = [
-    { name: 'Techstars', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Berkeley Skydeck', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'SparkLabs', type: 'Accelerator', logo: '/api/placeholder/120/120' },
-    { name: 'Band of Angels', type: 'Angel Network', logo: '/api/placeholder/120/120' },
-    { name: 'Y Combinator', type: 'Accelerator', logo: '/api/placeholder/120/120' }
-  ];
-
-  const perks = [
-    {
-      name: 'Carta',
-      category: 'Equity Management',
-      benefit: 'Start for Free',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Dropbox',
-      category: 'Cloud Storage',
-      benefit: 'Up to 50% Discount',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Google for Startups',
-      category: 'Cloud Services',
-      benefit: 'Up to $200,000',
-      logo: '/api/placeholder/120/60'
-    },
-    {
-      name: 'Notion',
-      category: 'Knowledge Management',
-      benefit: '6 Months Free',
-      logo: '/api/placeholder/120/60'
-    }
-  ];
-
-  const ComingSoonBadge = () => (
-    <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
-      🔒 Coming Soon
-    </span>
-  );
-
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
-        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners tailored to your startup idea.</p>
-      </div>
-
-      {/* Connect with Relevant Mentors */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Mentors</h2>
-              <ComingSoonBadge />
-            </div>
-            <p className="text-gray-600">Harness industry wisdom for strategic navigation.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {mentors.map((mentor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-3 overflow-hidden">
-                <img 
-                  src={mentor.image} 
-                  alt={mentor.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-xl font-semibold" style={{display: 'none'}}>
-                  {mentor.name.split(' ').map(n => n[0]).join('')}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{mentor.name}</h3>
-              <p className="text-xs text-gray-600">{mentor.title}</p>
-              <p className="text-xs text-gray-600">{mentor.company}</p>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {mentor.expertise}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Connect with Relevant Investors & Accelerators */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Investors & Accelerators</h2>
-              <ComingSoonBadge />
-            </div>
-            <p className="text-gray-600">Secure funding, networks, and growth catalysts.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {investors.map((investor, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={investor.logo} 
-                  alt={investor.name}
-                  className="w-full h-full object-contain p-2"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold text-center p-2" style={{display: 'none'}}>
-                  {investor.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{investor.name}</h3>
-              <div className="mt-2">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                  {investor.type}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Access Relevant Perks */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Relevant Perks</h2>
-          <p className="text-gray-600">Capitalize on cost-saving opportunities and benefits.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {perks.map((perk, index) => (
-            <div key={index} className="text-center border border-gray-200 rounded-lg p-4">
-              <div className="w-20 h-12 bg-white mx-auto mb-3 flex items-center justify-center overflow-hidden border border-gray-100 rounded">
-                <img 
-                  src={perk.logo} 
-                  alt={perk.name}
-                  className="max-w-full max-h-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-600 text-xs font-semibold text-center" style={{display: 'none'}}>
-                  {perk.name}
-                </div>
-              </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-1">{perk.name}</h3>
-              <p className="text-xs text-gray-600 mb-2">{perk.category}</p>
-              <div className="text-xs">
-                {perk.benefit.includes('Free') ? (
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : perk.benefit.includes('Discount') ? (
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                ) : (
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full font-medium">
-                    {perk.benefit}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-          
-          {/* Click Here for More */}
-          <div className="text-center border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-              <span className="text-blue-600 text-sm">+</span>
-            </div>
-            <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
-              Click Here for More
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
