@@ -325,7 +325,7 @@ class ZigZagBackendTester:
         try:
             # Step 1: Generate content
             print("\nStep 1: Generating AI content")
-            description = "AI-powered fitness app for personalized workouts"
+            description = "AI-powered personal finance app for Gen Z users"
             
             generate_response = requests.post(
                 f"{API_BASE_URL}/generate-startup-content",
@@ -367,6 +367,31 @@ class ZigZagBackendTester:
             assert retrieved_idea["name"] == new_idea["name"], "Name mismatch"
             assert retrieved_idea["description"] == new_idea["description"], "Description mismatch"
             assert retrieved_idea["industry"] == new_idea["industry"], "Industry mismatch"
+            
+            # Step 4: Update the idea
+            print("\nStep 4: Updating the idea")
+            
+            update_data = {
+                "name": f"{retrieved_idea['name']} - Updated",
+                "description": f"{retrieved_idea['description']} - Updated with new features"
+            }
+            
+            update_response = requests.put(f"{API_BASE_URL}/startup-ideas/{idea_id}", json=update_data)
+            assert update_response.status_code == 200, f"Expected status code 200, got {update_response.status_code}"
+            
+            updated_idea = update_response.json()
+            assert updated_idea["name"] == update_data["name"], "Updated name mismatch"
+            assert updated_idea["description"] == update_data["description"], "Updated description mismatch"
+            
+            # Step 5: Verify data persistence
+            print("\nStep 5: Verifying data persistence")
+            
+            verify_response = requests.get(f"{API_BASE_URL}/startup-ideas/{idea_id}")
+            assert verify_response.status_code == 200, f"Expected status code 200, got {verify_response.status_code}"
+            
+            verified_idea = verify_response.json()
+            assert verified_idea["name"] == update_data["name"], "Persisted name mismatch"
+            assert verified_idea["description"] == update_data["description"], "Persisted description mismatch"
             
             print("✅ End-to-end flow test passed")
         except Exception as e:
