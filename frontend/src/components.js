@@ -615,7 +615,10 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
   };
 
   const navigate = (section) => {
-    window.location.hash = section;
+    // Navigate to the lean canvas details section
+    if (typeof onNavigate === 'function') {
+      onNavigate(section);
+    }
   };
 
   return (
