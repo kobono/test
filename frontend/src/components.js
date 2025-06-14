@@ -1430,6 +1430,9 @@ const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
           <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
           <GeneratedBadge />
         </div>
+        <div className="flex items-center space-x-3">
+          <ExportButton currentIdea={currentIdea} />
+        </div>
       </div>
 
       {/* Startup Idea Card */}
