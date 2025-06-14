@@ -1575,9 +1575,14 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
-        <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
+          <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <ExportButton currentIdea={currentIdea} />
+        </div>
       </div>
 
       {/* Lean Canvas Overview */}
