@@ -1719,3 +1719,232 @@ export const ZigZagWorkspace = ({ onLogout }) => {
   );
 };
 
+const ConnectDashboardSection = () => {
+  const mentors = [
+    {
+      name: 'Jenny Lawton',
+      title: 'Executive VP @',
+      company: 'Roister',
+      expertise: 'Business Leadership',
+      image: '/api/placeholder/120/120'
+    },
+    {
+      name: 'Khaled Nasr',
+      title: 'GP @ Interwest',
+      company: 'Partners',
+      expertise: 'Investment',
+      image: '/api/placeholder/120/120'
+    },
+    {
+      name: 'Georges Khoury',
+      title: 'Software Engineer',
+      company: '(Ex Uber)',
+      expertise: 'Product Management',
+      image: '/api/placeholder/120/120'
+    },
+    {
+      name: 'Mira Murati',
+      title: 'CTO @ OpenAI',
+      company: '',
+      expertise: 'AI',
+      image: '/api/placeholder/120/120'
+    },
+    {
+      name: 'Scott Ford',
+      title: 'Partner @ Zigzag',
+      company: '',
+      expertise: 'Operations',
+      image: '/api/placeholder/120/120'
+    }
+  ];
+
+  const investors = [
+    { name: 'Techstars', type: 'Accelerator', logo: '/api/placeholder/120/120' },
+    { name: 'Berkeley Skydeck', type: 'Accelerator', logo: '/api/placeholder/120/120' },
+    { name: 'SparkLabs', type: 'Accelerator', logo: '/api/placeholder/120/120' },
+    { name: 'Band of Angels', type: 'Angel Network', logo: '/api/placeholder/120/120' },
+    { name: 'Y Combinator', type: 'Accelerator', logo: '/api/placeholder/120/120' }
+  ];
+
+  const perks = [
+    {
+      name: 'Carta',
+      category: 'Equity Management',
+      benefit: 'Start for Free',
+      logo: '/api/placeholder/120/60'
+    },
+    {
+      name: 'Dropbox',
+      category: 'Cloud Storage',
+      benefit: 'Up to 50% Discount',
+      logo: '/api/placeholder/120/60'
+    },
+    {
+      name: 'Google for Startups',
+      category: 'Cloud Services',
+      benefit: 'Up to $200,000',
+      logo: '/api/placeholder/120/60'
+    },
+    {
+      name: 'Notion',
+      category: 'Knowledge Management',
+      benefit: '6 Months Free',
+      logo: '/api/placeholder/120/60'
+    }
+  ];
+
+  const ComingSoonBadge = () => (
+    <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
+      🔒 Coming Soon
+    </span>
+  );
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Dashboard</h1>
+        <p className="text-gray-600">Progress in your validation journey to unlock a curated list of mentors, investors and potential partners tailored to your startup idea.</p>
+      </div>
+
+      {/* Connect with Relevant Mentors */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center space-x-3 mb-2">
+              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Mentors</h2>
+              <ComingSoonBadge />
+            </div>
+            <p className="text-gray-600">Harness industry wisdom for strategic navigation.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {mentors.map((mentor, index) => (
+            <div key={index} className="text-center">
+              <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-3 overflow-hidden">
+                <img 
+                  src={mentor.image} 
+                  alt={mentor.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-xl font-semibold" style={{display: 'none'}}>
+                  {mentor.name.split(' ').map(n => n[0]).join('')}
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm">{mentor.name}</h3>
+              <p className="text-xs text-gray-600">{mentor.title}</p>
+              <p className="text-xs text-gray-600">{mentor.company}</p>
+              <div className="mt-2">
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  {mentor.expertise}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Connect with Relevant Investors & Accelerators */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center space-x-3 mb-2">
+              <h2 className="text-xl font-semibold text-gray-900">Connect with Relevant Investors & Accelerators</h2>
+              <ComingSoonBadge />
+            </div>
+            <p className="text-gray-600">Secure funding, networks, and growth catalysts.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {investors.map((investor, index) => (
+            <div key={index} className="text-center">
+              <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={investor.logo} 
+                  alt={investor.name}
+                  className="w-full h-full object-contain p-2"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-semibold text-center p-2" style={{display: 'none'}}>
+                  {investor.name}
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm">{investor.name}</h3>
+              <div className="mt-2">
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  {investor.type}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Access Relevant Perks */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Relevant Perks</h2>
+          <p className="text-gray-600">Capitalize on cost-saving opportunities and benefits.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {perks.map((perk, index) => (
+            <div key={index} className="text-center border border-gray-200 rounded-lg p-4">
+              <div className="w-20 h-12 bg-white mx-auto mb-3 flex items-center justify-center overflow-hidden border border-gray-100 rounded">
+                <img 
+                  src={perk.logo} 
+                  alt={perk.name}
+                  className="max-w-full max-h-full object-contain"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-600 text-xs font-semibold text-center" style={{display: 'none'}}>
+                  {perk.name}
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm mb-1">{perk.name}</h3>
+              <p className="text-xs text-gray-600 mb-2">{perk.category}</p>
+              <div className="text-xs">
+                {perk.benefit.includes('Free') ? (
+                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full font-medium">
+                    {perk.benefit}
+                  </span>
+                ) : perk.benefit.includes('Discount') ? (
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
+                    {perk.benefit}
+                  </span>
+                ) : (
+                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full font-medium">
+                    {perk.benefit}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+          
+          {/* Click Here for More */}
+          <div className="text-center border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+              <span className="text-blue-600 text-sm">+</span>
+            </div>
+            <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
+              Click Here for More
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
