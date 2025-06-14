@@ -296,7 +296,10 @@ export const ZigZagWorkspace = ({ onLogout }) => {
 
         {/* Navigation */}
         <div className="p-4">
-          <button className="w-full flex items-center px-4 py-3 bg-blue-800 rounded-lg transition-colors duration-200">
+          <button
+            onClick={handleNewIdea}
+            className="w-full flex items-center px-4 py-3 bg-blue-800 hover:bg-blue-700 rounded-lg transition-colors duration-200"
+          >
             <span className="mr-3">💡</span>
             <span className="font-medium">New Idea</span>
           </button>
