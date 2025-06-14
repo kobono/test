@@ -726,11 +726,177 @@ const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
   );
 };
 
-// Business Prototype Section - Matching screenshot 2
+// Business Prototype Section - Matching screenshot 2 and detailed Lean Canvas
 const BusinessPrototypeSection = ({ currentIdea }) => {
+  const [showDetails, setShowDetails] = useState(false);
+  
   if (!currentIdea || !currentIdea.leanCanvas) return null;
 
   const leanCanvas = currentIdea.leanCanvas;
+
+  if (showDetails) {
+    return (
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">Lean Canvas</h1>
+            <div className="flex items-center space-x-2">
+              <GeneratedBadge />
+              <button 
+                onClick={() => setShowDetails(false)}
+                className="text-sm text-gray-600 hover:text-gray-800"
+              >
+                ← Back to Overview
+              </button>
+            </div>
+            <p className="text-gray-600 text-sm mt-2">A streamlined one-page business plan template that succinctly captures your startup's vision.</p>
+          </div>
+          <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            <span className="mr-2">🔍</span>
+            Details
+          </button>
+        </div>
+
+        {/* Detailed Lean Canvas */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="grid grid-cols-12 gap-3">
+            {/* Row 1 */}
+            <div className="col-span-3 bg-blue-50 border border-blue-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-blue-900 mb-3 text-sm flex items-center">
+                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">B</span>
+                Problem
+              </h3>
+              <div className="space-y-2">
+                <div className="text-xs text-blue-800">• Difficulty in making informed trading decisions for new investors</div>
+                <div className="text-xs text-blue-800">• Lack of transparency and trust in financial markets</div>
+              </div>
+            </div>
+
+            <div className="col-span-3 bg-green-50 border border-green-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-green-900 mb-3 text-sm flex items-center">
+                <span className="bg-green-200 text-green-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">D</span>
+                Solution
+              </h3>
+              <div className="space-y-2">
+                <div className="text-xs text-green-800">• Real-time social feed for trading insights</div>
+                <div className="text-xs text-green-800">• Copy-trading feature that replicates top traders' actions</div>
+              </div>
+            </div>
+
+            <div className="col-span-3 bg-purple-50 border border-purple-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-purple-900 mb-3 text-sm flex items-center">
+                <span className="bg-purple-200 text-purple-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">E</span>
+                Unique Value Proposition
+              </h3>
+              <div className="text-xs text-purple-800 font-medium mb-3">Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.</div>
+            </div>
+
+            <div className="col-span-3 bg-red-50 border border-red-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-red-900 mb-3 text-sm flex items-center">
+                <span className="bg-red-200 text-red-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">A</span>
+                Customer Segments
+              </h3>
+              <div className="space-y-2">
+                <div className="text-xs text-red-800">• Millennial Investors</div>
+                <div className="text-xs text-red-800">• Retirement Planners</div>
+                <div className="text-xs text-red-800">• Aspiring Full-time Traders</div>
+                <div className="text-xs text-red-800">• Financial Enthusiast Students</div>
+              </div>
+              
+              <div className="mt-4 pt-3 border-t border-red-200">
+                <h4 className="font-semibold text-red-900 mb-2 text-xs">Early Adopters</h4>
+                <div className="space-y-1">
+                  <div className="text-xs text-red-800">• Young traders savvy with social media</div>
+                  <div className="text-xs text-red-800">• Investors</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2 */}
+            <div className="col-span-3 bg-teal-50 border border-teal-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-teal-900 mb-3 text-sm flex items-center">
+                <span className="bg-teal-200 text-teal-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">C</span>
+                Existing Alternatives
+              </h3>
+              <div className="space-y-1">
+                <div className="text-xs text-teal-800">• eToro</div>
+                <div className="text-xs text-teal-800">• ZuluTrade</div>
+                <div className="text-xs text-teal-800">• CopyMe</div>
+                <div className="text-xs text-teal-800">• NAGA</div>
+                <div className="text-xs text-teal-800">• TradingView</div>
+                <div className="text-xs text-teal-800">• PeopTrade</div>
+                <div className="text-xs text-teal-800">• Traditional</div>
+              </div>
+            </div>
+
+            <div className="col-span-3 bg-yellow-50 border border-yellow-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-yellow-900 mb-3 text-sm flex items-center">
+                <span className="bg-yellow-200 text-yellow-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">I</span>
+                Key Metrics
+              </h3>
+              <div className="space-y-1">
+                <div className="text-xs text-yellow-800">• Number of active users</div>
+                <div className="text-xs text-yellow-800">• Volume of trades executed</div>
+                <div className="text-xs text-yellow-800">• User retention rates</div>
+                <div className="text-xs text-yellow-800">• Social</div>
+              </div>
+            </div>
+
+            <div className="col-span-3 bg-gray-50 border border-gray-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm flex items-center">
+                <span className="bg-gray-200 text-gray-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">F</span>
+                Channels
+              </h3>
+              <div className="text-xs text-gray-700 font-medium mb-2">High Level Concept</div>
+              <div className="text-xs text-gray-600 mb-3">Social network meets trading floor</div>
+              <div className="space-y-1">
+                <div className="text-xs text-gray-700">• Mobile and desktop applications</div>
+                <div className="text-xs text-gray-700">• Social media</div>
+                <div className="text-xs text-gray-700">• Trading forums and communities</div>
+                <div className="text-xs text-gray-700">• Financial blogs</div>
+              </div>
+            </div>
+
+            <div className="col-span-3 bg-orange-50 border border-orange-200 rounded-lg p-4 min-h-48">
+              <h3 className="font-semibold text-orange-900 mb-3 text-sm flex items-center">
+                <span className="bg-orange-200 text-orange-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">J</span>
+                Unfair Advantage
+              </h3>
+              <div className="text-xs text-orange-800">Proprietary algorithm that surfaces trending trades and insights</div>
+            </div>
+
+            {/* Row 3 */}
+            <div className="col-span-6 bg-pink-50 border border-pink-200 rounded-lg p-4">
+              <h3 className="font-semibold text-pink-900 mb-3 text-sm flex items-center">
+                <span className="bg-pink-200 text-pink-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">H</span>
+                Cost Structure
+              </h3>
+              <div className="space-y-1">
+                <div className="text-xs text-pink-800">• Development and maintenance of the platform</div>
+                <div className="text-xs text-pink-800">• Marketing and user acquisition costs</div>
+                <div className="text-xs text-pink-800">• Community management and customer support</div>
+                <div className="text-xs text-pink-800">• Data security and legal compliance</div>
+                <div className="text-xs text-pink-800">• Server and infrastructure costs</div>
+              </div>
+            </div>
+
+            <div className="col-span-6 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+              <h3 className="font-semibold text-emerald-900 mb-3 text-sm flex items-center">
+                <span className="bg-emerald-200 text-emerald-900 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">G</span>
+                Revenue Streams
+              </h3>
+              <div className="space-y-1">
+                <div className="text-xs text-emerald-800">• Subscription fees for premium features</div>
+                <div className="text-xs text-emerald-800">• Commissions on trades executed through the platform</div>
+                <div className="text-xs text-emerald-800">• Advertisement revenue from financial services</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -748,19 +914,22 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
             <GeneratedBadge />
             <p className="text-gray-600 text-sm mt-2">A streamlined one-page business plan template that succinctly captures your startup's vision.</p>
           </div>
-          <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+          <button 
+            onClick={() => setShowDetails(true)}
+            className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
             <span className="mr-2">👁️</span>
             Details
           </button>
         </div>
 
-        {/* Lean Canvas Grid */}
+        {/* Lean Canvas Grid Preview */}
         <div className="grid grid-cols-5 gap-4 mb-6">
           {/* Top Row */}
           <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
             <h3 className="font-semibold text-blue-900 mb-3 text-sm">B. Problem</h3>
             <div className="space-y-2">
-              {leanCanvas.problems?.map((problem, index) => (
+              {leanCanvas.problems?.slice(0, 2).map((problem, index) => (
                 <div key={index} className="text-xs text-blue-800">• {problem}</div>
               ))}
             </div>
@@ -769,7 +938,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
             <h3 className="font-semibold text-green-900 mb-3 text-sm">D. Solution</h3>
             <div className="space-y-2">
-              {leanCanvas.solutions?.map((solution, index) => (
+              {leanCanvas.solutions?.slice(0, 2).map((solution, index) => (
                 <div key={index} className="text-xs text-green-800">• {solution}</div>
               ))}
             </div>
@@ -777,18 +946,18 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
 
           <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
             <h3 className="font-semibold text-purple-900 mb-3 text-sm">E. Unique Value Proposition</h3>
-            <div className="text-xs text-purple-800 font-medium mb-2">Trade smarter together. Access real-time insights and follow top traders moves on a collaborative platform.</div>
+            <div className="text-xs text-purple-800 font-medium">Trade smarter together...</div>
           </div>
 
           <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
             <h3 className="font-semibold text-orange-900 mb-3 text-sm">J. Unfair Advantage</h3>
-            <div className="text-xs text-orange-800">Proprietary algorithm that surfaces trending trades and insights</div>
+            <div className="text-xs text-orange-800">Proprietary algorithm...</div>
           </div>
 
           <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
             <h3 className="font-semibold text-red-900 mb-3 text-sm">A. Customer Segments</h3>
             <div className="space-y-1">
-              {leanCanvas.customers?.map((customer, index) => (
+              {leanCanvas.customers?.slice(0, 3).map((customer, index) => (
                 <div key={index} className="text-xs text-red-800">• {customer}</div>
               ))}
             </div>
@@ -800,7 +969,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           <div className="bg-teal-50 border-2 border-teal-200 rounded-lg p-4">
             <h3 className="font-semibold text-teal-900 mb-3 text-sm">C. Existing Alternatives</h3>
             <div className="space-y-1">
-              {leanCanvas.competitors?.map((competitor, index) => (
+              {leanCanvas.competitors?.slice(0, 4).map((competitor, index) => (
                 <div key={index} className="text-xs text-teal-800">• {competitor}</div>
               ))}
             </div>
@@ -809,7 +978,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
             <h3 className="font-semibold text-yellow-900 mb-3 text-sm">I. Key Metrics</h3>
             <div className="space-y-1">
-              {leanCanvas.keyMetrics?.map((metric, index) => (
+              {leanCanvas.keyMetrics?.slice(0, 3).map((metric, index) => (
                 <div key={index} className="text-xs text-yellow-800">• {metric}</div>
               ))}
             </div>
@@ -817,10 +986,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
 
           <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm">F. Channels</h3>
-            <div className="text-xs text-gray-700 font-medium mb-2">High Level Concept</div>
-            <div className="text-xs text-gray-600">Social network meets trading floor</div>
-            <div className="space-y-1 mt-2">
-              {leanCanvas.channels?.map((channel, index) => (
+            <div className="text-xs text-gray-600 mb-2">Social network meets trading floor</div>
+            <div className="space-y-1">
+              {leanCanvas.channels?.slice(0, 2).map((channel, index) => (
                 <div key={index} className="text-xs text-gray-700">• {channel}</div>
               ))}
             </div>
@@ -829,7 +997,7 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
           <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
             <h3 className="font-semibold text-indigo-900 mb-3 text-sm">Early Adopters</h3>
             <div className="space-y-1">
-              <div className="text-xs text-indigo-800">• Young traders savvy with social media</div>
+              <div className="text-xs text-indigo-800">• Young traders</div>
               <div className="text-xs text-indigo-800">• Investors</div>
             </div>
           </div>
