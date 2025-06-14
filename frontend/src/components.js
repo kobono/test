@@ -1,5 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+
+// API Configuration
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+const api = axios.create({
+  baseURL: `${API_BASE_URL}/api`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// API Functions
+const apiService = {
+  // Startup Ideas API
+  createStartupIdea: async (ideaData) => {
+    const response = await api.post('/startup-ideas', ideaData);
+    return response.data;
+  },
+  
+  getStartupIdeas: async (userId = null) => {
+    const params = userId ? { userId } : {};
+    const response = await api.get('/startup-ideas', { params });
+    return response.data;
+  },
+  
+  getStartupIdea: async (ideaId) => {
+    const response = await api.get(`/startup-ideas/${ideaId}`);
+    return response.data;
+  },
+  
+  updateStartupIdea: async (ideaId, updateData) => {
+    const response = await api.put(`/startup-ideas/${ideaId}`, updateData);
+    return response.data;
+  },
+  
+  deleteStartupIdea: async (ideaId) => {
+    const response = await api.delete(`/startup-ideas/${ideaId}`);
+    return response.data;
+  },
+  
+  generateStartupContent: async (description) => {
+    const response = await api.post('/generate-startup-content', { description });
+    return response.data;
+  }
+};
 
 // Login Page Component
 export const LoginPage = ({ onLogin }) => {
