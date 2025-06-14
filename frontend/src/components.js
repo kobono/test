@@ -1007,19 +1007,294 @@ const InsightsSection = () => {
   );
 };
 
-const ReportsSection = () => (
-  <div className="space-y-6">
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-      <p className="text-gray-600 mt-2">Generate comprehensive reports on your experiments and results</p>
+const ReportsSection = () => {
+  const [selectedReport, setSelectedReport] = useState('validation-summary');
+
+  const mockReports = [
+    {
+      id: 'validation-summary',
+      title: 'Startup Validation Summary',
+      description: 'Comprehensive overview of all validation activities and results',
+      type: 'summary',
+      lastGenerated: '2 hours ago',
+      format: 'PDF',
+      pages: 24,
+      sections: ['Executive Summary', 'Problem Validation', 'Solution Validation', 'Market Analysis', 'Business Model', 'Recommendations']
+    },
+    {
+      id: 'hypothesis-report',
+      title: 'Critical Hypotheses Analysis',
+      description: 'Detailed analysis of all hypotheses with validation status and confidence levels',
+      type: 'analysis',
+      lastGenerated: '1 day ago',
+      format: 'PDF',
+      pages: 18,
+      sections: ['Hypothesis Overview', 'Validation Results', 'Confidence Analysis', 'Risk Assessment']
+    },
+    {
+      id: 'experiment-results',
+      title: 'Experiment Results Compilation',
+      description: 'Complete results from all experiments including A/B tests, surveys, and interviews',
+      type: 'results',
+      lastGenerated: '3 days ago',
+      format: 'PDF',
+      pages: 32,
+      sections: ['A/B Test Results', 'Survey Analysis', 'Interview Insights', 'Statistical Analysis']
+    },
+    {
+      id: 'market-analysis',
+      title: 'Market Opportunity Assessment',
+      description: 'In-depth market analysis including size, competition, and positioning',
+      type: 'market',
+      lastGenerated: '1 week ago',
+      format: 'PDF',
+      pages: 28,
+      sections: ['Market Size', 'Competitive Analysis', 'Customer Segments', 'Positioning Strategy']
+    },
+    {
+      id: 'investor-deck',
+      title: 'Investor Presentation Deck',
+      description: 'Investor-ready presentation with validation data and market opportunity',
+      type: 'presentation',
+      lastGenerated: '5 days ago',
+      format: 'PowerPoint',
+      pages: 16,
+      sections: ['Problem Statement', 'Solution', 'Market Opportunity', 'Validation Results', 'Business Model', 'Ask']
+    }
+  ];
+
+  const reportTemplates = [
+    { name: 'Weekly Validation Report', icon: '📅', description: 'Regular progress updates' },
+    { name: 'Investor Update', icon: '💼', description: 'Stakeholder communication' },
+    { name: 'Hypothesis Deep Dive', icon: '🔬', description: 'Detailed hypothesis analysis' },
+    { name: 'Market Research Summary', icon: '📊', description: 'Market insights compilation' },
+    { name: 'Experiment Results', icon: '⚗️', description: 'Test results and learnings' },
+    { name: 'Customer Feedback Report', icon: '💬', description: 'User interview insights' }
+  ];
+
+  const validationMetrics = {
+    problemValidation: { score: 8.2, status: 'validated', evidence: 'Strong' },
+    solutionValidation: { score: 7.1, status: 'in-progress', evidence: 'Moderate' },
+    marketValidation: { score: 6.8, status: 'in-progress', evidence: 'Moderate' },
+    businessModel: { score: 5.4, status: 'needs-work', evidence: 'Weak' }
+  };
+
+  const ReportCard = ({ report }) => {
+    const typeIcons = {
+      'summary': '📋',
+      'analysis': '🔍',
+      'results': '📊',
+      'market': '🎯',
+      'presentation': '📽️'
+    };
+
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl">{typeIcons[report.type]}</span>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{report.title}</h3>
+              <p className="text-sm text-gray-600">{report.description}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-gray-500">Last generated</p>
+            <p className="text-sm font-medium text-gray-900">{report.lastGenerated}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4 text-sm text-gray-600">
+            <span>{report.format}</span>
+            <span>•</span>
+            <span>{report.pages} pages</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+              Ready
+            </span>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">Sections:</p>
+          <div className="flex flex-wrap gap-1">
+            {report.sections.slice(0, 3).map((section, index) => (
+              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                {section}
+              </span>
+            ))}
+            {report.sections.length > 3 && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                +{report.sections.length - 3} more
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex space-x-2">
+          <button className="px-3 py-1 text-sm text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors duration-200">
+            📥 Download
+          </button>
+          <button className="px-3 py-1 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
+            🔄 Regenerate
+          </button>
+          <button className="px-3 py-1 text-sm text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors duration-200">
+            📤 Share
+          </button>
+          <button className="px-3 py-1 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            ⚙️ Customize
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Validation Reports</h1>
+          <p className="text-gray-600 mt-2">Generate comprehensive reports for stakeholders and decision making</p>
+        </div>
+        <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+          📝 Create Custom Report
+        </button>
+      </div>
+
+      {/* Validation Score Overview */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Overall Validation Score</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {Object.entries(validationMetrics).map(([key, metric]) => (
+            <div key={key} className="text-center">
+              <div className="relative w-20 h-20 mx-auto mb-2">
+                <svg className="w-20 h-20 transform -rotate-90">
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="32"
+                    stroke="#e5e7eb"
+                    strokeWidth="6"
+                    fill="none"
+                  />
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="32"
+                    stroke={metric.score >= 8 ? "#10b981" : metric.score >= 6 ? "#f59e0b" : "#ef4444"}
+                    strokeWidth="6"
+                    fill="none"
+                    strokeDasharray={`${metric.score * 20} 200`}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold text-gray-900">{metric.score}</span>
+                </div>
+              </div>
+              <p className="text-sm font-medium text-gray-900 capitalize">
+                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+              </p>
+              <p className="text-xs text-gray-600">{metric.evidence} Evidence</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Report Templates */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Report Templates</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {reportTemplates.map((template, index) => (
+            <button
+              key={index}
+              className="p-4 border border-gray-200 rounded-lg hover:border-teal-300 hover:bg-teal-50 transition-all duration-200 text-left"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">{template.icon}</span>
+                <div>
+                  <p className="font-medium text-gray-900">{template.name}</p>
+                  <p className="text-sm text-gray-600">{template.description}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Reports */}
+      <div>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Reports</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {mockReports.map((report) => (
+            <ReportCard key={report.id} report={report} />
+          ))}
+        </div>
+      </div>
+
+      {/* Report Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4">Report Usage</h4>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Downloads this month</span>
+              <span className="font-medium">47</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Shares</span>
+              <span className="font-medium">23</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Custom reports</span>
+              <span className="font-medium">8</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4">Popular Sections</h4>
+          <div className="space-y-2">
+            {['Executive Summary', 'Market Analysis', 'Validation Results', 'Recommendations'].map((section, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">{section}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-16 h-2 bg-gray-200 rounded-full">
+                    <div 
+                      className="h-2 bg-teal-500 rounded-full"
+                      style={{ width: `${100 - index * 20}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-500">{100 - index * 20}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4">Export Formats</h4>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { format: 'PDF', count: 31, icon: '📄' },
+              { format: 'PowerPoint', count: 12, icon: '📽️' },
+              { format: 'Excel', count: 8, icon: '📊' },
+              { format: 'Word', count: 4, icon: '📝' }
+            ].map((item, index) => (
+              <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                <div className="text-2xl mb-1">{item.icon}</div>
+                <div className="text-sm font-medium text-gray-900">{item.format}</div>
+                <div className="text-xs text-gray-600">{item.count} exports</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
-      <div className="text-6xl mb-4">📋</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">Custom Reports</h3>
-      <p className="text-gray-600">Create detailed reports for stakeholders and team members</p>
-    </div>
-  </div>
-);
+  );
+};
 
 const SettingsSection = () => (
   <div className="space-y-6">
