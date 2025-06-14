@@ -738,19 +738,274 @@ const ExperimentsSection = () => {
   );
 };
 
-const InsightsSection = () => (
-  <div className="space-y-6">
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900">Insights</h1>
-      <p className="text-gray-600 mt-2">Discover patterns and actionable insights from your data</p>
+const InsightsSection = () => {
+  const [selectedInsightType, setSelectedInsightType] = useState('all');
+
+  const mockInsights = [
+    {
+      id: 1,
+      type: 'market_opportunity',
+      title: 'Underserved Market Segment Identified',
+      description: 'Analysis shows 67% of SMBs (50-100 employees) lack integrated productivity solutions. This represents a $2.3B opportunity.',
+      confidence: 94,
+      impact: 'high',
+      actionable: true,
+      timestamp: '2 hours ago',
+      source: 'Market Analysis AI',
+      recommendations: [
+        'Consider expanding product features for mid-market segment',
+        'Develop enterprise-grade security features',
+        'Create dedicated onboarding flow for larger teams'
+      ]
+    },
+    {
+      id: 2,
+      type: 'user_behavior',
+      title: 'Feature Usage Pattern Insight',
+      description: 'Users who engage with the collaboration feature within first 7 days have 3.2x higher retention rate.',
+      confidence: 87,
+      impact: 'high',
+      actionable: true,
+      timestamp: '4 hours ago',
+      source: 'Behavioral Analytics AI',
+      recommendations: [
+        'Highlight collaboration features in onboarding',
+        'Send targeted emails promoting team features',
+        'Add collaboration prompts in the first week experience'
+      ]
+    },
+    {
+      id: 3,
+      type: 'pricing_optimization',
+      title: 'Price Sensitivity Analysis',
+      description: 'Current pricing may be 23% higher than optimal. Lowering to $19/month could increase conversions by 41%.',
+      confidence: 76,
+      impact: 'medium',
+      actionable: true,
+      timestamp: '1 day ago',
+      source: 'Pricing AI',
+      recommendations: [
+        'Test $19/month price point with A/B experiment',
+        'Consider value-based pricing tiers',
+        'Add annual discount to improve LTV'
+      ]
+    },
+    {
+      id: 4,
+      type: 'competitive_intelligence',
+      title: 'Competitor Gap Analysis',
+      description: 'Main competitors lack mobile-first design. 78% of your target market uses mobile devices for work.',
+      confidence: 91,
+      impact: 'high',
+      actionable: true,
+      timestamp: '2 days ago',
+      source: 'Competitive Intelligence AI',
+      recommendations: [
+        'Prioritize mobile app development',
+        'Emphasize mobile-first approach in marketing',
+        'Create mobile-specific feature set'
+      ]
+    },
+    {
+      id: 5,
+      type: 'customer_feedback',
+      title: 'Support Ticket Sentiment Analysis',
+      description: 'Negative sentiment around onboarding process increased 34% this month. Common issues: complexity and time required.',
+      confidence: 89,
+      impact: 'medium',
+      actionable: true,
+      timestamp: '3 days ago',
+      source: 'Sentiment Analysis AI',
+      recommendations: [
+        'Simplify onboarding flow to 3 steps max',
+        'Add progress indicators and time estimates',
+        'Create quick setup option for basic users'
+      ]
+    },
+    {
+      id: 6,
+      type: 'market_trends',
+      title: 'Emerging Technology Trend',
+      description: 'AI-powered automation is becoming a must-have feature. 89% of similar tools added AI features in the last 6 months.',
+      confidence: 82,
+      impact: 'medium',
+      actionable: false,
+      timestamp: '1 week ago',
+      source: 'Trend Analysis AI',
+      recommendations: [
+        'Research AI integration opportunities',
+        'Survey users about desired AI features',
+        'Plan AI-powered features roadmap'
+      ]
+    }
+  ];
+
+  const insightTypes = [
+    { key: 'all', label: 'All Insights', icon: '🔍' },
+    { key: 'market_opportunity', label: 'Market Opportunities', icon: '📈' },
+    { key: 'user_behavior', label: 'User Behavior', icon: '👥' },
+    { key: 'pricing_optimization', label: 'Pricing', icon: '💰' },
+    { key: 'competitive_intelligence', label: 'Competition', icon: '🎯' },
+    { key: 'customer_feedback', label: 'Customer Feedback', icon: '💬' },
+    { key: 'market_trends', label: 'Market Trends', icon: '📊' }
+  ];
+
+  const filteredInsights = selectedInsightType === 'all' 
+    ? mockInsights 
+    : mockInsights.filter(insight => insight.type === selectedInsightType);
+
+  const InsightCard = ({ insight }) => {
+    const impactColors = {
+      'high': 'bg-red-100 text-red-800',
+      'medium': 'bg-yellow-100 text-yellow-800',
+      'low': 'bg-green-100 text-green-800'
+    };
+
+    const typeInfo = insightTypes.find(t => t.key === insight.type);
+
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl">{typeInfo?.icon}</span>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{insight.title}</h3>
+              <p className="text-sm text-gray-600">{typeInfo?.label}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${impactColors[insight.impact]}`}>
+              {insight.impact.toUpperCase()} IMPACT
+            </span>
+            {insight.actionable && (
+              <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                ACTIONABLE
+              </span>
+            )}
+          </div>
+        </div>
+
+        <p className="text-gray-700 mb-4">{insight.description}</p>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <span className="text-sm text-gray-600">Confidence:</span>
+              <span className="font-medium text-gray-900">{insight.confidence}%</span>
+            </div>
+            <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className={`h-full rounded-full transition-all duration-300 ${
+                  insight.confidence >= 80 ? 'bg-green-500' :
+                  insight.confidence >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                }`}
+                style={{ width: `${insight.confidence}%` }}
+              ></div>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-gray-500">{insight.source}</p>
+            <p className="text-xs text-gray-500">{insight.timestamp}</p>
+          </div>
+        </div>
+
+        {insight.recommendations && insight.recommendations.length > 0 && (
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-sm font-medium text-gray-700 mb-2">Recommended Actions:</p>
+            <ul className="space-y-1">
+              {insight.recommendations.map((rec, index) => (
+                <li key={index} className="text-sm text-gray-600 flex items-start">
+                  <span className="text-teal-500 mr-2">•</span>
+                  {rec}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="flex space-x-2 mt-4">
+          <button className="px-3 py-1 text-sm text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors duration-200">
+            Create Hypothesis
+          </button>
+          <button className="px-3 py-1 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
+            Run Experiment
+          </button>
+          <button className="px-3 py-1 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            Share Insight
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">AI-Powered Insights</h1>
+          <p className="text-gray-600 mt-2">Get intelligent recommendations to accelerate your startup validation</p>
+        </div>
+        <div className="flex space-x-2">
+          <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200">
+            🤖 Generate New Insights
+          </button>
+          <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
+            📊 Insight Report
+          </button>
+        </div>
+      </div>
+
+      {/* Insight Type Filter */}
+      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+          {insightTypes.map((type) => (
+            <button
+              key={type.key}
+              onClick={() => setSelectedInsightType(type.key)}
+              className={`p-3 rounded-lg text-center transition-all duration-200 ${
+                selectedInsightType === type.key
+                  ? 'bg-teal-100 text-teal-700 border-2 border-teal-300'
+                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <div className="text-lg mb-1">{type.icon}</div>
+              <div className="text-xs font-medium">{type.label}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg p-4 border border-gray-100">
+          <div className="text-2xl font-bold text-purple-600">{mockInsights.length}</div>
+          <div className="text-sm text-gray-600">Total Insights</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100">
+          <div className="text-2xl font-bold text-green-600">{mockInsights.filter(i => i.actionable).length}</div>
+          <div className="text-sm text-gray-600">Actionable</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100">
+          <div className="text-2xl font-bold text-red-600">{mockInsights.filter(i => i.impact === 'high').length}</div>
+          <div className="text-sm text-gray-600">High Impact</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100">
+          <div className="text-2xl font-bold text-blue-600">
+            {Math.round(mockInsights.reduce((acc, i) => acc + i.confidence, 0) / mockInsights.length)}%
+          </div>
+          <div className="text-sm text-gray-600">Avg Confidence</div>
+        </div>
+      </div>
+
+      {/* Insights Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {filteredInsights.map((insight) => (
+          <InsightCard key={insight.id} insight={insight} />
+        ))}
+      </div>
     </div>
-    <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
-      <div className="text-6xl mb-4">💡</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
-      <p className="text-gray-600">Get intelligent recommendations based on your experiment data</p>
-    </div>
-  </div>
-);
+  );
+};
 
 const ReportsSection = () => (
   <div className="space-y-6">
