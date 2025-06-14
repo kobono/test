@@ -233,16 +233,30 @@ const HypothesisCard = ({ hypothesis, status, confidence, lastUpdated }) => {
 const OverviewSection = () => {
   const mockMetrics = [
     { title: 'Active Hypotheses', value: '24', change: '+12%', changeType: 'positive' },
-    { title: 'Experiments Running', value: '8', change: '+3', changeType: 'positive' },
-    { title: 'Success Rate', value: '73%', change: '+5%', changeType: 'positive' },
-    { title: 'Total Tests', value: '156', change: '-2%', changeType: 'negative' }
+    { title: 'Validation Score', value: '8.2/10', change: '+0.4', changeType: 'positive' },
+    { title: 'Market Fit Confidence', value: '73%', change: '+5%', changeType: 'positive' },
+    { title: 'Days to Launch', value: '156', change: '-12', changeType: 'positive' }
+  ];
+
+  const recentActivity = [
+    { type: 'hypothesis', title: 'New hypothesis created: "Users will pay $29/month"', time: '2 hours ago', status: 'active' },
+    { type: 'experiment', title: 'Landing page A/B test completed', time: '4 hours ago', status: 'completed' },
+    { type: 'insight', title: 'AI insight: Consider reducing price point', time: '1 day ago', status: 'insight' },
+    { type: 'validation', title: 'Customer interview #12 completed', time: '2 days ago', status: 'completed' }
+  ];
+
+  const validationPhases = [
+    { phase: 'Problem Validation', status: 'completed', progress: 100 },
+    { phase: 'Solution Validation', status: 'active', progress: 67 },
+    { phase: 'Market Validation', status: 'pending', progress: 25 },
+    { phase: 'Business Model', status: 'pending', progress: 0 }
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-2">Monitor your hypotheses and experiments performance</p>
+        <h1 className="text-3xl font-bold text-gray-900">Startup Validation Dashboard</h1>
+        <p className="text-gray-600 mt-2">Track your startup validation progress and key metrics</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -251,15 +265,56 @@ const OverviewSection = () => {
         ))}
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Validation Progress */}
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Validation Progress</h3>
+          <div className="space-y-4">
+            {validationPhases.map((phase, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className={`w-3 h-3 rounded-full mr-3 ${
+                    phase.status === 'completed' ? 'bg-green-500' :
+                    phase.status === 'active' ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}></div>
+                  <span className="text-sm font-medium text-gray-700">{phase.phase}</span>
+                </div>
+                <span className="text-sm text-gray-500">{phase.progress}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+          <div className="space-y-4">
+            {recentActivity.map((activity, index) => (
+              <div key={index} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                <div className={`w-2 h-2 rounded-full mt-2 ${
+                  activity.status === 'completed' ? 'bg-green-500' :
+                  activity.status === 'active' ? 'bg-blue-500' :
+                  activity.status === 'insight' ? 'bg-purple-500' : 'bg-gray-400'
+                }`}></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">{activity.title}</p>
+                  <p className="text-xs text-gray-500">{activity.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Chart title="Hypothesis Success Rate" type="line" />
-        <Chart title="Experiment Results" type="bar" />
+        <Chart title="Validation Score Trend" type="line" />
+        <Chart title="Hypothesis Status Distribution" type="pie" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Chart title="Weekly Activity" type="area" />
-        <Chart title="Category Distribution" type="pie" />
-        <Chart title="Confidence Trends" type="line" />
+        <Chart title="Weekly Experiments" type="bar" />
+        <Chart title="Customer Feedback Score" type="gauge" />
+        <Chart title="Market Confidence" type="area" />
       </div>
     </div>
   );
