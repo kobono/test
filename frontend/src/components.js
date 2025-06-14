@@ -44,6 +44,49 @@ ChartJS.register(
   Legend,
   ArcElement
 );
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from 'chart.js';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar
+} from 'recharts';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
@@ -87,148 +130,6 @@ const apiService = {
     const response = await api.post('/generate-startup-content', { description });
     return response.data;
   }
-};
-
-// Enhanced Loading Components
-const LoadingSpinner = ({ size = 'medium', color = 'teal' }) => {
-  const sizeClasses = {
-    small: 'w-4 h-4',
-    medium: 'w-8 h-8', 
-    large: 'w-12 h-12'
-  };
-  
-  const colorClasses = {
-    teal: 'border-teal-500',
-    blue: 'border-blue-500',
-    purple: 'border-purple-500'
-  };
-  
-  return (
-    <div className={`${sizeClasses[size]} ${colorClasses[color]} border-2 border-t-transparent rounded-full animate-spin`}></div>
-  );
-};
-
-const SkeletonLoader = ({ lines = 3, className = '' }) => (
-  <div className={`animate-pulse ${className}`}>
-    {Array.from({ length: lines }).map((_, i) => (
-      <div 
-        key={i}
-        className={`h-4 bg-gray-200 rounded mb-3 ${i === lines - 1 ? 'w-3/4' : 'w-full'}`}
-      ></div>
-    ))}
-  </div>
-);
-
-const ProgressBar = ({ progress, label, color = 'teal' }) => {
-  const colorClasses = {
-    teal: 'bg-teal-600',
-    blue: 'bg-blue-600',
-    green: 'bg-green-600',
-    purple: 'bg-purple-600'
-  };
-  
-  return (
-    <div className="w-full">
-      {label && (
-        <div className="flex justify-between text-sm font-medium text-gray-700 mb-1">
-          <span>{label}</span>
-          <span>{progress}%</span>
-        </div>
-      )}
-      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div 
-          className={`${colorClasses[color]} h-2 rounded-full transition-all duration-500 ease-out`}
-          style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
-        ></div>
-      </div>
-    </div>
-  );
-};
-
-const Toast = ({ message, type = 'success', onClose }) => {
-  const typeClasses = {
-    success: 'bg-green-500 text-white',
-    error: 'bg-red-500 text-white',
-    warning: 'bg-yellow-500 text-black',
-    info: 'bg-blue-500 text-white'
-  };
-  
-  const icons = {
-    success: '✅',
-    error: '❌', 
-    warning: '⚠️',
-    info: 'ℹ️'
-  };
-  
-  return (
-    <div className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${typeClasses[type]} animate-fadeIn`}>
-      <div className="flex items-center space-x-3">
-        <span className="text-lg">{icons[type]}</span>
-        <span className="font-medium">{message}</span>
-        <button onClick={onClose} className="ml-4 hover:opacity-75">
-          ✕
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Enhanced Card Component with hover effects
-const Card = ({ children, className = '', hover = true, onClick = null }) => (
-  <div 
-    className={`
-      bg-white rounded-lg border border-gray-200 shadow-sm 
-      ${hover ? 'hover:shadow-md hover:-translate-y-1 transition-all duration-200' : ''}
-      ${onClick ? 'cursor-pointer' : ''}
-      ${className}
-    `}
-    onClick={onClick}
-  >
-    {children}
-  </div>
-);
-
-// Enhanced Button Component
-const Button = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'medium', 
-  loading = false, 
-  disabled = false,
-  onClick,
-  className = '',
-  ...props 
-}) => {
-  const baseClasses = 'font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
-  const variants = {
-    primary: 'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 disabled:bg-gray-300',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-    outline: 'border-2 border-teal-600 text-teal-600 hover:bg-teal-50 focus:ring-teal-500',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-  };
-  
-  const sizes = {
-    small: 'px-3 py-1.5 text-sm',
-    medium: 'px-4 py-2 text-sm',
-    large: 'px-6 py-3 text-base'
-  };
-  
-  return (
-    <button
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
-      disabled={disabled || loading}
-      onClick={onClick}
-      {...props}
-    >
-      {loading ? (
-        <div className="flex items-center justify-center">
-          <LoadingSpinner size="small" color="white" />
-          <span className="ml-2">Loading...</span>
-        </div>
-      ) : children}
-    </button>
-  );
 };
 
 // Login Page Component
@@ -806,9 +707,6 @@ const StartupIdeaSection = ({ onNavigate, currentIdea }) => {
           <h1 className="text-3xl font-bold text-gray-900">Your Startup Idea</h1>
           <GeneratedBadge />
         </div>
-        <div className="flex items-center space-x-3">
-          <ExportButton currentIdea={currentIdea} />
-        </div>
       </div>
 
       {/* Startup Idea Card */}
@@ -951,14 +849,9 @@ const BusinessPrototypeSection = ({ currentIdea }) => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
-          <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <ExportButton currentIdea={currentIdea} />
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Prototype</h1>
+        <p className="text-gray-600">Transform your idea into a tangible blueprint ensuring a solid foundation for your startup journey.</p>
       </div>
 
       {/* Lean Canvas Overview */}
@@ -2142,6 +2035,306 @@ const AnalyticsDashboardSection = ({ currentIdea, userIdeas }) => {
   );
 };
 
+const AnalyticsDashboardSection = ({ currentIdea, userIdeas }) => {
+  const [timeRange, setTimeRange] = useState('7d');
+  
+  // Generate analytics data based on user ideas and current idea
+  const generateAnalyticsData = () => {
+    const industries = {};
+    const creationDates = {};
+    const hypothesesTypes = { Desirability: 0, Viability: 0, Feasibility: 0 };
+    
+    userIdeas.forEach(idea => {
+      // Industry distribution
+      industries[idea.industry] = (industries[idea.industry] || 0) + 1;
+      
+      // Creation timeline
+      const date = new Date(idea.created).toLocaleDateString();
+      creationDates[date] = (creationDates[date] || 0) + 1;
+      
+      // Hypotheses analysis
+      if (idea.hypotheses) {
+        idea.hypotheses.forEach(hypothesis => {
+          hypothesesTypes[hypothesis.type] = (hypothesesTypes[hypothesis.type] || 0) + 1;
+        });
+      }
+    });
+    
+    return { industries, creationDates, hypothesesTypes };
+  };
+  
+  const { industries, creationDates, hypothesesTypes } = generateAnalyticsData();
+  
+  // Industry distribution chart data
+  const industryChartData = {
+    labels: Object.keys(industries),
+    datasets: [{
+      label: 'Ideas by Industry',
+      data: Object.values(industries),
+      backgroundColor: [
+        '#14b8a6', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
+        '#06b6d4', '#10b981', '#f97316', '#ec4899', '#6366f1'
+      ],
+      borderWidth: 0,
+    }]
+  };
+  
+  // Timeline chart data
+  const timelineData = Object.entries(creationDates).map(([date, count]) => ({
+    date,
+    ideas: count
+  }));
+  
+  // Hypotheses radar chart data
+  const hypothesesRadarData = [
+    {
+      subject: 'Desirability',
+      A: hypothesesTypes.Desirability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Viability', 
+      A: hypothesesTypes.Viability,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    },
+    {
+      subject: 'Feasibility',
+      A: hypothesesTypes.Feasibility,
+      fullMark: Math.max(...Object.values(hypothesesTypes)) + 2
+    }
+  ];
+  
+  // Progress metrics for current idea
+  const currentIdeaMetrics = currentIdea ? {
+    completeness: Math.round((
+      (currentIdea.leanCanvas?.problems?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.solutions?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.customers?.length > 0 ? 1 : 0) +
+      (currentIdea.leanCanvas?.valueProposition ? 1 : 0) +
+      (currentIdea.hypotheses?.length > 0 ? 1 : 0) +
+      (currentIdea.storytelling?.elevatorPitch ? 1 : 0)
+    ) / 6 * 100),
+    sections: {
+      'Lean Canvas': currentIdea.leanCanvas ? 90 : 0,
+      'Hypotheses': currentIdea.hypotheses?.length > 0 ? 85 : 0,
+      'Storytelling': currentIdea.storytelling ? 75 : 0,
+      'Validation': 45
+    }
+  } : null;
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
+          <p className="text-gray-600">Track your startup development progress and insights</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <select 
+            value={timeRange} 
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+          >
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="90d">Last 90 days</option>
+            <option value="all">All time</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-teal-100 rounded-lg">
+              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Ideas</p>
+              <p className="text-2xl font-bold text-gray-900">{userIdeas.length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h3M9 7h6m-6 4h6m-2 4h2M9 15h1" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Industries</p>
+              <p className="text-2xl font-bold text-gray-900">{Object.keys(industries).length}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Avg. Completeness</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {currentIdeaMetrics ? currentIdeaMetrics.completeness : 0}%
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Hypotheses</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {Object.values(hypothesesTypes).reduce((a, b) => a + b, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Industry Distribution */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ideas by Industry</h3>
+          {Object.keys(industries).length > 0 ? (
+            <div className="h-64">
+              <Doughnut 
+                data={industryChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No data available</p>
+                <p className="text-sm">Create some ideas to see analytics</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Idea Creation Timeline */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Idea Creation Timeline</h3>
+          {timelineData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={timelineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <RechartsTooltip />
+                <Area type="monotone" dataKey="ideas" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="text-center">
+                <p>No timeline data</p>
+                <p className="text-sm">Create ideas over time to see trends</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Current Idea Analysis */}
+      {currentIdea && currentIdeaMetrics && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Completeness Progress */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Current Idea: {currentIdea.name} - Completeness
+            </h3>
+            <div className="space-y-4">
+              {Object.entries(currentIdeaMetrics.sections).map(([section, percentage]) => (
+                <div key={section}>
+                  <div className="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                    <span>{section}</span>
+                    <span>{percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-teal-600 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Hypotheses Distribution */}
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Hypotheses Distribution</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <RadarChart data={hypothesesRadarData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Radar name="Hypotheses" dataKey="A" stroke="#14b8a6" fill="#14b8a6" fillOpacity={0.6} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Insights and Recommendations */}
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">📊 Insights & Recommendations</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-medium text-blue-900 mb-2">🎯 Focus Area</h4>
+            <p className="text-sm text-blue-800">
+              {Object.keys(industries).length > 1 
+                ? "You're exploring multiple industries - consider focusing on your strongest domain first."
+                : "Great focus on a single industry domain for deeper expertise."}
+            </p>
+          </div>
+          <div className="p-4 bg-green-50 rounded-lg">
+            <h4 className="font-medium text-green-900 mb-2">✅ Progress</h4>
+            <p className="text-sm text-green-800">
+              {userIdeas.length === 0 
+                ? "Start by creating your first startup idea to begin validation."
+                : `You've created ${userIdeas.length} idea${userIdeas.length > 1 ? 's' : ''}. Keep developing your concepts!`}
+            </p>
+          </div>
+          <div className="p-4 bg-purple-50 rounded-lg">
+            <h4 className="font-medium text-purple-900 mb-2">🚀 Next Steps</h4>
+            <p className="text-sm text-purple-800">
+              {currentIdeaMetrics?.completeness < 50 
+                ? "Complete more sections of your current idea for better validation."
+                : "Your idea is well-developed. Consider starting validation experiments."}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ConnectDashboardSection = () => {
   return (
@@ -2367,8 +2560,6 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         return <ValidationSection currentIdea={currentIdea} />;
       case 'storytelling':
         return <StorytellingSection currentIdea={currentIdea} />;
-      case 'analytics':
-        return <AnalyticsDashboardSection currentIdea={currentIdea} userIdeas={userIdeas} />;
       case 'connect-dashboard':
         return <ConnectDashboardSection />;
       default:
