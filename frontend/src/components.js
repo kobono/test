@@ -2217,6 +2217,8 @@ export const ZigZagWorkspace = ({ onLogout }) => {
         return <ValidationSection currentIdea={currentIdea} />;
       case 'storytelling':
         return <StorytellingSection currentIdea={currentIdea} />;
+      case 'analytics':
+        return <AnalyticsDashboardSection currentIdea={currentIdea} userIdeas={userIdeas} />;
       case 'connect-dashboard':
         return <ConnectDashboardSection />;
       default:
