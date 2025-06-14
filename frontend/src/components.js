@@ -323,59 +323,139 @@ const OverviewSection = () => {
 const CriticalHypothesesSection = () => {
   const mockHypotheses = [
     {
-      hypothesis: "Increasing checkout button size by 20% will improve conversion rate by 15%",
+      hypothesis: "Small business owners will pay $29/month for automated social media scheduling",
       status: "active",
       confidence: 78,
-      lastUpdated: "2 hours ago"
+      lastUpdated: "2 hours ago",
+      category: "Pricing & Monetization",
+      priority: "high"
     },
     {
-      hypothesis: "Personalizing email subject lines will increase open rates by 25%",
+      hypothesis: "Remote workers struggle with productivity tracking and need a simple solution",
       status: "validated",
       confidence: 92,
-      lastUpdated: "1 day ago"
+      lastUpdated: "1 day ago",
+      category: "Problem Validation",
+      priority: "critical"
     },
     {
-      hypothesis: "Adding social proof badges will reduce cart abandonment by 10%",
+      hypothesis: "Users prefer mobile-first interface over desktop for task management",
       status: "pending",
       confidence: 65,
-      lastUpdated: "3 days ago"
+      lastUpdated: "3 days ago",
+      category: "Product Features",
+      priority: "medium"
     },
     {
-      hypothesis: "Simplifying the registration form will increase sign-ups by 30%",
+      hypothesis: "B2B customers require enterprise-level security features to adopt our solution",
       status: "invalidated",
       confidence: 23,
-      lastUpdated: "1 week ago"
+      lastUpdated: "1 week ago",
+      category: "Market Requirements",
+      priority: "low"
     },
     {
-      hypothesis: "Implementing dark mode will increase user engagement by 12%",
+      hypothesis: "Freemium model will drive more user acquisition than paid-only model",
       status: "active",
       confidence: 84,
-      lastUpdated: "5 hours ago"
+      lastUpdated: "5 hours ago",
+      category: "Business Model",
+      priority: "high"
     },
     {
-      hypothesis: "Adding urgency indicators will boost purchase decisions by 18%",
+      hypothesis: "Integration with Slack/Teams is essential for product adoption",
       status: "validated",
       confidence: 89,
-      lastUpdated: "2 days ago"
+      lastUpdated: "2 days ago",
+      category: "Product Features",
+      priority: "critical"
     }
   ];
+
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedPriority, setSelectedPriority] = useState('all');
+
+  const categories = ['all', 'Problem Validation', 'Product Features', 'Pricing & Monetization', 'Business Model', 'Market Requirements'];
+  const priorities = ['all', 'critical', 'high', 'medium', 'low'];
+
+  const filteredHypotheses = mockHypotheses.filter(h => {
+    const categoryMatch = selectedCategory === 'all' || h.category === selectedCategory;
+    const priorityMatch = selectedPriority === 'all' || h.priority === selectedPriority;
+    return categoryMatch && priorityMatch;
+  });
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Critical Hypotheses</h1>
-          <p className="text-gray-600 mt-2">Track and manage your most important business hypotheses</p>
+          <p className="text-gray-600 mt-2">Validate your key startup assumptions before investing time and money</p>
         </div>
         <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200">
           + New Hypothesis
         </button>
       </div>
 
+      {/* Filters */}
+      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+        <div className="flex flex-wrap gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select 
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat === 'all' ? 'All Categories' : cat}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+            <select 
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            >
+              {priorities.map(pri => (
+                <option key={pri} value={pri}>{pri === 'all' ? 'All Priorities' : pri.charAt(0).toUpperCase() + pri.slice(1)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+              Export Data
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Hypothesis Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {mockHypotheses.map((hypothesis, index) => (
-          <HypothesisCard key={index} {...hypothesis} />
+        {filteredHypotheses.map((hypothesis, index) => (
+          <EnhancedHypothesisCard key={index} {...hypothesis} />
         ))}
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg p-4 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-green-600">{mockHypotheses.filter(h => h.status === 'validated').length}</div>
+          <div className="text-sm text-gray-600">Validated</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-blue-600">{mockHypotheses.filter(h => h.status === 'active').length}</div>
+          <div className="text-sm text-gray-600">Active Testing</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-yellow-600">{mockHypotheses.filter(h => h.status === 'pending').length}</div>
+          <div className="text-sm text-gray-600">Pending</div>
+        </div>
+        <div className="bg-white rounded-lg p-4 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-red-600">{mockHypotheses.filter(h => h.status === 'invalidated').length}</div>
+          <div className="text-sm text-gray-600">Invalidated</div>
+        </div>
       </div>
     </div>
   );
